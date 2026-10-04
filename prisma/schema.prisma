@@ -1,0 +1,364 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  passwordHash String
+  name         String
+  role         String        @default("TEACHER") // TEACHER, ADMIN, PRINCIPAL
+  avatar       String?
+  school       String?       @default("THCS Chu Văn An")
+  subjects     String?       @default("Toán học")
+  grades       String?       @default("6, 7, 8, 9")
+  phone        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  classes       Class[]
+  questions     Question[]
+  exams         Exam[]
+  materials     TeacherMaterial[]
+  conversations AIConversation[]
+}
+
+model School {
+  id        String   @id @default(cuid())
+  name      String
+  code      String?  @unique
+  province  String?  @default("Hà Nội")
+  district  String?
+  createdAt DateTime @default(now())
+}
+
+model Class {
+  id           String        @id @default(cuid())
+  teacherId    String
+  teacher      User          @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  name         String        // e.g. "7A1"
+  gradeLevel   Int           // 6, 7, 8, 9
+  subject      String        @default("Toán học")
+  schoolYear   String        @default("2026-2027")
+  roomNumber   String?
+  notes        String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  students      Student[]
+  exams         Exam[]
+  materials     TeacherMaterial[]
+  conversations AIConversation[]
+
+  @@index([teacherId])
+  @@index([gradeLevel])
+}
+
+model Student {
+  id          String   @id @default(cuid())
+  classId     String
+  class       Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  studentCode String   // e.g. "HS7A101"
+  name        String
+  gender      String   @default("Nam") // Nam, Nữ
+  birthday    String?
+  parentPhone String?
+  email       String?
+  avatar      String?
+  status      String   @default("ACTIVE") // ACTIVE, INACTIVE, WARNING
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  examAttempts  ExamAttempt[]
+  studentSkills StudentSkill[]
+
+  @@unique([classId, studentCode])
+  @@index([classId])
+}
+
+// Curriculum Hierarchy: Subject -> Grade -> Chapter -> Lesson -> Skill
+model Subject {
+  id          String    @id @default(cuid())
+  code        String    @unique // MATH, ENGLISH, SCIENCE, LITERATURE
+  name        String    // Toán học, Tiếng Anh, v.v.
+  icon        String?
+  description String?
+  chapters    Chapter[]
+  questions   Question[]
+}
+
+model Chapter {
+  id          String     @id @default(cuid())
+  subjectId   String
+  subject     Subject    @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  gradeLevel  Int        // 6, 7, 8, 9
+  orderNumber Int        @default(1)
+  title       String     // e.g. "Chương 1: Số hữu tỉ"
+  description String?
+  lessons     Lesson[]
+  questions   Question[]
+
+  @@index([subjectId, gradeLevel])
+}
+
+model Lesson {
+  id               String     @id @default(cuid())
+  chapterId        String
+  chapter          Chapter    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  orderNumber      Int        @default(1)
+  title            String     // e.g. "Bài 1: Tập hợp các số hữu tỉ"
+  description      String?
+  learningOutcomes String?    // Yêu cầu cần đạt chuẩn GDPT 2018
+  skills           Skill[]
+  questions        Question[]
+  materials        TeacherMaterial[]
+  exams            Exam[]
+
+  @@index([chapterId])
+}
+
+model Skill {
+  id          String         @id @default(cuid())
+  lessonId    String
+  lesson      Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  code        String         // e.g. "MATH7-CH1-L1-S1"
+  name        String         // e.g. "Nhận biết và biểu diễn số hữu tỉ trên trục số"
+  description String?
+  questions   Question[]
+  studentSkills StudentSkill[]
+
+  @@index([lessonId])
+}
+
+// Question Bank
+model Question {
+  id           String           @id @default(cuid())
+  teacherId    String?
+  teacher      User?            @relation(fields: [teacherId], references: [id], onDelete: SetNull)
+  subjectId    String
+  subject      Subject          @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  gradeLevel   Int              // 6, 7, 8, 9
+  chapterId    String?
+  chapter      Chapter?         @relation(fields: [chapterId], references: [id], onDelete: SetNull)
+  lessonId     String?
+  lesson       Lesson?          @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  skillId      String?
+  skill        Skill?           @relation(fields: [skillId], references: [id], onDelete: SetNull)
+  
+  questionType String           @default("SINGLE_CHOICE") // SINGLE_CHOICE, MULTIPLE_CHOICE, TRUE_FALSE, FILL_BLANK, SHORT_ANSWER, ESSAY
+  difficulty   String           @default("THONG_HIEU") // NHAN_BIET, THONG_HIEU, VAN_DUNG, VAN_DUNG_CAO
+  content      String           // Content of question (supports math / latex)
+  answer       String?          // Correct answer or key
+  explanation  String?          // Detailed step-by-step solution
+  source       String?          @default("SGK Kết Nối Tri Thức")
+  tags         String?          @default("toan-7,hoc-ky-1")
+  numberOfUses Int              @default(0)
+  isFavorite   Boolean          @default(false)
+  status       String           @default("APPROVED") // DRAFT, REVIEWED, APPROVED
+  reported     Boolean          @default(false)
+  reportReason String?
+  subItemsJson String?          // For True/False (a, b, c, d statements)
+  rubricJson   String?          // For Essay (step-by-step scoring criteria)
+  
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  answers      QuestionAnswer[]
+  examQuestions ExamQuestion[]
+
+  @@index([subjectId, gradeLevel])
+  @@index([difficulty])
+  @@index([questionType])
+}
+
+model QuestionAnswer {
+  id          String   @id @default(cuid())
+  questionId  String
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  label       String   // 'A', 'B', 'C', 'D'
+  content     String
+  isCorrect   Boolean  @default(false)
+  orderNumber Int      @default(0)
+
+  @@index([questionId])
+}
+
+// Exams and Multiple Versions
+model Exam {
+  id              String         @id @default(cuid())
+  teacherId       String
+  teacher         User           @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  classId         String?
+  class           Class?         @relation(fields: [classId], references: [id], onDelete: SetNull)
+  lessonId        String?
+  lesson          Lesson?        @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  title           String         // e.g. "Kiểm tra 1 tiết Đại số 7 - Chương 1"
+  subject         String         @default("Toán học")
+  gradeLevel      Int            @default(7)
+  durationMinutes Int            @default(45)
+  totalScore      Float          @default(10.0)
+  questionCount   Int            @default(10)
+  matrixConfig    String?        // Legacy JSON: {"nhanBiet": 30, "thongHieu": 40, "vanDung": 20, "vanDungCao": 10}
+  matrixJson      String?        // Full CV 7991 Matrix JSON
+  specJson        String?        // Full CV 7991 Specification Table JSON
+  gradingGuideJson String?       // Full Scoring Guide (Trắc nghiệm + Tự luận từng bước)
+  curriculumDoc   String?        @default("CONG_VAN_7991")
+  status          String         @default("APPROVED") // DRAFT, REVIEWED, APPROVED
+  reported        Boolean        @default(false)
+  reportReason    String?
+  schoolName      String?        @default("Trường THCS Chu Văn An")
+  examType        String         @default("REGULAR") // 15MIN, 45MIN, MID_TERM, FINAL_TERM
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  questions       ExamQuestion[]
+  versions        ExamVersion[]
+  attempts        ExamAttempt[]
+
+  @@index([teacherId])
+  @@index([gradeLevel])
+  @@index([lessonId])
+}
+
+model ExamQuestion {
+  id            String   @id @default(cuid())
+  examId        String
+  exam          Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  questionId    String
+  question      Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  orderNumber   Int      @default(1)
+  scorePoints   Float    @default(1.0)
+  customContent String?
+
+  @@unique([examId, questionId])
+  @@index([examId])
+}
+
+model ExamVersion {
+  id               String        @id @default(cuid())
+  examId           String
+  exam             Exam          @relation(fields: [examId], references: [id], onDelete: Cascade)
+  versionCode      String        // e.g. "101", "102", "103", "104"
+  questionOrder    String        // JSON array of question IDs & answer orders
+  answerKey        String?       // JSON: {"1": "A", "2": "C", ...}
+  createdAt        DateTime      @default(now())
+
+  attempts         ExamAttempt[]
+
+  @@unique([examId, versionCode])
+  @@index([examId])
+}
+
+model ExamAttempt {
+  id             String       @id @default(cuid())
+  examId         String
+  exam           Exam         @relation(fields: [examId], references: [id], onDelete: Cascade)
+  versionId      String?
+  version        ExamVersion? @relation(fields: [versionId], references: [id], onDelete: SetNull)
+  studentId      String
+  student        Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  
+  score          Float        @default(0)
+  maxScore       Float        @default(10.0)
+  studentAnswers String?      // JSON: {"qId1": "A", "qId2": "B"}
+  gradingDetail  String?      // JSON with per-question correctness, points, teacher comments
+  status         String       @default("GRADED") // NOT_STARTED, SUBMITTED, GRADED
+  submittedAt    DateTime?    @default(now())
+  gradedAt       DateTime?    @default(now())
+  createdAt      DateTime     @default(now())
+
+  @@index([examId])
+  @@index([studentId])
+}
+
+// Student Skill Mastery tracking
+model StudentSkill {
+  id           String   @id @default(cuid())
+  studentId    String
+  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  skillId      String
+  skill        Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  
+  attemptCount Int      @default(0)
+  correctCount Int      @default(0)
+  masteryScore Float    @default(50.0) // 0 - 100%
+  lastUpdated  DateTime @default(now())
+
+  @@unique([studentId, skillId])
+  @@index([studentId])
+  @@index([skillId])
+}
+
+// Teaching Materials (Lesson plans, worksheets, revision guides)
+model TeacherMaterial {
+  id             String   @id @default(cuid())
+  teacherId      String
+  teacher        User     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  classId        String?
+  class          Class?   @relation(fields: [classId], references: [id], onDelete: SetNull)
+  lessonId       String?
+  lesson         Lesson?  @relation(fields: [lessonId], references: [id], onDelete: SetNull)
+  type           String   @default("LESSON_PLAN") // LESSON_PLAN, SLIDE_DECK, WORKSHEET, DOCUMENT
+  title          String
+  content        String   // Markdown / HTML content
+  metaJson       String?  // Grade, subject, duration, objectives (Knowledge, Competencies, Qualities)
+  activitiesJson String?  // 4 activities: Khởi động, Hình thành kiến thức, Luyện tập, Vận dụng
+  slidesJson     String?  // Array of Slide objects
+  templateId     String?
+  status         String   @default("APPROVED") // DRAFT, REVIEWED, APPROVED
+  reported       Boolean  @default(false)
+  reportReason   String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([teacherId])
+  @@index([lessonId])
+}
+
+// Educational Document Templates (CV 5512, CV 7991, Exam Matrix, Slide Themes)
+model DocumentTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   // LESSON_PLAN, EXAM, MATRIX, SPECIFICATION, SLIDE
+  description String?
+  contentJson String?  // Layout rules, sections, headers
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// AI Assistant Conversations & Insights
+model AIConversation {
+  id        String      @id @default(cuid())
+  teacherId String
+  teacher   User        @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  classId   String?
+  class     Class?      @relation(fields: [classId], references: [id], onDelete: SetNull)
+  title     String      @default("Trò chuyện mới")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  messages  AIMessage[]
+
+  @@index([teacherId])
+}
+
+model AIMessage {
+  id               String         @id @default(cuid())
+  conversationId   String
+  conversation     AIConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role             String         // "user" | "assistant"
+  content          String
+  structuredData   String?        // JSON for graphs, cards, student list, question proposals
+  suggestedActions String?        // JSON: [{"label": "Tạo bài luyện tập", "action": "CREATE_EXAM", "params": {...}}]
+  createdAt        DateTime       @default(now())
+
+  @@index([conversationId])
+}
