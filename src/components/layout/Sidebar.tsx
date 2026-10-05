@@ -51,17 +51,17 @@ export function Sidebar({ user }: SidebarProps) {
       {/* Brand Header */}
       <div className="h-16 px-5 border-b border-slate-100 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-600 flex items-center justify-center text-white shadow-sm shadow-blue-500/20 group-hover:scale-105 transition-transform">
+          <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-700 transition-colors">
             <Sparkles className="w-4 h-4 text-white" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
               <span className="font-extrabold text-base text-slate-900 tracking-tight">EduMind</span>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+              <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200/60">
                 THCS
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 font-medium">Trợ lý Giáo viên AI</p>
+            <p className="text-[11px] text-slate-400 font-medium">Trợ lý Giáo viên GDPT</p>
           </div>
         </Link>
       </div>
@@ -75,11 +75,11 @@ export function Sidebar({ user }: SidebarProps) {
             className={cn(
               "flex items-center gap-2.5 px-3 py-2 rounded-xl font-semibold transition-all",
               isActive("/")
-                ? "bg-blue-50 text-blue-700 shadow-xs"
-                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                ? "bg-indigo-50 text-indigo-700 shadow-xs"
+                : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
             )}
           >
-            <LayoutDashboard className={cn("w-4 h-4", isActive("/") ? "text-blue-600" : "text-slate-400")} />
+            <LayoutDashboard className={cn("w-4 h-4", isActive("/") ? "text-indigo-600" : "text-slate-400")} />
             <span>Tổng quan (Dashboard)</span>
           </Link>
 
@@ -88,8 +88,8 @@ export function Sidebar({ user }: SidebarProps) {
             className={cn(
               "flex items-center gap-2.5 px-3 py-2 rounded-xl font-semibold transition-all group",
               isActive("/assistant")
-                ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm"
-                : "bg-indigo-50/50 text-indigo-700 hover:bg-indigo-50 border border-indigo-100"
+                ? "bg-indigo-600 text-white shadow-xs"
+                : "bg-indigo-50/70 text-indigo-700 hover:bg-indigo-50 border border-indigo-100/80"
             )}
           >
             <Bot className={cn("w-4 h-4", isActive("/assistant") ? "text-white" : "text-indigo-600")} />
@@ -109,11 +109,11 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/lessons")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
-              <Layers className="w-4 h-4 text-slate-400" />
+              <Layers className={cn("w-4 h-4", isActive("/lessons") ? "text-indigo-600" : "text-slate-400")} />
               <span>Không gian bài học</span>
             </Link>
 
@@ -122,15 +122,15 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center justify-between px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/materials/lesson-plan")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
               <div className="flex items-center gap-2.5">
-                <FileText className="w-4 h-4 text-slate-400" />
+                <FileText className={cn("w-4 h-4", isActive("/materials/lesson-plan") ? "text-indigo-600" : "text-slate-400")} />
                 <span>Kế hoạch bài dạy</span>
               </div>
-              <span className="text-[9px] font-bold bg-blue-100 text-blue-700 px-1.5 py-0.2 rounded">CV 5512</span>
+              <span className="text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200/60 px-2 py-0.5 rounded-md">CV 5512</span>
             </Link>
 
             <Link
@@ -138,15 +138,15 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center justify-between px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/materials/slides")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
               <div className="flex items-center gap-2.5">
-                <Presentation className="w-4 h-4 text-slate-400" />
+                <Presentation className={cn("w-4 h-4", isActive("/materials/slides") ? "text-indigo-600" : "text-slate-400")} />
                 <span>Slide bài giảng AI</span>
               </div>
-              <span className="text-[9px] font-bold bg-violet-100 text-violet-700 px-1.5 py-0.2 rounded">Mới</span>
+              <span className="text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/60 px-2 py-0.5 rounded-md">16:9</span>
             </Link>
 
             <Link
@@ -154,11 +154,11 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/materials") && !isActive("/materials/lesson-plan") && !isActive("/materials/slides")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
-              <FolderOpen className="w-4 h-4 text-slate-400" />
+              <FolderOpen className={cn("w-4 h-4", isActive("/materials") && !isActive("/materials/lesson-plan") && !isActive("/materials/slides") ? "text-indigo-600" : "text-slate-400")} />
               <span>Phiếu học tập (Worksheet)</span>
             </Link>
           </div>
@@ -175,15 +175,15 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center justify-between px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/exams/wizard")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
               <div className="flex items-center gap-2.5">
-                <Sparkles className="w-4 h-4 text-amber-500" />
+                <Sparkles className={cn("w-4 h-4", isActive("/exams/wizard") ? "text-indigo-600" : "text-amber-500")} />
                 <span className="font-semibold text-slate-900">Tạo đề CV 7991</span>
               </div>
-              <span className="text-[9px] font-bold bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded">Wizard 7B</span>
+              <span className="text-[10px] font-semibold bg-amber-50 text-amber-800 border border-amber-200/60 px-2 py-0.5 rounded-md">Ma trận 7B</span>
             </Link>
 
             <Link
@@ -191,11 +191,11 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/exams") && !isActive("/exams/builder") && !isActive("/exams/wizard")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
-              <FileSpreadsheet className="w-4 h-4 text-slate-400" />
+              <FileSpreadsheet className={cn("w-4 h-4", isActive("/exams") && !isActive("/exams/builder") && !isActive("/exams/wizard") ? "text-indigo-600" : "text-slate-400")} />
               <span>Đề kiểm tra &amp; Mã đề</span>
             </Link>
 
@@ -204,11 +204,11 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/questions") && !pathname.includes("/generate")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
-              <FileQuestion className="w-4 h-4 text-slate-400" />
+              <FileQuestion className={cn("w-4 h-4", isActive("/questions") && !pathname.includes("/generate") ? "text-indigo-600" : "text-slate-400")} />
               <span>Ngân hàng câu hỏi</span>
             </Link>
 
@@ -218,10 +218,10 @@ export function Sidebar({ user }: SidebarProps) {
                 "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/questions/generate")
                   ? "bg-indigo-50 text-indigo-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
-              <Sparkles className="w-4 h-4 text-indigo-500" />
+              <Sparkles className={cn("w-4 h-4", isActive("/questions/generate") ? "text-indigo-600" : "text-indigo-500")} />
               <span>AI Tạo câu hỏi</span>
             </Link>
 
@@ -230,15 +230,15 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center justify-between px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/grading")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
               <div className="flex items-center gap-2.5">
-                <CheckSquare className="w-4 h-4 text-slate-400" />
+                <CheckSquare className={cn("w-4 h-4", isActive("/grading") ? "text-indigo-600" : "text-slate-400")} />
                 <span>Chấm bài thi</span>
               </div>
-              <span className="text-[10px] font-bold bg-amber-100 text-amber-700 px-1.5 py-0.2 rounded-full">
+              <span className="text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200/60 px-2 py-0.5 rounded-md">
                 12 bài
               </span>
             </Link>
@@ -248,11 +248,11 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/analytics")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
-              <BarChart3 className="w-4 h-4 text-slate-400" />
+              <BarChart3 className={cn("w-4 h-4", isActive("/analytics") ? "text-indigo-600" : "text-slate-400")} />
               <span>Phân tích năng lực</span>
             </Link>
           </div>
@@ -269,11 +269,11 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/classes")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
-              <Users className="w-4 h-4 text-slate-400" />
+              <Users className={cn("w-4 h-4", isActive("/classes") ? "text-indigo-600" : "text-slate-400")} />
               <span>Danh sách lớp học</span>
             </Link>
 
@@ -282,11 +282,11 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/students")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
-              <GraduationCap className="w-4 h-4 text-slate-400" />
+              <GraduationCap className={cn("w-4 h-4", isActive("/students") ? "text-indigo-600" : "text-slate-400")} />
               <span>Hồ sơ học sinh</span>
             </Link>
           </div>
@@ -303,11 +303,11 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/export-center")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
-              <Download className="w-4 h-4 text-slate-400" />
+              <Download className={cn("w-4 h-4", isActive("/export-center") ? "text-indigo-600" : "text-slate-400")} />
               <span>Trung tâm xuất học liệu</span>
             </Link>
 
@@ -316,11 +316,11 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
                 isActive("/settings")
-                  ? "bg-blue-50 text-blue-700 font-semibold"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
-              <Settings className="w-4 h-4 text-slate-400" />
+              <Settings className={cn("w-4 h-4", isActive("/settings") ? "text-indigo-600" : "text-slate-400")} />
               <span>Cài đặt hệ thống</span>
             </Link>
           </div>

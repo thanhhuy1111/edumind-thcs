@@ -36,7 +36,7 @@ export function TopHeader({ onOpenAIDrawer }: TopHeaderProps) {
           <input
             type="text"
             placeholder="Tìm bài học, câu hỏi, đề thi hoặc học sinh..."
-            className="w-full pl-10 pr-12 py-2 bg-slate-50/80 border border-slate-200 rounded-xl text-xs placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
+            className="w-full pl-10 pr-12 py-2 bg-slate-50/80 border border-slate-200/90 rounded-xl text-xs placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
           />
           <kbd className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-slate-200 bg-white px-1.5 font-mono text-[10px] font-medium text-slate-400">
             ⌘K
@@ -58,20 +58,20 @@ export function TopHeader({ onOpenAIDrawer }: TopHeaderProps) {
         {/* AI Quick Assistant Trigger Button */}
         <button
           onClick={onOpenAIDrawer}
-          className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-xs hover:shadow-md hover:from-blue-700 hover:to-indigo-700 transition-all group"
+          className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition-all group cursor-pointer"
         >
           <Sparkles className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
           <span>Hỏi Trợ lý AI</span>
-          <span className="text-[10px] font-mono bg-white/20 px-1.5 py-0.2 rounded-full">⌘J</span>
+          <span className="text-[10px] font-mono bg-white/20 px-1.5 py-0.5 rounded-full">⌘J</span>
         </button>
 
         {/* Quick Action Button */}
         <div className="relative">
           <button
             onClick={() => setQuickActionOpen(!quickActionOpen)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition-colors cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5 text-blue-600" />
+            <Plus className="w-3.5 h-3.5 text-indigo-600" />
             <span>Tạo nhanh</span>
           </button>
 
@@ -88,9 +88,9 @@ export function TopHeader({ onOpenAIDrawer }: TopHeaderProps) {
                 <Link
                   href="/exams/wizard"
                   onClick={() => setQuickActionOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-xl transition-colors"
+                  className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-colors"
                 >
-                  <Award className="w-4 h-4 text-blue-600" />
+                  <Award className="w-4 h-4 text-indigo-600" />
                   <span>Tạo đề kiểm tra CV 7991</span>
                 </Link>
                 <Link
@@ -104,17 +104,17 @@ export function TopHeader({ onOpenAIDrawer }: TopHeaderProps) {
                 <Link
                   href="/materials/slides"
                   onClick={() => setQuickActionOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-violet-50 hover:text-violet-700 rounded-xl transition-colors"
+                  className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-colors"
                 >
-                  <Presentation className="w-4 h-4 text-violet-600" />
+                  <Presentation className="w-4 h-4 text-indigo-600" />
                   <span>Tạo slide bài giảng AI</span>
                 </Link>
                 <Link
                   href="/questions/generate"
                   onClick={() => setQuickActionOpen(false)}
-                  className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-amber-50 hover:text-amber-700 rounded-xl transition-colors"
+                  className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-colors"
                 >
-                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <Sparkles className="w-4 h-4 text-indigo-600" />
                   <span>AI Tạo câu hỏi</span>
                 </Link>
                 <Link

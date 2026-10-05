@@ -99,15 +99,15 @@ export default function LessonsDirectoryPage() {
         <div className="flex items-center gap-2">
           <Link
             href="/materials/lesson-plan"
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs transition-all"
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-all"
           >
             <Sparkles className="w-3.5 h-3.5" /> Soạn Giáo Án Mới
           </Link>
           <Link
             href="/exams/wizard"
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-xs transition-all"
+            className="flex items-center gap-1.5 px-3.5 py-2 bg-white border border-slate-200/80 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-semibold shadow-xs transition-all"
           >
-            <FileCheck2 className="w-3.5 h-3.5" /> Tạo Đề 7991
+            <FileCheck2 className="w-3.5 h-3.5 text-indigo-600" /> Tạo Đề 7991
           </Link>
         </div>
       </div>
@@ -216,7 +216,7 @@ export default function LessonsDirectoryPage() {
                   </div>
                   <div className="p-2 rounded-xl bg-slate-50/80 border border-slate-100 text-center">
                     <span className="block text-slate-400 text-[10px]">Đề kiểm tra</span>
-                    <strong className="text-blue-600 font-bold">
+                    <strong className="text-indigo-600 font-bold">
                       {lesson._count.exams > 0 ? `${lesson._count.exams} đề` : "Chưa tạo"}
                     </strong>
                   </div>

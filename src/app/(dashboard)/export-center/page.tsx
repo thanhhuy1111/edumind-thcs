@@ -529,7 +529,7 @@ export default function ExportCenterPage() {
 
           <button
             onClick={handleExportFullExamPackage}
-            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-bold shadow-md transition-all self-start md:self-auto cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-all self-start md:self-auto cursor-pointer"
           >
             <Award className="w-4 h-4" /> Xuất Trọn Gói CV 7991 ({exportSubject} {exportGrade})
           </button>
@@ -603,26 +603,26 @@ export default function ExportCenterPage() {
       {/* QUICK EXPORT CHANNELS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* Channel 1: Kế hoạch bài dạy */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between space-y-4">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-xs flex flex-col justify-between space-y-4 hover:border-indigo-200 transition-all">
           <div>
-            <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3">
-              <FileText className="w-6 h-6" />
+            <div className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3.5">
+              <FileText className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">
               Kế Hoạch Bài Dạy (Giáo Án)
             </h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
               Chuẩn Công văn 5512/BGDĐT gồm 4 hoạt động: Khởi động, Hình thành kiến thức, Luyện tập, Vận dụng.
             </p>
 
             <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2 text-xs">
               <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
                 <span>Định dạng hỗ trợ:</span>
-                <span className="font-bold text-indigo-600">DOCX, Word (.doc), PDF</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">DOCX, Word, PDF</span>
               </div>
               <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
                 <span>Hỗ trợ công thức:</span>
-                <span className="font-bold text-emerald-600">Toán học KaTeX chuẩn</span>
+                <span className="font-semibold text-indigo-600">Toán học KaTeX chuẩn</span>
               </div>
             </div>
           </div>
@@ -630,7 +630,7 @@ export default function ExportCenterPage() {
           <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
             <Link
               href="/materials/lesson-plan"
-              className="flex-1 py-2 text-center bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl text-xs font-bold transition-colors"
+              className="flex-1 py-2 text-center bg-slate-50 hover:bg-indigo-50 text-indigo-600 border border-slate-200/60 hover:border-indigo-200 rounded-xl text-xs font-semibold transition-all"
             >
               Mở Soạn Giáo Án
             </Link>
@@ -638,26 +638,26 @@ export default function ExportCenterPage() {
         </div>
 
         {/* Channel 2: Slide Bài Giảng */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between space-y-4">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-xs flex flex-col justify-between space-y-4 hover:border-indigo-200 transition-all">
           <div>
-            <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-violet-950 text-violet-600 dark:text-violet-400 flex items-center justify-center mb-3">
-              <Presentation className="w-6 h-6" />
+            <div className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3.5">
+              <Presentation className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">
               Slide Bài Giảng Trực Quan
             </h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
               Bộ trình chiếu 16:9 với 10 trang bài giảng, mini-game trắc nghiệm, hình ảnh minh họa và ghi chú sư phạm.
             </p>
 
             <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2 text-xs">
               <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
                 <span>Định dạng hỗ trợ:</span>
-                <span className="font-bold text-violet-600">HTML Trình chiếu, PDF, PPTX</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">HTML Trình chiếu, PPTX</span>
               </div>
               <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
                 <span>Chế độ:</span>
-                <span className="font-bold text-indigo-600">Thuyết trình Toàn màn hình</span>
+                <span className="font-semibold text-indigo-600">Thuyết trình Toàn màn hình</span>
               </div>
             </div>
           </div>
@@ -665,7 +665,7 @@ export default function ExportCenterPage() {
           <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
             <Link
               href="/materials/slides"
-              className="flex-1 py-2 text-center bg-violet-50 hover:bg-violet-100 text-violet-600 rounded-xl text-xs font-bold transition-colors"
+              className="flex-1 py-2 text-center bg-slate-50 hover:bg-indigo-50 text-indigo-600 border border-slate-200/60 hover:border-indigo-200 rounded-xl text-xs font-semibold transition-all"
             >
               Mở Studio Slide
             </Link>
@@ -673,26 +673,26 @@ export default function ExportCenterPage() {
         </div>
 
         {/* Channel 3: Trọn Bộ Đề Kiểm Tra 7991 */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col justify-between space-y-4">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-6 shadow-xs flex flex-col justify-between space-y-4 hover:border-indigo-200 transition-all">
           <div>
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3">
-              <FileCheck2 className="w-6 h-6" />
+            <div className="w-11 h-11 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-3.5">
+              <FileCheck2 className="w-5 h-5" />
             </div>
             <h3 className="text-sm font-bold text-slate-900 dark:text-white">
               Hồ Sơ Đề Kiểm Tra (CV 7991)
             </h3>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
               Bao gồm: Đề thi gốc, 4 mã đề hoán vị (101-104), Bảng đáp án, Ma trận 2 chiều, Bản đặc tả và Barem chấm tự luận.
             </p>
 
             <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2 text-xs">
               <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
                 <span>Kiểm tra nhất quán:</span>
-                <span className="font-bold text-emerald-600">Consistency Guard (10đ)</span>
+                <span className="font-semibold text-indigo-600">Consistency Guard (10đ)</span>
               </div>
               <div className="flex items-center justify-between text-slate-600 dark:text-slate-400">
                 <span>Định dạng:</span>
-                <span className="font-bold text-blue-600">Trọn bộ Word (.doc) &amp; PDF</span>
+                <span className="font-semibold text-slate-800 dark:text-slate-200">Trọn bộ Word (.doc) &amp; PDF</span>
               </div>
             </div>
           </div>
@@ -700,7 +700,7 @@ export default function ExportCenterPage() {
           <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
             <Link
               href="/exams/wizard"
-              className="flex-1 py-2 text-center bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl text-xs font-bold transition-colors"
+              className="flex-1 py-2 text-center bg-slate-50 hover:bg-indigo-50 text-indigo-600 border border-slate-200/60 hover:border-indigo-200 rounded-xl text-xs font-semibold transition-all"
             >
               Mở Exam Wizard 7991
             </Link>

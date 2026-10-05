@@ -119,17 +119,17 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
   return (
     <div className="p-8 max-w-5xl mx-auto h-[calc(100vh-5rem)] flex flex-col space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+      <div className="flex items-center justify-between pb-3 border-b border-slate-200/80">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
-            <Sparkles className="w-5 h-5 text-amber-300" />
+          <div className="w-10 h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white shadow-xs">
+            <Sparkles className="w-5 h-5 text-indigo-200" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h1 className="font-extrabold text-lg text-slate-900">
                 AI Command Center – Trợ lý giảng dạy
               </h1>
-              <span className="text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-2 py-0.5 rounded-full">
                 Trực tuyến
               </span>
             </div>
@@ -139,21 +139,21 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
           </div>
         </div>
 
-        <div className="hidden sm:flex items-center gap-2 text-xs text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-2xs">
-          <Users className="w-3.5 h-3.5 text-blue-600" />
+        <div className="hidden sm:flex items-center gap-2 text-xs text-slate-600 bg-white border border-slate-200/80 px-3 py-1.5 rounded-xl shadow-xs">
+          <Users className="w-3.5 h-3.5 text-indigo-600" />
           <span>4 lớp (6A1, 7A1, 7A2, 8A1)</span>
         </div>
       </div>
 
       {/* Chat Messages Body */}
-      <div className="flex-1 overflow-y-auto bg-white rounded-3xl border border-slate-200 p-6 shadow-2xs space-y-6">
+      <div className="flex-1 overflow-y-auto bg-white rounded-3xl border border-slate-200/80 p-6 shadow-xs space-y-6">
         {messages.map((msg) => (
           <div
             key={msg.id}
             className={cn("flex gap-3", msg.role === "user" ? "justify-end" : "justify-start")}
           >
             {msg.role === "assistant" && (
-              <div className="w-9 h-9 rounded-2xl bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-700 shrink-0 mt-0.5 shadow-2xs">
+              <div className="w-9 h-9 rounded-2xl bg-indigo-50 border border-indigo-200/80 flex items-center justify-center text-indigo-600 shrink-0 mt-0.5 shadow-xs">
                 <Bot className="w-5 h-5" />
               </div>
             )}
@@ -162,8 +162,8 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
               className={cn(
                 "max-w-[85%] rounded-3xl p-5 text-sm leading-relaxed",
                 msg.role === "user"
-                  ? "bg-blue-600 text-white rounded-br-xs shadow-xs"
-                  : "bg-slate-50 border border-slate-200/90 text-slate-800 rounded-bl-xs shadow-xs"
+                  ? "bg-indigo-600 text-white rounded-br-xs shadow-xs"
+                  : "bg-slate-50 border border-slate-200/80 text-slate-800 rounded-bl-xs shadow-xs"
               )}
             >
               <div className="leading-relaxed font-sans">
@@ -181,12 +181,12 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
                     {msg.structuredData.data.map((item: any, idx: number) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200 text-xs shadow-2xs"
+                        className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-slate-200/80 text-xs shadow-xs"
                       >
-                        <span className="font-bold text-slate-900">{item.name}</span>
+                        <span className="font-semibold text-slate-900">{item.name}</span>
                         <div className="flex items-center gap-1.5">
                           <span className="text-[11px] text-slate-500">{item.reason}</span>
-                          <span className="font-black px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200">
+                          <span className="font-bold px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200/60">
                             {item.mastery}%
                           </span>
                         </div>
@@ -200,13 +200,13 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
               {msg.structuredData?.type === "COMPARISON" && (
                 <div className="mt-4 pt-4 border-t border-slate-200/80 space-y-3">
                   <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="p-3 rounded-xl bg-white border border-slate-200 text-center">
+                    <div className="p-3 rounded-xl bg-white border border-slate-200/80 text-center">
                       <span className="text-[11px] text-slate-500 font-semibold uppercase">Lớp 7A1</span>
-                      <p className="text-xl font-black text-blue-600">7.4/10</p>
+                      <p className="text-xl font-bold text-indigo-600">7.4/10</p>
                     </div>
-                    <div className="p-3 rounded-xl bg-white border border-slate-200 text-center">
+                    <div className="p-3 rounded-xl bg-white border border-slate-200/80 text-center">
                       <span className="text-[11px] text-slate-500 font-semibold uppercase">Lớp 7A2</span>
-                      <p className="text-xl font-black text-slate-700">6.2/10</p>
+                      <p className="text-xl font-bold text-slate-700">6.2/10</p>
                     </div>
                   </div>
                 </div>
@@ -219,10 +219,10 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
                     <button
                       key={i}
                       onClick={() => handleAction(action.action, action.params)}
-                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-blue-200 text-blue-700 hover:bg-blue-50 text-xs font-bold shadow-2xs transition-all active:scale-95"
+                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200/80 text-slate-700 hover:border-indigo-300 hover:bg-indigo-50/50 hover:text-indigo-700 text-xs font-semibold shadow-xs transition-all active:scale-95"
                     >
                       <span>{action.label}</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-3.5 h-3.5 text-indigo-500" />
                     </button>
                   ))}
                 </div>
@@ -239,7 +239,7 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
 
         {loading && (
           <div className="flex gap-3 items-center text-slate-500 text-xs italic py-2">
-            <div className="w-9 h-9 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 animate-pulse">
+            <div className="w-9 h-9 rounded-2xl bg-indigo-50 border border-indigo-200/80 flex items-center justify-center text-indigo-600 animate-pulse">
               <Bot className="w-5 h-5" />
             </div>
             <span>EduMind AI đang phân tích dữ liệu lớp học...</span>
@@ -250,7 +250,7 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
       </div>
 
       {/* Input Bar */}
-      <div className="bg-white p-3.5 rounded-3xl border border-slate-200 shadow-2xs">
+      <div className="bg-white p-3.5 rounded-3xl border border-slate-200/80 shadow-xs">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -263,12 +263,12 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Hỏi bất kỳ điều gì về lớp học, điểm số hoặc yêu cầu: 'Tạo bài tập 15 phút cho lớp 7A1'..."
-            className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+            className="flex-1 px-4 py-2.5 bg-slate-50/80 border border-slate-200/80 rounded-2xl text-xs placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
           />
           <button
             type="submit"
             disabled={!input.trim() || loading}
-            className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-blue-500/20 transition-all active:scale-95 disabled:opacity-40"
+            className="px-5 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs transition-all active:scale-95 disabled:opacity-40 cursor-pointer"
           >
             <span>Gửi</span>
             <Send className="w-3.5 h-3.5" />

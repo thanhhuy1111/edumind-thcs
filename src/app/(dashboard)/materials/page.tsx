@@ -111,7 +111,7 @@ function MaterialsContent() {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-blue-600 uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-xs font-semibold text-indigo-600 uppercase tracking-wider">
             <BookOpen className="w-3.5 h-3.5" />
             <span>Thư viện giáo án &amp; Phiếu học tập</span>
           </div>
@@ -129,9 +129,9 @@ function MaterialsContent() {
               setModalType("WORKSHEET");
               setIsModalOpen(true);
             }}
-            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-xs shadow-2xs hover:bg-slate-50 transition-colors"
+            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white border border-slate-200/80 text-slate-700 font-semibold text-xs shadow-xs hover:bg-slate-50 transition-colors cursor-pointer"
           >
-            <Sparkles className="w-4 h-4 text-violet-600" />
+            <Sparkles className="w-4 h-4 text-indigo-500" />
             <span>AI Tạo Worksheet</span>
           </button>
           <button
@@ -139,7 +139,7 @@ function MaterialsContent() {
               setModalType("LESSON_PLAN");
               setIsModalOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all active:scale-95"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-xs transition-all active:scale-95 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>AI Soạn giáo án</span>
@@ -148,7 +148,7 @@ function MaterialsContent() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-200 pb-2 text-xs font-bold">
+      <div className="flex items-center gap-2 border-b border-slate-200/80 pb-2 text-xs font-semibold">
         {[
           { id: "ALL", label: "Tất cả tài liệu" },
           { id: "LESSON_PLAN", label: "Giáo án (Kế hoạch bài dạy)" },
@@ -157,9 +157,9 @@ function MaterialsContent() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 rounded-xl transition-all ${
+            className={`px-4 py-2 rounded-xl transition-all cursor-pointer ${
               activeTab === tab.id
-                ? "bg-blue-600 text-white shadow-2xs"
+                ? "bg-indigo-600 text-white shadow-xs font-bold"
                 : "text-slate-600 hover:bg-slate-100"
             }`}
           >
@@ -175,7 +175,7 @@ function MaterialsContent() {
           {loading ? (
             <div className="p-8 text-center text-slate-400 text-xs">Đang tải tài liệu...</div>
           ) : materials.length === 0 ? (
-            <div className="p-12 text-center bg-white rounded-3xl border border-slate-200 space-y-2">
+            <div className="p-12 text-center bg-white rounded-3xl border border-slate-200/80 space-y-2">
               <p className="font-bold text-slate-700 text-sm">Chưa có tài liệu nào</p>
               <p className="text-xs text-slate-400">Bấm nút trên để AI tạo giáo án hoặc worksheet.</p>
             </div>
@@ -186,16 +186,16 @@ function MaterialsContent() {
                 onClick={() => setSelectedMaterial(m)}
                 className={`p-4 rounded-3xl border transition-all cursor-pointer space-y-2 ${
                   selectedMaterial?.id === m.id
-                    ? "bg-blue-50/70 border-blue-300 shadow-xs"
-                    : "bg-white border-slate-200 hover:border-slate-300"
+                    ? "bg-indigo-50/60 border-indigo-300 shadow-xs"
+                    : "bg-white border-slate-200/80 hover:border-slate-300"
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${
                       m.type === "LESSON_PLAN"
-                        ? "bg-blue-100 text-blue-700"
-                        : "bg-violet-100 text-violet-700"
+                        ? "bg-indigo-50 text-indigo-700 border-indigo-200/60"
+                        : "bg-slate-100 text-slate-700 border-slate-200/60"
                     }`}
                   >
                     {m.type === "LESSON_PLAN" ? "Giáo án" : "Worksheet"}
@@ -222,11 +222,11 @@ function MaterialsContent() {
         {/* Right: Preview Panel */}
         <div className="lg:col-span-8">
           {selectedMaterial ? (
-            <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-2xs space-y-6">
+            <div className="bg-white rounded-3xl border border-slate-200/80 p-8 shadow-xs space-y-6">
               {/* Header and Actions */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
                 <div className="space-y-1">
-                  <span className="text-[11px] font-bold uppercase bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full">
+                  <span className="text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/60 px-2.5 py-0.5 rounded-full">
                     {selectedMaterial.type === "LESSON_PLAN" ? "Giáo án THCS" : "Phiếu bài tập"}
                   </span>
                   <h2 className="text-xl font-extrabold text-slate-900">{selectedMaterial.title}</h2>
@@ -235,14 +235,14 @@ function MaterialsContent() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleCopy}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-semibold shadow-2xs transition-colors"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200/80 text-slate-700 hover:bg-slate-50 text-xs font-semibold shadow-xs transition-colors cursor-pointer"
                   >
                     {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copied ? "Đã sao chép" : "Sao chép Markdown"}</span>
                   </button>
                   <button
                     onClick={() => window.print()}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 text-white hover:bg-blue-700 text-xs font-semibold shadow-2xs transition-colors"
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 text-xs font-semibold shadow-xs transition-colors cursor-pointer"
                   >
                     <Printer className="w-3.5 h-3.5" />
                     <span>In tài liệu</span>
@@ -319,9 +319,9 @@ function MaterialsContent() {
                 <button
                   type="submit"
                   disabled={isGenerating}
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold flex items-center gap-1.5 shadow-xs disabled:opacity-50"
+                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold flex items-center gap-1.5 shadow-xs disabled:opacity-50 cursor-pointer"
                 >
-                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  <Sparkles className="w-4 h-4 text-indigo-200" />
                   <span>{isGenerating ? "AI đang soạn bài..." : "Bắt đầu soạn"}</span>
                 </button>
               </div>
