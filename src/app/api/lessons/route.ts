@@ -9,6 +9,121 @@ const CURRICULUM_CATALOG: Record<string, Record<number, Array<{
   learningOutcomes: string;
   skills: string[];
 }>>> = {
+  MUSIC: {
+    6: [
+      {
+        title: "Bài 1: Học hát bài Con đường học trò",
+        chapterTitle: "Chủ đề 1: Tuổi học trò",
+        durationPeriods: 2,
+        learningOutcomes: "Hát đúng giai điệu, lời ca bài Con đường học trò. Thể hiện sắc thái vui tươi, rộn ràng, biết lấy hơi đúng nhịp phách.",
+        skills: ["Tập hát diễn cảm", "Lấy hơi và nhả chữ"],
+      },
+      {
+        title: "Bài 2: Nhạc lí: Các thuộc tính cơ bản của âm thanh có tính nhạc - Đọc nhạc: Bài số 1",
+        chapterTitle: "Chủ đề 1: Tuổi học trò",
+        durationPeriods: 2,
+        learningOutcomes: "Nhận biết 4 thuộc tính của âm thanh: Cao độ, trường độ, cường độ, âm sắc. Đọc đúng cao độ và tiết tấu bài đọc nhạc số 1 giọng Đô trưởng.",
+        skills: ["Nhận biết 4 thuộc tính âm thanh", "Đọc nhạc giọng Đô trưởng"],
+      },
+      {
+        title: "Bài 3: Học hát bài Thầy cô là tất cả",
+        chapterTitle: "Chủ đề 2: Thầy cô và mái trường",
+        durationPeriods: 2,
+        learningOutcomes: "Hát đúng cao độ, trường độ và diễn cảm bài hát ca ngợi thầy cô. Biết kết hợp động tác vận động cơ thể (body percussion).",
+        skills: ["Hát biểu cảm", "Vận động cơ thể theo nhịp"],
+      },
+      {
+        title: "Bài 4: Nhạc cụ: Thực hành gõ thanh phách đệm cho bài hát - Thưởng thức âm nhạc: Đàn bầu Việt Nam",
+        chapterTitle: "Chủ đề 2: Thầy cô và mái trường",
+        durationPeriods: 2,
+        learningOutcomes: "Sử dụng nhạc cụ gõ thanh phách đệm đúng phách, đúng tiết tấu. Nhận biết hình dáng, âm sắc độc đáo của cây Đàn bầu Việt Nam.",
+        skills: ["Gõ đệm thanh phách", "Cảm thụ nhạc cụ truyền thống Đàn bầu"],
+      },
+    ],
+    7: [
+      {
+        title: "Bài 1: Học hát bài Mùa khai trường",
+        chapterTitle: "Chủ đề 1: Vui bước đến trường",
+        durationPeriods: 2,
+        learningOutcomes: "Hát đúng cao độ, trường độ bài Mùa khai trường. Hát hòa giọng, thể hiện tình cảm hân hoan, rộn rã trong ngày tựu trường.",
+        skills: ["Hát hòa giọng", "Thể hiện sắc thái âm nhạc"],
+      },
+      {
+        title: "Bài 2: Nhạc lí: Nhịp 4/4 - Đọc nhạc: Bài đọc nhạc số 1 (Giọng Đô trưởng)",
+        chapterTitle: "Chủ đề 1: Vui bước đến trường",
+        durationPeriods: 2,
+        learningOutcomes: "Hiểu định nghĩa và tính chất nhịp 4/4 (nhịp C). Đọc chuẩn xác các nốt C-D-E-F-G-A-B trong gam Đô trưởng với hình nốt đen, nốt trắng, nốt tròn.",
+        skills: ["Đánh nhịp 4/4", "Đọc nhạc thang âm Đô trưởng"],
+      },
+      {
+        title: "Bài 3: Học hát bài Nụ cười (Nhạc Nga)",
+        chapterTitle: "Chủ đề 2: Tình bạn",
+        durationPeriods: 2,
+        learningOutcomes: "Hát chuẩn xác giai điệu và ca từ bài hát Nụ cười. Biết kết hợp hát lĩnh xướng, hòa giọng và động tác vận động phụ họa.",
+        skills: ["Hát lĩnh xướng và hòa ca", "Vận động phụ họa"],
+      },
+      {
+        title: "Bài 4: Nhạc cụ: Gõ thanh phách và triangle đệm theo tiết tấu - Nhạc lí: Dấu nối và Dấu quay lại",
+        chapterTitle: "Chủ đề 2: Tình bạn",
+        durationPeriods: 2,
+        learningOutcomes: "Nhận biết ý nghĩa kí hiệu dấu nối, dấu quay lại trong bản nhạc. Thực hành gõ đệm thanh phách và triangle giữ nhịp ổn định.",
+        skills: ["Nhận diện kí hiệu âm nhạc", "Thực hành nhạc cụ gõ"],
+      },
+      {
+        title: "Bài 5: Thưởng thức âm nhạc: Dân ca Nam Bộ - Điệu Lý cây bông",
+        chapterTitle: "Chủ đề 3: Giai điệu quê hương",
+        durationPeriods: 2,
+        learningOutcomes: "Cảm thụ nét đẹp mộc mạc, ngọt ngào của dân ca Nam Bộ. Phân tích lời ca và thang âm ngũ cung đặc trưng.",
+        skills: ["Cảm thụ âm nhạc dân gian", "Nhận biết điệu Lý Nam Bộ"],
+      },
+    ],
+    8: [
+      {
+        title: "Bài 1: Học hát bài Mùa thu ngày khai trường",
+        chapterTitle: "Chủ đề 1: Chào năm học mới",
+        durationPeriods: 2,
+        learningOutcomes: "Hát đúng giai điệu, nhịp điệu và sắc thái bài hát. Nắm vững kỹ thuật hát bè đơn giản.",
+        skills: ["Hát đúng cao độ", "Hát bè 2 giọng"],
+      },
+      {
+        title: "Bài 2: Nhạc lí: Gam Đô trưởng và Giọng Đô trưởng - Đọc nhạc: Bài đọc nhạc số 1",
+        chapterTitle: "Chủ đề 1: Chào năm học mới",
+        durationPeriods: 2,
+        learningOutcomes: "Hiểu cấu tạo gam Đô trưởng với các nửa cung E-F và B-C. Đọc lưu loát bài đọc nhạc số 1 kết hợp vỗ tay theo phách.",
+        skills: ["Phân tích gam Đô trưởng", "Đọc nhạc nâng cao"],
+      },
+      {
+        title: "Bài 3: Học hát bài Tia nắng hạt mưa - Thưởng thức âm nhạc: Nhạc sĩ Văn Cao và Tiến quân ca",
+        chapterTitle: "Chủ đề 2: Trái đất đẹp tươi",
+        durationPeriods: 2,
+        learningOutcomes: "Hát trong sáng bài Tia nắng hạt mưa. Tìm hiểu thân thế, sự nghiệp vĩ đại của Nhạc sĩ Văn Cao và hoàn cảnh ra đời bài Quốc ca Việt Nam.",
+        skills: ["Hát biểu cảm tuổi học trò", "Tìm hiểu lịch sử âm nhạc cách mạng"],
+      },
+    ],
+    9: [
+      {
+        title: "Bài 1: Học hát bài Bóng dáng một ngôi trường",
+        chapterTitle: "Chủ đề 1: Khát vọng tuổi trẻ",
+        durationPeriods: 2,
+        learningOutcomes: "Hát đúng giai điệu, truyền cảm xúc nhớ thương mái trường và bạn bè của học sinh cuối cấp THCS.",
+        skills: ["Xử lý thanh nhạc", "Hát cảm xúc tuổi thiếu niên"],
+      },
+      {
+        title: "Bài 2: Nhạc lí: Nhịp 3/4 và Nhịp lấy đà - Đọc nhạc: Bài đọc nhạc số 1",
+        chapterTitle: "Chủ đề 1: Khát vọng tuổi trẻ",
+        durationPeriods: 2,
+        learningOutcomes: "Phân biệt nhịp 3/4 nhịp nhàng uyển chuyển của điệu Valse và hiện tượng nhịp lấy đà (anacrusis) ở đầu ô nhịp.",
+        skills: ["Đánh nhịp 3/4", "Xử lý nhịp lấy đà"],
+      },
+      {
+        title: "Bài 3: Thưởng thức âm nhạc: Ludwig van Beethoven và Bản giao hưởng số 5 Định Mệnh",
+        chapterTitle: "Chủ đề 2: Tinh hoa âm nhạc thế giới",
+        durationPeriods: 2,
+        learningOutcomes: "Cảm nhận chủ đề số phận 'Định mệnh gõ cửa' qua 4 nốt nhạc bất hủ của Beethoven. Hiểu ý chí kiên cường chiến thắng số phận của danh họa âm nhạc cổ điển.",
+        skills: ["Cảm thụ nhạc giao hưởng kinh điển", "Phân tích motif âm nhạc"],
+      },
+    ],
+  },
   MATH: {
     6: [
       {
@@ -176,7 +291,7 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const grade = searchParams.get("grade") ? parseInt(searchParams.get("grade")!, 10) : 7;
-    let subjectCode = searchParams.get("subject") || "MATH";
+    let subjectCode = searchParams.get("subject") || "MUSIC";
 
     // Normalize subject codes
     if (subjectCode === "NATURAL_SCIENCES") subjectCode = "SCIENCE";
@@ -213,7 +328,7 @@ export async function GET(req: NextRequest) {
 
     // 2. If DB has no lessons for this grade/subject, auto-seed from standard catalog
     if (lessons.length === 0) {
-      const subjectCatalog = CURRICULUM_CATALOG[subjectCode] || CURRICULUM_CATALOG["MATH"];
+      const subjectCatalog = CURRICULUM_CATALOG[subjectCode] || CURRICULUM_CATALOG["MUSIC"] || CURRICULUM_CATALOG["MATH"];
       const gradeLessons = subjectCatalog[grade] || subjectCatalog[7] || [];
 
       // Find or create subject
@@ -225,8 +340,8 @@ export async function GET(req: NextRequest) {
         dbSubject = await prisma.subject.create({
           data: {
             code: subjectCode,
-            name: subjectCode === "SCIENCE" ? "Khoa học tự nhiên" : "Toán học",
-            icon: "Calculator",
+            name: subjectCode === "MUSIC" ? "Âm nhạc" : subjectCode === "SCIENCE" ? "Khoa học tự nhiên" : "Toán học",
+            icon: subjectCode === "MUSIC" ? "Music" : "Calculator",
             description: "Chương trình chuẩn GDPT 2018",
           },
         });

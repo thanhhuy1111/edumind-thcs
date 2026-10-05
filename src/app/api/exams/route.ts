@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
     const {
       title,
       classId,
-      subject = "Toán học",
+      subject = "Âm nhạc",
       gradeLevel = 7,
       durationMinutes = 45,
       totalScore = 10.0,

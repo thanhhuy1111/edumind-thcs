@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const {
-      subject = "Toán học",
+      subject = "Âm nhạc",
       grade = 7,
       chapter,
       lesson,

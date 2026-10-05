@@ -39,7 +39,7 @@ export default function ClassesPage() {
   const [formData, setFormData] = useState({
     name: "",
     gradeLevel: "7",
-    subject: "Toán học",
+    subject: "Âm nhạc",
     schoolYear: "2026-2027",
     roomNumber: "",
     notes: "",
@@ -78,7 +78,7 @@ export default function ClassesPage() {
         setFormData({
           name: "",
           gradeLevel: "7",
-          subject: "Toán học",
+          subject: "Âm nhạc",
           schoolYear: "2026-2027",
           roomNumber: "",
           notes: "",
@@ -318,7 +318,7 @@ export default function ClassesPage() {
                   </label>
                   <input
                     type="text"
-                    placeholder="VD: P.206"
+                    placeholder="VD: P.Nghệ thuật 1"
                     value={formData.roomNumber}
                     onChange={(e) => setFormData({ ...formData, roomNumber: e.target.value })}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none"

@@ -40,11 +40,11 @@ export async function POST(req: NextRequest) {
 
     if (action === "GENERATE") {
       const generated = await ai.generateLessonPlan({
-        subject: params?.subject || "Toán học",
+        subject: params?.subject || "Âm nhạc",
         grade: params?.grade || 7,
-        chapter: params?.chapter,
-        lessonTitle: params?.lessonTitle || "Bài 6: Tỉ lệ thức và dãy tỉ số bằng nhau",
-        durationMinutes: params?.durationMinutes || 90,
+        chapter: params?.chapter || "Chủ đề 2: Tình bạn",
+        lessonTitle: params?.lessonTitle || "Chủ đề 2: Tình bạn - Bài 3: Học hát bài Nụ cười",
+        durationMinutes: params?.durationMinutes || 45,
         learningOutcomes: params?.learningOutcomes,
         keyContent: params?.keyContent,
         method: params?.method,

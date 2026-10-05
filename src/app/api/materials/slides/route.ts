@@ -39,17 +39,29 @@ export async function POST(req: NextRequest) {
     const teacher = await prisma.user.findFirst();
 
     if (action === "GENERATE_OUTLINE") {
-      const { lessonTitle = "Bài 6: Tỉ lệ thức và dãy tỉ số bằng nhau", subject = "Toán học", grade = 7 } = params || {};
-      const outline = [
+      const { lessonTitle = "Chủ đề 2: Tình bạn - Học hát bài Nụ cười", subject = "Âm nhạc", grade = 7 } = params || {};
+      const isMusic = subject.toLowerCase().includes("nhạc");
+      const outline = isMusic ? [
+        { slideNumber: 1, title: lessonTitle, subtitle: `Môn Âm nhạc ${grade} - Giới thiệu bài học` },
+        { slideNumber: 2, title: "Mục Tiêu & Cảm Thụ Âm Nhạc", subtitle: "Yêu cầu cần đạt chuẩn GDPT 2018" },
+        { slideNumber: 3, title: "Khởi Động Luyện Thanh", subtitle: "Bài tập lấy hơi, mở khẩu hình và ngân dài âm A-O-U" },
+        { slideNumber: 4, title: "Giới Thiệu Tác Giả & Tác Phẩm", subtitle: "Hoàn cảnh sáng tác bài hát Nụ cười (Nhạc Nga)" },
+        { slideNumber: 5, title: "Tập Hát Từng Câu & Khớp Lời Ca", subtitle: "Nghe giai điệu mẫu, xướng âm chuẩn cao độ nhịp nhàng" },
+        { slideNumber: 6, title: "Luyện Tập Hát Hòa Giọng & Lĩnh Xướng", subtitle: "Phân chia bè nhóm, thể hiện sắc thái vui tươi rạng rỡ" },
+        { slideNumber: 7, title: "Thực Hành Gõ Đệm Thanh Phách", subtitle: "Gõ đệm theo phách và theo tiết tấu lời ca" },
+        { slideNumber: 8, title: "Vận Động Cơ Thể (Body Percussion)", subtitle: "Vỗ tay, giậm chân, búng tay theo nhịp điệu bài hát" },
+        { slideNumber: 9, title: "Góc Cảm Nhận & Đố Vui Âm Nhạc", subtitle: "Cảm thụ thông điệp tình bạn và trắc nghiệm vui" },
+        { slideNumber: 10, title: "Hướng Dẫn Tự Luyện Về Nhà", subtitle: "Biểu diễn cho người thân và chuẩn bị bài học tiếp theo" },
+      ] : [
         { slideNumber: 1, title: lessonTitle, subtitle: `Môn ${subject} ${grade} - Giới thiệu bài giảng` },
         { slideNumber: 2, title: "Mục Tiêu Bài Học", subtitle: "Yêu cầu cần đạt chuẩn GDPT 2018" },
-        { slideNumber: 3, title: "Khởi Động Tình Huống", subtitle: "Pha chế tỉ lệ thức thực tiễn" },
-        { slideNumber: 4, title: "Khái Niệm Cốt Lõi", subtitle: "Định nghĩa tỉ lệ thức và các số hạng" },
-        { slideNumber: 5, title: "Tính Chất Tích Chéo", subtitle: "Quy tắc ad = bc và tìm ẩn x" },
-        { slideNumber: 6, title: "Dãy Tỉ Số Bằng Nhau", subtitle: "Công thức mở rộng cộng trừ tử mẫu" },
-        { slideNumber: 7, title: "Ví Dụ Mẫu Giải Chi Tiết", subtitle: "Tìm hai số x, y biết tổng và tỉ số" },
-        { slideNumber: 8, title: "Trắc Nghiệm Tương Tác", subtitle: "Mini-game tính nhanh 60 giây" },
-        { slideNumber: 9, title: "Sơ Đồ Tư Duy Tổng Kết", subtitle: "Khắc sâu 3 chìa khóa vàng bài học" },
+        { slideNumber: 3, title: "Khởi Động Tình Huống", subtitle: "Kết nối thực tiễn bài học" },
+        { slideNumber: 4, title: "Khái Niệm Cốt Lõi", subtitle: "Nội dung trọng tâm bài học" },
+        { slideNumber: 5, title: "Quy Tắc & Tính Chất", subtitle: "Hệ thống hóa kiến thức" },
+        { slideNumber: 6, title: "Luyện Tập Thực Hành", subtitle: "Hướng dẫn vận dụng bài bản" },
+        { slideNumber: 7, title: "Ví Dụ Mẫu Giải Chi Tiết", subtitle: "Các bước làm bài chuẩn" },
+        { slideNumber: 8, title: "Trắc Nghiệm Tương Tác", subtitle: "Mini-game củng cố 60 giây" },
+        { slideNumber: 9, title: "Sơ Đồ Tư Duy Tổng Kết", subtitle: "Khắc sâu chìa khóa vàng bài học" },
         { slideNumber: 10, title: "Hướng Dẫn Về Nhà", subtitle: "Giao nhiệm vụ và chuẩn bị bài mới" },
       ];
       return NextResponse.json({ outline });
@@ -57,11 +69,11 @@ export async function POST(req: NextRequest) {
 
     if (action === "GENERATE_DECK") {
       const generated = await ai.generateSlideDeck({
-        lessonTitle: params?.lessonTitle || "Bài 6: Tỉ lệ thức và dãy tỉ số bằng nhau",
-        subject: params?.subject || "Toán học",
+        lessonTitle: params?.lessonTitle || "Chủ đề 2: Tình bạn - Học hát bài Nụ cười",
+        subject: params?.subject || "Âm nhạc",
         grade: params?.grade || 7,
         slideCount: params?.slideCount || 10,
-        style: params?.style || "Học tập tương tác",
+        style: params?.style || "Học tập tương tác & Trực quan",
       });
 
       return NextResponse.json(generated);

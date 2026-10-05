@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, gradeLevel, subject = "Toán học", schoolYear = "2026-2027", roomNumber, notes } = body;
+    const { name, gradeLevel, subject = "Âm nhạc", schoolYear = "2026-2027", roomNumber, notes } = body;
 
     if (!name || !gradeLevel) {
       return NextResponse.json({ error: "Vui lòng nhập tên lớp và khối" }, { status: 400 });

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const subjectCode = searchParams.get("subject") || "MATH";
+    const subjectCode = searchParams.get("subject") || "MUSIC";
     const gradeLevel = searchParams.get("grade") ? parseInt(searchParams.get("grade")!, 10) : undefined;
 
     const subject = await prisma.subject.findUnique({

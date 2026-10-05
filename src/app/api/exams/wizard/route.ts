@@ -11,14 +11,14 @@ export async function POST(req: NextRequest) {
 
     if (action === "GENERATE_PACKAGE") {
       const pkg = await ai.generateExamCV7991({
-        title: params?.title || "Kiểm tra định kỳ theo Công văn 7991",
-        subject: params?.subject || "Toán học",
+        title: params?.title || "Kiểm tra định kỳ môn Âm nhạc theo Công văn 7991",
+        subject: params?.subject || "Âm nhạc",
         grade: params?.grade || 7,
         semester: params?.semester || 1,
         durationMinutes: params?.durationMinutes || 45,
         totalScore: params?.totalScore || 10.0,
         examType: params?.examType || "GIUA_KY",
-        topics: params?.topics || ["Tỉ lệ thức", "Dãy tỉ số bằng nhau"],
+        topics: params?.topics || ["Thực hành Hát & Nhạc cụ gõ", "Lí thuyết âm nhạc & Đọc nhạc"],
         learningOutcomes: params?.learningOutcomes || [],
         matrixRatio: params?.matrixRatio || {
           nhanBiet: 40,

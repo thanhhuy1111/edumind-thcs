@@ -386,7 +386,7 @@ function SlidesStudioContent() {
               </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Soạn slide 16:9 tự động từ nội dung bài học, thuyết trình tương tác với công thức Toán KaTeX
+              Soạn slide 16:9 tự động chuẩn GDPT 2018 môn Âm nhạc & các bộ môn THCS, thuyết trình trực quan sống động
             </p>
           </div>
         </div>

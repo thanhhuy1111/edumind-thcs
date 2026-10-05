@@ -48,7 +48,7 @@ export default function LessonsDirectoryPage() {
   const [lessons, setLessons] = useState<LessonItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [gradeFilter, setGradeFilter] = useState("7");
-  const [subjectFilter, setSubjectFilter] = useState("MATH");
+  const [subjectFilter, setSubjectFilter] = useState("MUSIC");
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
@@ -138,6 +138,7 @@ export default function LessonsDirectoryPage() {
             onChange={(e) => setSubjectFilter(e.target.value)}
             className="text-xs rounded-xl border border-slate-200 bg-white px-3 py-2 text-slate-800 font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
           >
+            <option value="MUSIC">Môn Âm nhạc</option>
             <option value="MATH">Môn Toán học</option>
             <option value="SCIENCE">Khoa học tự nhiên</option>
             <option value="LITERATURE">Ngữ văn</option>
@@ -170,12 +171,12 @@ export default function LessonsDirectoryPage() {
           <button
             onClick={() => {
               setGradeFilter("7");
-              setSubjectFilter("MATH");
+              setSubjectFilter("MUSIC");
               setSearchQuery("");
             }}
             className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl text-xs font-bold hover:bg-indigo-100 transition-colors inline-flex items-center gap-1.5"
           >
-            <RefreshCw className="w-3.5 h-3.5" /> Đặt lại bộ lọc (Toán 7)
+            <RefreshCw className="w-3.5 h-3.5" /> Đặt lại bộ lọc (Âm nhạc 7)
           </button>
         </div>
       ) : (
