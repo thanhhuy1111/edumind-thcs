@@ -32,16 +32,16 @@ export default function AIAssistantPage() {
     {
       id: "welcome",
       role: "assistant",
-      content: `Xin chào cô Lan! Em là **EduMind AI Assistant**, trung tâm điều hành và phân tích dữ liệu giảng dạy của cô.
+      content: `Xin chào cô Huyền! Em là **EduMind AI Assistant**, trợ lý giảng dạy và phân tích dữ liệu môn Âm nhạc của cô tại THCS Tân Phong - Vĩnh Long.
 
-Em đã phân tích toàn bộ dữ liệu 4 lớp học, kết quả 42 bài kiểm tra gần nhất và mức độ thành thạo kỹ năng môn Toán THCS.
+Em đã phân tích dữ liệu các lớp học (6A1, 7A1, 7A2, 8A1, 9A1), ngân hàng câu hỏi âm nhạc và mức độ thành thạo kỹ năng hát, gõ đệm phách, đọc nhạc của học sinh.
 
-Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câu hỏi tự do để em giải đáp ngay!`,
+Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câu hỏi tự do về phương pháp dạy học, tạo đề thi, soạn giáo án âm nhạc để em hỗ trợ ngay!`,
       suggestedActions: [
-        { label: "Lớp 7A1 đang yếu phần nào?", action: "PROMPT", params: { text: "Lớp 7A1 đang yếu phần nào?" } },
-        { label: "So sánh kết quả giữa 7A1 và 7A2", action: "PROMPT", params: { text: "So sánh kết quả lớp 7A1 và 7A2" } },
-        { label: "Tạo đề 15 phút cho phần lớp đang yếu", action: "PROMPT", params: { text: "Tạo đề 15 phút dựa trên các nội dung lớp 7A1 đang yếu" } },
-        { label: "Học sinh nào có nguy cơ hổng kiến thức?", action: "PROMPT", params: { text: "Học sinh nào có nguy cơ mất gốc?" } },
+        { label: "Lớp 7A1 cần rèn luyện thêm kỹ năng nào?", action: "PROMPT", params: { text: "Lớp 7A1 đang yếu phần nào?" } },
+        { label: "Gợi ý trò chơi khởi động tiết học hát", action: "PROMPT", params: { text: "Gợi ý trò chơi khởi động tiết học hát lớp 7" } },
+        { label: "Tạo đề kiểm tra 15 phút Âm nhạc 7", action: "PROMPT", params: { text: "Tạo đề 15 phút âm nhạc lớp 7" } },
+        { label: "Học sinh nào cần phụ đạo thêm nhịp phách?", action: "PROMPT", params: { text: "Học sinh nào có nguy cơ hổng kiến thức nhịp phách?" } },
       ],
     },
   ]);

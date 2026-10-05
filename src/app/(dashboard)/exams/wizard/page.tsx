@@ -94,8 +94,8 @@ function ExamWizardContent() {
   const [currentStep, setCurrentStep] = useState(1);
 
   // Step 1: Info
-  const [title, setTitle] = useState("Kiểm tra định kỳ Giữa Học kỳ I - Môn Toán 7");
-  const [subject, setSubject] = useState("Toán học");
+  const [title, setTitle] = useState("Kiểm tra định kỳ Giữa Học kỳ I - Môn Âm nhạc 7");
+  const [subject, setSubject] = useState("Âm nhạc");
   const [grade, setGrade] = useState("7");
   const [semester, setSemester] = useState("1");
   const [durationMinutes, setDurationMinutes] = useState(45);
@@ -104,18 +104,18 @@ function ExamWizardContent() {
 
   // Step 2: Content Selection
   const [selectedTopics, setSelectedTopics] = useState<string[]>([
-    "Tỉ lệ thức và các tính chất",
-    "Tính chất của dãy tỉ số bằng nhau",
-    "Đại lượng tỉ lệ thuận và tỉ lệ nghịch",
+    "Học hát (Khai trường, Nụ cười)",
+    "Nhạc lí và Đọc nhạc (Nhịp 2/4, Gam Đô trưởng)",
+    "Thưởng thức âm nhạc & Nhạc cụ (Dân ca Nam Bộ - Lý cây bông)",
   ]);
   const [newTopicInput, setNewTopicInput] = useState("");
 
   // Step 3: Learning Outcomes (YCCĐ)
   const [outcomes, setOutcomes] = useState<string[]>([
-    "Nhận biết được tỉ lệ thức và các số hạng của tỉ lệ thức.",
-    "Hiểu và vận dụng tính chất cơ bản: nếu a/b = c/d thì a.d = b.c để tìm số chưa biết.",
-    "Vận dụng tính chất của dãy tỉ số bằng nhau vào bài toán chia phần tỉ lệ thực tiễn.",
-    "Vận dụng cao giải quyết bài toán tối ưu liên hệ sản xuất và đời sống.",
+    "Hát đúng cao độ, trường độ, biểu cảm và phát âm rõ lời ca.",
+    "Hiểu khái niệm nhịp 2/4, đọc đúng cao độ các bậc âm gam Đô trưởng.",
+    "Sử dụng được thanh phách gõ đệm theo phách và nhịp của bài hát.",
+    "Cảm thụ và nhận biết được làn điệu dân ca Nam Bộ và nhạc cụ dân tộc.",
   ]);
   const [newOutcomeInput, setNewOutcomeInput] = useState("");
 
@@ -361,13 +361,14 @@ function ExamWizardContent() {
   <table class="header-box" style="border: none;">
     <tr style="border: none;">
       <td style="border: none; width: 45%; text-align: center;">
-        PHÒNG GD&ĐT HUYỆN/QUẬN<br>
-        <strong>TRƯỜNG THCS CHU VĂN AN</strong>
+        SỞ GD&ĐT TỈNH VĨNH LONG<br>
+        <strong>TRƯỜNG THCS TÂN PHONG</strong>
       </td>
       <td style="border: none; width: 55%; text-align: center;">
         <strong>ĐỀ KIỂM TRA ĐỊNH KỲ - GDPT 2018</strong><br>
-        NĂM HỌC 2024 - 2025<br>
+        NĂM HỌC 2026 - 2027<br>
         <em>Môn: ${subject} - Lớp ${grade}</em>
+        <br><span style="font-size: 11px;">GVBM: Phan Thị Ngọc Huyền</span>
       </td>
     </tr>
   </table>
@@ -657,9 +658,26 @@ function ExamWizardContent() {
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Môn học</label>
               <select
                 value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-slate-100"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSubject(val);
+                  if (val === "Âm nhạc") {
+                    setSelectedTopics([
+                      "Học hát (Khai trường, Nụ cười)",
+                      "Nhạc lí và Đọc nhạc (Nhịp 2/4, Gam Đô trưởng)",
+                      "Thưởng thức âm nhạc & Nhạc cụ (Dân ca Nam Bộ - Lý cây bông)",
+                    ]);
+                    setOutcomes([
+                      "Hát đúng cao độ, trường độ, biểu cảm và rõ lời ca.",
+                      "Hiểu khái niệm nhịp 2/4, đọc đúng cao độ các bậc âm gam Đô trưởng.",
+                      "Sử dụng được thanh phách gõ đệm theo phách và nhịp của bài hát.",
+                      "Cảm thụ và nhận biết được làn điệu dân ca Nam Bộ và nhạc cụ dân tộc.",
+                    ]);
+                  }
+                }}
+                className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-slate-100 font-semibold"
               >
+                <option value="Âm nhạc">Âm nhạc</option>
                 <option value="Toán học">Toán học</option>
                 <option value="Khoa học tự nhiên">Khoa học tự nhiên</option>
                 <option value="Ngữ văn">Ngữ văn</option>

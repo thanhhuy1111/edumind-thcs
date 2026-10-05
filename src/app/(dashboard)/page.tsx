@@ -46,6 +46,11 @@ export default async function DashboardPage() {
     include: { _count: { select: { students: true } } },
   });
 
+  const teacher = await prisma.user.findFirst();
+  const teacherGreeting = teacher?.name ? `cô ${teacher.name.split(" ").slice(-1)[0]}` : "cô Huyền";
+  const teacherSchool = teacher?.school || "THCS Tân Phong - Vĩnh Long";
+  const teacherSubject = teacher?.subjects || "Âm nhạc";
+
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in duration-300">
       {/* Welcome Banner */}
@@ -57,10 +62,10 @@ export default async function DashboardPage() {
             <span>EduMind AI THCS • Tích hợp Công văn 7991 &amp; 5512/BGDĐT</span>
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight">
-            Chào buổi sáng, cô Lan 👋
+            Chào buổi sáng, {teacherGreeting} 👋
           </h1>
           <p className="text-blue-100 text-sm max-w-xl">
-            Hôm nay cô có <strong>4 tiết dạy Toán</strong> tại THCS Chu Văn An. Hệ thống đã chuẩn bị sẵn Kế hoạch bài dạy, Slide bài giảng và Exam Wizard 7991.
+            Hôm nay cô có <strong>4 tiết dạy môn {teacherSubject}</strong> tại {teacherSchool}. Hệ thống đã chuẩn bị sẵn Kế hoạch bài dạy (5512), Slide bài giảng và Ngân hàng đề kiểm tra đánh giá năng lực GDPT 2018.
           </p>
         </div>
 
@@ -269,7 +274,7 @@ export default async function DashboardPage() {
                 Slide Bài Giảng AI
               </h3>
               <p className="text-[11px] text-slate-600 mt-1">
-                Dàn ý 10 slides, phòng chiếu toàn màn hình, mini-game tương tác và công thức Toán KaTeX.
+                Dàn ý 10 slides, phòng chiếu toàn màn hình, mini-game tương tác, nốt nhạc và học liệu số.
               </p>
             </div>
             <span className="mt-3 text-[11px] font-bold text-violet-600 flex items-center gap-1">
@@ -289,7 +294,7 @@ export default async function DashboardPage() {
                 Không Gian Bài Học
               </h3>
               <p className="text-[11px] text-slate-600 mt-1">
-                Thư mục bài học GDPT 2018 (Toán 6, 7, 8, 9) kết nối 5 sản phẩm học liệu thống nhất.
+                Thư mục bài học GDPT 2018 (Âm nhạc, Toán 6, 7, 8, 9) kết nối 5 sản phẩm học liệu thống nhất.
               </p>
             </div>
             <span className="mt-3 text-[11px] font-bold text-teal-600 flex items-center gap-1">

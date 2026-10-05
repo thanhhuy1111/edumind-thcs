@@ -10,8 +10,8 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    school: "Trường THCS Chu Văn An",
-    subjects: "Toán học",
+    school: "Trường THCS Tân Phong - Vĩnh Long",
+    subjects: "Âm nhạc",
     password: "",
   });
   const [loading, setLoading] = useState(false);

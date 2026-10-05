@@ -47,13 +47,14 @@ function ExamBuilderContent() {
   const [title, setTitle] = useState(
     topicParam
       ? `Kiểm tra 15 phút - Củng cố ${topicParam === "ti-le-thuc" ? "Tỉ lệ thức & Dãy tỉ số" : topicParam}`
-      : "Kiểm tra 1 tiết Toán 7 - Chương 2: Số thực và Tỉ lệ thức"
+      : "Kiểm tra định kỳ Giữa Học kỳ I - Môn Âm nhạc 7"
   );
+  const [subject, setSubject] = useState("Âm nhạc");
   const [gradeLevel, setGradeLevel] = useState(gradeParam);
   const [classId, setClassId] = useState(classIdParam || "");
   const [durationMinutes, setDurationMinutes] = useState(topicParam ? "15" : "45");
   const [totalScore, setTotalScore] = useState("10");
-  const [questionCount, setQuestionCount] = useState(topicParam ? "5" : "10");
+  const [questionCount, setQuestionCount] = useState(topicParam ? "5" : "7");
 
   // Matrix percentages
   const [matrix, setMatrix] = useState({
@@ -104,7 +105,7 @@ function ExamBuilderContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          subject: "Toán học",
+          subject: subject || "Âm nhạc",
           grade: parseInt(gradeLevel, 10),
           difficulty: "THONG_HIEU",
           count: parseInt(questionCount, 10),
@@ -174,7 +175,7 @@ function ExamBuilderContent() {
         body: JSON.stringify({
           title,
           classId: classId || undefined,
-          subject: "Toán học",
+          subject,
           gradeLevel: parseInt(gradeLevel, 10),
           durationMinutes: parseInt(durationMinutes, 10),
           totalScore: parseFloat(totalScore),
@@ -247,6 +248,21 @@ function ExamBuilderContent() {
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
               />
+            </div>
+
+            <div>
+              <label className="block font-semibold text-slate-700 mb-1">Môn học</label>
+              <select
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 outline-none"
+              >
+                <option value="Âm nhạc">Môn Âm nhạc</option>
+                <option value="Toán học">Môn Toán học</option>
+                <option value="Tiếng Anh">Môn Tiếng Anh</option>
+                <option value="Ngữ văn">Môn Ngữ văn</option>
+                <option value="Khoa học tự nhiên">Môn Khoa học tự nhiên</option>
+              </select>
             </div>
 
             <div className="grid grid-cols-2 gap-3">

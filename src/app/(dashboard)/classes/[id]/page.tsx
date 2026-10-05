@@ -105,7 +105,7 @@ export default function ClassDetailPage() {
               </span>
             </div>
             <p className="text-xs text-slate-500">
-              {classData.subject} • Năm học {classData.schoolYear} • GVBM: Cô Nguyễn Thị Lan
+              {classData.subject} • Năm học {classData.schoolYear} • GVBM: Cô Phan Thị Ngọc Huyền
             </p>
           </div>
         </div>

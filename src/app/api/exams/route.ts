@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
       questionCount = 10,
       matrixConfig,
       questionIds = [],
-      schoolName = "Trường THCS Chu Văn An",
+      schoolName = "Trường THCS Tân Phong - Vĩnh Long",
       examType = "REGULAR",
     } = body;
 

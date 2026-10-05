@@ -64,13 +64,13 @@ function LessonPlanContent() {
   const initialLessonId = searchParams.get("lessonId") || "";
 
   // Form State
-  const [subject, setSubject] = useState("Toán học");
+  const [subject, setSubject] = useState("Âm nhạc");
   const [grade, setGrade] = useState("7");
-  const [lessonTitle, setLessonTitle] = useState("Bài 6: Tỉ lệ thức và dãy tỉ số bằng nhau");
-  const [durationMinutes, setDurationMinutes] = useState("90");
-  const [method, setMethod] = useState("Dạy học nêu vấn đề kết hợp thảo luận nhóm và trải nghiệm");
+  const [lessonTitle, setLessonTitle] = useState("Chủ đề 2: Tình bạn - Bài 3: Học hát bài Nụ cười");
+  const [durationMinutes, setDurationMinutes] = useState("45");
+  const [method, setMethod] = useState("Dạy học thực hành biểu diễn, luyện thanh, hòa âm nhóm và gõ đệm thanh phách");
   const [learningOutcomes, setLearningOutcomes] = useState(
-    "Nhận biết định nghĩa tỉ lệ thức, vận dụng tính chất tích chéo và tính chất dãy tỉ số bằng nhau giải quyết bài toán thực tiễn."
+    "Hát đúng giai điệu và lời ca bài hát Nụ cười, biết gõ đệm thanh phách nhịp nhàng theo phách 2/4, cảm nhận tình bạn trong sáng."
   );
 
   // Generation & Interactive State
@@ -236,8 +236,9 @@ function LessonPlanContent() {
         <table class="header-table">
           <tr>
             <td style="width: 50%; text-align: center;">
-              <strong>TRƯỜNG THCS CHU VĂN AN</strong><br/>
-              TỔ TỰ NHIÊN - TOÁN HỌC
+              <strong>TRƯỜNG THCS TÂN PHONG - VĨNH LONG</strong><br/>
+              TỔ NGHỆ THUẬT (ÂM NHẠC - MĨ THUẬT)<br/>
+              GVBM: Phan Thị Ngọc Huyền
             </td>
             <td style="width: 50%; text-align: center;">
               <strong>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong><br/>
@@ -383,9 +384,18 @@ function LessonPlanContent() {
               <label className="block font-bold text-slate-700 mb-1">Môn học</label>
               <select
                 value={subject}
-                onChange={(e) => setSubject(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setSubject(val);
+                  if (val === "Âm nhạc") {
+                    setLessonTitle("Chủ đề 2: Tình bạn - Bài 3: Học hát bài Nụ cười");
+                    setLearningOutcomes("Hát đúng giai điệu và lời ca bài hát Nụ cười, biết gõ đệm thanh phách nhịp nhàng theo phách 2/4, cảm nhận tình bạn trong sáng.");
+                    setDurationMinutes("45");
+                  }
+                }}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 outline-none"
               >
+                <option value="Âm nhạc">Âm nhạc</option>
                 <option value="Toán học">Toán học</option>
                 <option value="Tiếng Anh">Tiếng Anh</option>
                 <option value="Khoa học tự nhiên">Khoa học tự nhiên</option>

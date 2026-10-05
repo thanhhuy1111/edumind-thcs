@@ -45,6 +45,7 @@ export default function QuestionsPage() {
   const [questions, setQuestions] = useState<QuestionItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [subjectFilter, setSubjectFilter] = useState("ALL");
   const [gradeFilter, setGradeFilter] = useState("ALL");
   const [difficultyFilter, setDifficultyFilter] = useState("ALL");
   const [typeFilter, setTypeFilter] = useState("ALL");
@@ -64,8 +65,14 @@ export default function QuestionsPage() {
       if (search) params.append("search", search);
 
       const res = await fetch(`/api/questions?${params.toString()}`);
-      const data = await res.json();
-      setQuestions(data);
+      const data: QuestionItem[] = await res.json();
+      if (Array.isArray(data)) {
+        if (subjectFilter !== "ALL") {
+          setQuestions(data.filter(q => q.subject?.code === subjectFilter || q.subject?.name?.toLowerCase().includes(subjectFilter.toLowerCase())));
+        } else {
+          setQuestions(data);
+        }
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -75,7 +82,7 @@ export default function QuestionsPage() {
 
   useEffect(() => {
     fetchQuestions();
-  }, [gradeFilter, difficultyFilter, typeFilter, favoriteOnly, search]);
+  }, [subjectFilter, gradeFilter, difficultyFilter, typeFilter, favoriteOnly, search]);
 
   const handleToggleFavorite = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -167,16 +174,28 @@ export default function QuestionsPage() {
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-2 text-xs">
             {/* Grade */}
+            {/* Subject */}
+            <select
+              value={subjectFilter}
+              onChange={(e) => setSubjectFilter(e.target.value)}
+              className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-700 outline-none"
+            >
+              <option value="ALL">Tất cả môn học</option>
+              <option value="MUSIC">Môn Âm nhạc</option>
+              <option value="MATH">Môn Toán học</option>
+            </select>
+
+            {/* Grade */}
             <select
               value={gradeFilter}
               onChange={(e) => setGradeFilter(e.target.value)}
               className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-700 outline-none"
             >
               <option value="ALL">Tất cả khối</option>
-              <option value="6">Toán Khối 6</option>
-              <option value="7">Toán Khối 7</option>
-              <option value="8">Toán Khối 8</option>
-              <option value="9">Toán Khối 9</option>
+              <option value="6">Khối 6</option>
+              <option value="7">Khối 7</option>
+              <option value="8">Khối 8</option>
+              <option value="9">Khối 9</option>
             </select>
 
             {/* Difficulty */}
@@ -276,8 +295,8 @@ export default function QuestionsPage() {
                     <span className="font-mono text-xs font-black text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
                       #{idx + 1}
                     </span>
-                    <span className="text-xs font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-lg border border-blue-100">
-                      Toán {q.gradeLevel}
+                    <span className="text-xs font-bold bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-lg border border-indigo-100">
+                      {q.subject?.name || "Âm nhạc"} {q.gradeLevel}
                     </span>
                     <span className={`text-xs font-bold px-2 py-0.5 rounded-lg border ${diffBadge.color}`}>
                       {diffBadge.label}
@@ -374,7 +393,7 @@ export default function QuestionsPage() {
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold bg-blue-100 text-blue-700 px-2.5 py-0.5 rounded-full">
-                  Toán {previewQuestion.gradeLevel}
+                  {previewQuestion.subject?.name || "Âm nhạc"} Khối {previewQuestion.gradeLevel}
                 </span>
                 <span className="text-xs font-semibold text-slate-500">
                   {getDifficultyBadge(previewQuestion.difficulty).label}

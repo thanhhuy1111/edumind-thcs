@@ -16,11 +16,11 @@ import {
 
 export default function SettingsPage() {
   const [profile, setProfile] = useState({
-    name: "Nguyễn Thị Lan",
-    email: "lan.nguyen@thcs-cva.edu.vn",
-    phone: "0912 345 678",
-    school: "Trường THCS Chu Văn An - Hà Nội",
-    subjects: "Toán học",
+    name: "Phan Thị Ngọc Huyền",
+    email: "annahuyen889@gmail.com",
+    phone: "0987313889",
+    school: "Trường THCS Tân Phong - Vĩnh Long",
+    subjects: "Âm nhạc",
     grades: "Khối 6, 7, 8, 9",
   });
 

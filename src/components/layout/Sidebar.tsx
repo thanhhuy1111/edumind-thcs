@@ -331,16 +331,16 @@ export function Sidebar({ user }: SidebarProps) {
       <div className="p-3 border-t border-slate-100 bg-slate-50/60">
         <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200/80 shadow-xs">
           <div className="flex items-center gap-2.5 overflow-hidden">
-            <div className="w-8 h-8 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center font-bold text-xs text-blue-700 shrink-0">
-              NL
+            <div className="w-8 h-8 rounded-full bg-indigo-100 border border-indigo-200 flex items-center justify-center font-bold text-xs text-indigo-700 shrink-0">
+              {user?.name ? user.name.split(" ").slice(-2).map(n => n[0]).join("") : "NH"}
             </div>
             <div className="min-w-0">
               <div className="text-xs font-bold text-slate-900 truncate">
-                {user?.name || "Cô Nguyễn Thị Lan"}
+                {user?.name || "Cô Phan Thị Ngọc Huyền"}
               </div>
               <div className="text-[10px] text-slate-500 flex items-center gap-1 truncate font-medium">
                 <School className="w-3 h-3 text-slate-400 shrink-0" />
-                <span className="truncate">{user?.school || "THCS Chu Văn An"}</span>
+                <span className="truncate">{user?.school || "THCS Tân Phong - Vĩnh Long"}</span>
               </div>
             </div>
           </div>

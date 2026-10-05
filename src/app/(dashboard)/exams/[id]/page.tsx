@@ -93,8 +93,8 @@ export default function ExamDetailPage() {
         <table class="header-table">
           <tr>
             <td style="width: 50%;">
-              <strong>${exam.schoolName || "TRƯỜNG THCS CHU VĂN AN"}</strong><br/>
-              TỔ TỰ NHIÊN - TOÁN HỌC
+              <strong>${exam.schoolName || "TRƯỜNG THCS TÂN PHONG - VĨNH LONG"}</strong><br/>
+              ${exam.subject?.toLowerCase().includes("nhạc") ? "TỔ NGHỆ THUẬT (ÂM NHẠC - MĨ THUẬT)" : "TỔ KHOA HỌC TỰ NHIÊN"}
             </td>
             <td style="width: 50%;">
               <strong>ĐỀ KIỂM TRA ĐỊNH KỲ</strong><br/>
@@ -294,9 +294,11 @@ export default function ExamDetailPage() {
           <div className="grid grid-cols-2 gap-4 text-center text-xs">
             <div>
               <p className="font-bold uppercase tracking-wider">
-                {exam.schoolName || "TRƯỜNG THCS CHU VĂN AN"}
+                {exam.schoolName || "TRƯỜNG THCS TÂN PHONG - VĨNH LONG"}
               </p>
-              <p className="font-semibold text-slate-600">TỔ TỰ NHIÊN - BỘ MÔN TOÁN</p>
+              <p className="font-semibold text-slate-600">
+                {exam.subject?.toLowerCase().includes("nhạc") ? "TỔ NGHỆ THUẬT (ÂM NHẠC - MĨ THUẬT)" : "TỔ KHOA HỌC TỰ NHIÊN"}
+              </p>
               <p className="italic text-[11px] text-slate-500">Đề kiểm tra chính thức</p>
             </div>
 

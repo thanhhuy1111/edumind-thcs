@@ -7,7 +7,7 @@ import { Sparkles, Lock, Mail, ArrowRight, CheckCircle2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("lan.nguyen@thcs-cva.edu.vn");
+  const [email, setEmail] = useState("annahuyen889@gmail.com");
   const [password, setPassword] = useState("demo123456");
   const [loading, setLoading] = useState(false);
 

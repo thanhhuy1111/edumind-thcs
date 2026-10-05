@@ -39,11 +39,11 @@ export function FloatingAIAssistant({ isOpen, onClose }: FloatingAIAssistantProp
     {
       id: "initial",
       role: "assistant",
-      content: `Xin chào cô Lan! Em là **EduMind AI Assistant**, trợ lý giảng dạy THCS của cô. Em đã đồng bộ toàn bộ dữ liệu 4 lớp (6A1, 7A1, 7A2, 8A1), ngân hàng câu hỏi và lịch sử làm bài kiểm tra. Cô cần em hỗ trợ điều gì hôm nay?`,
+      content: `Xin chào cô Huyền! Em là **EduMind AI Assistant**, trợ lý giảng dạy môn Âm nhạc của cô tại THCS Tân Phong - Vĩnh Long. Em đã đồng bộ toàn bộ dữ liệu các lớp (6A1, 7A1, 7A2, 8A1, 9A1) và ngân hàng câu hỏi âm nhạc GDPT 2018. Cô cần em hỗ trợ gì hôm nay?`,
       suggestedActions: [
-        { label: "Lớp 7A1 đang yếu phần nào?", action: "ASK_PROMPT", params: { text: "Lớp 7A1 đang yếu phần nào?" } },
-        { label: "Tạo đề 15 phút bù hổng kiến thức", action: "ASK_PROMPT", params: { text: "Tạo đề 15 phút dựa trên phần lớp 7A1 đang yếu" } },
-        { label: "So sánh 7A1 và 7A2", action: "ASK_PROMPT", params: { text: "So sánh kết quả lớp 7A1 và 7A2" } },
+        { label: "Lớp 7A1 cần rèn kỹ năng nào?", action: "ASK_PROMPT", params: { text: "Lớp 7A1 đang yếu phần nào?" } },
+        { label: "Tạo đề 15 phút Âm nhạc lớp 7", action: "ASK_PROMPT", params: { text: "Tạo đề 15 phút âm nhạc lớp 7" } },
+        { label: "Gợi ý trò chơi khởi động tiết học", action: "ASK_PROMPT", params: { text: "Gợi ý trò chơi khởi động tiết học hát lớp 7" } },
       ],
     },
   ]);

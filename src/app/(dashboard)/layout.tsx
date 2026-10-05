@@ -29,9 +29,9 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <Sidebar
         user={{
-          name: "Cô Nguyễn Thị Lan",
-          email: "lan.nguyen@thcs-cva.edu.vn",
-          school: "THCS Chu Văn An - Hà Nội",
+          name: "Cô Phan Thị Ngọc Huyền",
+          email: "annahuyen889@gmail.com",
+          school: "THCS Tân Phong - Vĩnh Long",
         }}
       />
 

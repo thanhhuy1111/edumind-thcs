@@ -68,9 +68,9 @@ function SlidesStudioContent() {
   const initialLessonId = searchParams.get("lessonId") || "";
 
   // Configuration Form State
-  const [subject, setSubject] = useState("Toán học");
+  const [subject, setSubject] = useState("Âm nhạc");
   const [grade, setGrade] = useState("7");
-  const [lessonTitle, setLessonTitle] = useState("Bài 6: Tỉ lệ thức và dãy tỉ số bằng nhau");
+  const [lessonTitle, setLessonTitle] = useState("Chủ đề 2: Tình bạn - Học hát bài Nụ cười");
   const [style, setStyle] = useState("Học tập tương tác & Trực quan");
   const [slideCount, setSlideCount] = useState(10);
 
@@ -459,9 +459,16 @@ function SlidesStudioContent() {
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Môn học</label>
             <select
               value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-slate-100"
+              onChange={(e) => {
+                const val = e.target.value;
+                setSubject(val);
+                if (val === "Âm nhạc") {
+                  setLessonTitle("Chủ đề 2: Tình bạn - Học hát bài Nụ cười");
+                }
+              }}
+              className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-slate-100 font-semibold"
             >
+              <option value="Âm nhạc">Âm nhạc</option>
               <option value="Toán học">Toán học</option>
               <option value="Khoa học tự nhiên">Khoa học tự nhiên</option>
               <option value="Ngữ văn">Ngữ văn</option>

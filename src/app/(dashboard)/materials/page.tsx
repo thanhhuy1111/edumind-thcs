@@ -301,7 +301,7 @@ function MaterialsContent() {
                 <input
                   type="text"
                   required
-                  placeholder="VD: Bài 6: Tỉ lệ thức và dãy tỉ số bằng nhau"
+                  placeholder="VD: Chủ đề 2: Tình bạn - Bài 3: Học hát bài Nụ cười"
                   value={lessonName}
                   onChange={(e) => setLessonName(e.target.value)}
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold outline-none"

@@ -16,6 +16,7 @@ import {
   BookOpen,
   Presentation,
   Award,
+  Music,
 } from "lucide-react";
 
 interface TopHeaderProps {
@@ -50,8 +51,8 @@ export function TopHeader({ onOpenAIDrawer }: TopHeaderProps) {
           <Calendar className="w-3.5 h-3.5 text-slate-400" />
           <span>Năm học 2026–2027</span>
           <span className="w-1 h-1 rounded-full bg-slate-300" />
-          <Layers className="w-3.5 h-3.5 text-blue-600" />
-          <span className="text-slate-900 font-semibold">Toán THCS (K6-K9)</span>
+          <Music className="w-3.5 h-3.5 text-indigo-600" />
+          <span className="text-slate-900 font-semibold">Âm nhạc THCS (K6-K9)</span>
         </div>
 
         {/* AI Quick Assistant Trigger Button */}

@@ -36,13 +36,13 @@ export default function AIQuestionGeneratorPage() {
   const router = useRouter();
 
   // Generator Config State
-  const [subject, setSubject] = useState("MATH");
+  const [subject, setSubject] = useState("MUSIC");
   const [grade, setGrade] = useState("7");
   const [difficulty, setDifficulty] = useState("THONG_HIEU");
   const [questionType, setQuestionType] = useState("SINGLE_CHOICE");
   const [count, setCount] = useState("5");
   const [promptNote, setPromptNote] = useState(
-    "Tạo các câu trắc nghiệm về tỉ lệ thức và dãy tỉ số bằng nhau, gắn liền với bài toán chia tiền hoặc toán thực tế học sinh THCS."
+    "Tạo các câu trắc nghiệm Âm nhạc lớp 7 về bài hát Nụ cười, nhịp 2/4 và làn điệu Dân ca Nam Bộ (Lý cây bông) theo chuẩn GDPT 2018."
   );
 
   // Generation & Result State
@@ -61,7 +61,7 @@ export default function AIQuestionGeneratorPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          subject: subject === "MATH" ? "Toán học" : "Tiếng Anh",
+          subject: subject === "MUSIC" ? "Âm nhạc" : subject === "MATH" ? "Toán học" : "Tiếng Anh",
           grade: parseInt(grade, 10),
           difficulty,
           questionType,
@@ -169,9 +169,18 @@ export default function AIQuestionGeneratorPage() {
                   <label className="block font-semibold text-slate-700 mb-1">Môn học</label>
                   <select
                     value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setSubject(val);
+                      if (val === "MUSIC") {
+                        setPromptNote("Tạo 5 câu trắc nghiệm Âm nhạc lớp 7 về bài hát Nụ cười, nhịp 2/4 và Dân ca Nam Bộ theo định hướng phát triển năng lực GDPT 2018.");
+                      } else if (val === "MATH") {
+                        setPromptNote("Tạo các câu trắc nghiệm về tỉ lệ thức và dãy tỉ số bằng nhau, gắn liền với bài toán thực tế học sinh THCS.");
+                      }
+                    }}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 outline-none"
                   >
+                    <option value="MUSIC">Âm nhạc</option>
                     <option value="MATH">Toán học</option>
                     <option value="ENGLISH">Tiếng Anh</option>
                     <option value="SCIENCE">Khoa học tự nhiên</option>
@@ -255,7 +264,7 @@ export default function AIQuestionGeneratorPage() {
                   rows={4}
                   value={promptNote}
                   onChange={(e) => setPromptNote(e.target.value)}
-                  placeholder="Ví dụ: Tạo 5 câu trắc nghiệm về tỉ lệ thức lớp 7, ưu tiên bài toán thực tế..."
+                  placeholder="Ví dụ: Tạo 5 câu trắc nghiệm Âm nhạc về nhịp 2/4, Đàn Bầu Việt Nam, bài hát Khai trường..."
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                 />
               </div>

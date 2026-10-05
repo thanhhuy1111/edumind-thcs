@@ -33,7 +33,162 @@ export class SmartLocalAIProvider implements AIProvider {
     const isRatioTopic = promptNote.toLowerCase().includes("tỉ lệ") || promptNote.toLowerCase().includes("tỉ số") || grade === 7;
 
     for (let i = 0; i < count; i++) {
-      if (subject.includes("Toán") || subject === "MATH") {
+      if (subject.includes("Âm nhạc") || subject === "MUSIC" || subject.toLowerCase().includes("nhạc")) {
+        if (grade === 6) {
+          if (difficulty === "NHAN_BIET") {
+            questions.push({
+              content: `Kí hiệu nào sau đây dùng để chỉ độ cao của các âm thanh trong bản nhạc?`,
+              type: "SINGLE_CHOICE",
+              difficulty: "NHAN_BIET",
+              answers: [
+                { label: "A", content: "Khuông nhạc và khóa Sol", isCorrect: true },
+                { label: "B", content: "Dấu nối và dấu luyến", isCorrect: false },
+                { label: "C", content: "Dấu lặng đen", isCorrect: false },
+                { label: "D", content: "Vạch nhịp kép", isCorrect: false },
+              ],
+              correct_answer: "A",
+              explanation: "Khuông nhạc (gồm 5 dòng kẻ, 4 khe) kết hợp cùng Khóa Sol ở đầu khuông nhạc dùng để xác định cao độ chuẩn của các nốt nhạc.",
+              skill: "Nhận biết kí hiệu cao độ trong âm nhạc",
+              source: "EduMind Music Curriculum Engine",
+              tags: ["am-nhac-6", "li-thuyet-am-nhac", "nhan-biet"],
+            });
+          } else if (difficulty === "THONG_HIEU") {
+            questions.push({
+              content: `Trong nhịp 2/4, mỗi ô nhịp có bao nhiêu phách và giá trị độ dài mỗi phách tương đương với hình nốt nào?`,
+              type: "SINGLE_CHOICE",
+              difficulty: "THONG_HIEU",
+              answers: [
+                { label: "A", content: "Có 2 phách, mỗi phách tương đương một nốt đen", isCorrect: true },
+                { label: "B", content: "Có 4 phách, mỗi phách tương đương một nốt đơn", isCorrect: false },
+                { label: "C", content: "Có 2 phách, mỗi phách tương đương một nốt trắng", isCorrect: false },
+                { label: "D", content: "Có 3 phách, mỗi phách tương đương một nốt tròn", isCorrect: false },
+              ],
+              correct_answer: "A",
+              explanation: "Số chỉ nhịp 2/4: Số 2 ở trên chỉ 2 phách trong một ô nhịp; số 4 ở dưới chỉ mỗi phách tương đương giá trị 1/4 nốt tròn, tức là 1 nốt đen (phách 1 mạnh, phách 2 nhẹ).",
+              skill: "Hiểu số chỉ nhịp 2/4",
+              source: "EduMind Music Curriculum Engine",
+              tags: ["am-nhac-6", "nhip-2-4", "thong-hieu"],
+            });
+          } else {
+            questions.push({
+              content: `Khi luyện gõ thanh phách đệm cho bài hát viết ở nhịp 2/4, học sinh cần gõ vào những vị trí nào của ô nhịp?`,
+              type: "SINGLE_CHOICE",
+              difficulty: "VAN_DUNG",
+              answers: [
+                { label: "A", content: "Gõ đều đặn vào cả phách 1 (mạnh) và phách 2 (nhẹ)", isCorrect: true },
+                { label: "B", content: "Chỉ gõ vào phách 2 và bỏ phách 1", isCorrect: false },
+                { label: "C", content: "Gõ liên tục 4 tiếng trong một ô nhịp", isCorrect: false },
+                { label: "D", content: "Chỉ gõ khi kết thúc toàn bài hát", isCorrect: false },
+              ],
+              correct_answer: "A",
+              explanation: "Gõ đệm theo phách đòi hỏi gõ đều đặn vào từng phách của ô nhịp (phách 1 mạnh, phách 2 nhẹ) để giữ vững nhịp độ cho toàn bài hát.",
+              skill: "Kỹ năng gõ thanh phách theo nhịp 2/4",
+              source: "EduMind Music Curriculum Engine",
+              tags: ["am-nhac-6", "nhac-cu", "van-dung"],
+            });
+          }
+        } else if (grade === 7) {
+          if (difficulty === "NHAN_BIET") {
+            questions.push({
+              content: `Dấu hóa nào sau đây có tác dụng làm tăng cao độ của nốt nhạc lên nửa cung?`,
+              type: "SINGLE_CHOICE",
+              difficulty: "NHAN_BIET",
+              answers: [
+                { label: "A", content: "Dấu thăng (#)", isCorrect: true },
+                { label: "B", content: "Dấu giáng (b)", isCorrect: false },
+                { label: "C", content: "Dấu bình (♮)", isCorrect: false },
+                { label: "D", content: "Dấu chấm dôi", isCorrect: false },
+              ],
+              correct_answer: "A",
+              explanation: "Dấu thăng (#) có tác dụng nâng cao độ của nốt nhạc lên nửa cung (1/2 cung). Dấu giáng hạ nửa cung, dấu bình hủy bỏ hiệu lực của dấu thăng hoặc giáng.",
+              skill: "Nhận biết các loại dấu hóa",
+              source: "EduMind Music Curriculum Engine",
+              tags: ["am-nhac-7", "dau-hoa", "nhan-biet"],
+            });
+          } else if (difficulty === "THONG_HIEU") {
+            questions.push({
+              content: `Bài hát 'Lí cây đa' thuộc thể loại âm nhạc dân gian của vùng miền nào ở nước ta?`,
+              type: "SINGLE_CHOICE",
+              difficulty: "THONG_HIEU",
+              answers: [
+                { label: "A", content: "Dân ca Quan họ Bắc Ninh", isCorrect: true },
+                { label: "B", content: "Dân ca Nam Bộ", isCorrect: false },
+                { label: "C", content: "Dân ca Nam Trung Bộ", isCorrect: false },
+                { label: "D", content: "Hát then Tây Bắc", isCorrect: false },
+              ],
+              correct_answer: "A",
+              explanation: "'Lí cây đa' là bài dân ca đặc sắc, dí dỏm, mang đậm làn điệu dân ca Quan họ Bắc Ninh truyền thống của vùng đồng bằng Bắc Bộ.",
+              skill: "Thưởng thức và hiểu biết dân ca Việt Nam",
+              source: "EduMind Music Curriculum Engine",
+              tags: ["am-nhac-7", "dan-ca", "thong-hieu"],
+            });
+          } else if (difficulty === "VAN_DUNG") {
+            questions.push({
+              content: `Xác định tên nốt nhạc sau khi áp dụng dấu thăng (#) cho nốt Fa ở khe thứ nhất trên khuông nhạc khóa Sol:`,
+              type: "SINGLE_CHOICE",
+              difficulty: "VAN_DUNG",
+              answers: [
+                { label: "A", content: "Fa thăng (F#)", isCorrect: true },
+                { label: "B", content: "Sol giáng (Gb)", isCorrect: false },
+                { label: "C", content: "Mi thăng (E#)", isCorrect: false },
+                { label: "D", content: "Fa bình (F)", isCorrect: false },
+              ],
+              correct_answer: "A",
+              explanation: "Nốt Fa nằm ở khe 1 của khuông nhạc khóa Sol, khi có dấu thăng đứng trước sẽ trở thành nốt Fa thăng (F#).",
+              skill: "Vận dụng đọc nhạc có dấu hóa",
+              source: "EduMind Music Curriculum Engine",
+              tags: ["am-nhac-7", "doc-nhac", "van-dung"],
+            });
+          } else {
+            questions.push({
+              content: `Em hãy phân tích ý nghĩa cấu trúc giai điệu và tình cảm trong ca khúc thiếu nhi 'Nụ cười' (Nhạc Nga), từ đó nêu cách thể hiện sắc thái khi trình bày trước tập thể:`,
+              type: "SHORT_ANSWER",
+              difficulty: "VAN_DUNG_CAO",
+              answers: [{ label: "A", content: "Hát với sắc thái vui tươi, hồn nhiên, ngắt câu đúng nhịp và thể hiện ánh mắt lạc quan", isCorrect: true }],
+              correct_answer: "A",
+              explanation: "Bài hát có giai điệu tươi sáng, nhịp nhàng. Khi biểu diễn cần phát âm rõ lời, lấy hơi đúng chỗ, ánh mắt tươi vui truyền tải thông điệp lạc quan về tình bạn.",
+              skill: "Cảm thụ và sáng tạo âm nhạc nâng cao",
+              source: "EduMind Music Curriculum Engine",
+              tags: ["am-nhac-7", "bieu-dien", "van-dung-cao"],
+            });
+          }
+        } else if (grade === 8) {
+          questions.push({
+            content: `Gam Đô trưởng (C major) có âm chủ là nốt nào và gồm các bậc âm nào sau đây?`,
+            type: "SINGLE_CHOICE",
+            difficulty: "THONG_HIEU",
+            answers: [
+              { label: "A", content: "Âm chủ là Đô (C); gồm các âm Đô - Rê - Mi - Pha - Son - La - Si - (Đô)", isCorrect: true },
+              { label: "B", content: "Âm chủ là La (A); gồm các âm La - Si - Đô - Rê - Mi - Pha - Son - (La)", isCorrect: false },
+              { label: "C", content: "Âm chủ là Son (G); có một dấu thăng Fa#", isCorrect: false },
+              { label: "D", content: "Âm chủ là Fa (F); có một dấu giáng Sib", isCorrect: false },
+            ],
+            correct_answer: "A",
+            explanation: "Gam Đô trưởng là gam trưởng tự nhiên không có dấu hóa ở hóa biểu, âm chủ là Đô (bậc I), cấu tạo cung và nửa cung: 1 - 1 - 1/2 - 1 - 1 - 1 - 1/2.",
+            skill: "Lí thuyết Gam Đô trưởng và giọng La thứ",
+            source: "EduMind Music Curriculum Engine",
+            tags: ["am-nhac-8", "gam-do-truong", "thong-hieu"],
+          });
+        } else {
+          // Grade 9
+          questions.push({
+            content: `Nghệ thuật Đờn ca tài tử Nam Bộ được UNESCO công nhận là Di sản văn hóa phi vật thể của nhân loại sử dụng các nhạc cụ chủ đạo nào?`,
+            type: "SINGLE_CHOICE",
+            difficulty: "THONG_HIEU",
+            answers: [
+              { label: "A", content: "Đàn kìm (đàn nguyệt), đàn tranh, đàn cò, đàn bầu và song loan", isCorrect: true },
+              { label: "B", content: "Đàn ghi-ta điện, trống jazz và đàn organ điện tử", isCorrect: false },
+              { label: "C", content: "Cồng chiêng Tây Nguyên và sáo trúc", isCorrect: false },
+              { label: "D", content: "Đàn đáy, phách và trống chầu", isCorrect: false },
+            ],
+            correct_answer: "A",
+            explanation: "Đờn ca tài tử Nam Bộ là nét đẹp văn hóa đặc sắc phương Nam, dàn nhạc truyền thống tiêu biểu gồm bộ ngũ tuyệt: Đàn kìm, Đàn tranh, Đàn cò, Đàn bầu, Đàn tam kết hợp gõ song loan giữ nhịp.",
+            skill: "Thưởng thức di sản âm nhạc Đờn ca tài tử Nam Bộ",
+            source: "EduMind Music Curriculum Engine",
+            tags: ["am-nhac-9", "don-ca-tai-tu", "nam-bo"],
+          });
+        }
+      } else if (subject.includes("Toán") || subject === "MATH") {
         if (grade === 7 && isRatioTopic) {
           if (difficulty === "NHAN_BIET") {
             questions.push({
@@ -157,7 +312,7 @@ export class SmartLocalAIProvider implements AIProvider {
       } else {
         // Multi-subject fallback (e.g. English, Science)
         questions.push({
-          content: `Choose the correct form of the verb: "She ______ (teach) Math at Chu Van An Secondary School since 2020."`,
+          content: `Choose the correct form of the verb: "She ______ (teach) Music and Arts at Tan Phong Secondary School since 2020."`,
           type: "SINGLE_CHOICE",
           difficulty: "THONG_HIEU",
           answers: [
@@ -198,12 +353,100 @@ export class SmartLocalAIProvider implements AIProvider {
 
   async generateLessonPlan(params: GenerateLessonPlanParams): Promise<GeneratedLessonPlan> {
     const {
-      subject = "Toán học",
+      subject = "Âm nhạc",
       grade = 7,
-      lessonTitle = "Bài 6: Tỉ lệ thức và dãy tỉ số bằng nhau",
-      durationMinutes = 90,
+      lessonTitle = "Chủ đề 2: Tình bạn - Bài 3: Học hát bài Nụ cười",
+      durationMinutes = 45,
       learningOutcomes,
     } = params;
+
+    const isMusic =
+      subject.includes("Âm nhạc") ||
+      subject === "MUSIC" ||
+      subject.toLowerCase().includes("nhạc") ||
+      lessonTitle.toLowerCase().includes("hát") ||
+      lessonTitle.toLowerCase().includes("nhạc");
+
+    if (isMusic) {
+      return {
+        title: `KẾ HOẠCH BÀI DẠY: ${lessonTitle.toUpperCase()}`,
+        subject: "Âm nhạc",
+        grade,
+        duration: `${durationMinutes} phút (${Math.round(durationMinutes / 45)} tiết)`,
+        objectives: {
+          knowledge: [
+            `Học sinh hát đúng cao độ, trường độ bài hát, thể hiện đúng tính chất âm nhạc vui tươi, trong sáng.`,
+            `Biết hát kết hợp gõ đệm thanh phách theo phách, theo nhịp 2/4 hoặc vận động cơ thể (body percussion).`,
+            learningOutcomes || `Cảm nhận được thông điệp lạc quan về tình bạn, niềm tin yêu cuộc sống qua giai điệu âm nhạc.`,
+          ],
+          competencies: [
+            "Năng lực thể hiện âm nhạc: Biết lấy hơi, duy trì cột hơi, hát đúng giai điệu và phát âm rõ lời ca.",
+            "Năng lực cảm thụ và hiểu biết âm nhạc: Cảm nhận được sắc thái tình cảm của bài hát và cấu trúc đoạn/câu.",
+            "Năng lực ứng dụng và sáng tạo âm nhạc: Biết tự sáng tạo các động tác gõ đệm hoặc vận động phụ họa phù hợp.",
+            "Năng lực giao tiếp và hợp tác: Tự tin hòa giọng cùng nhóm, tôn trọng sự phối hợp bè và nhịp điệu chung.",
+          ],
+          qualities: [
+            "Nhân ái: Biết sẻ chia niềm vui, gắn kết tình bạn bè trong sáng dưới mái trường THCS.",
+            "Chăm chỉ: Tích cực luyện thanh, kiên trì tập luyện các nốt cao và gõ đệm chính xác.",
+            "Trách nhiệm: Giữ gìn và sử dụng cẩn thận nhạc cụ gõ (thanh phách, song loan) của phòng học bộ môn.",
+          ],
+        },
+        equipment: {
+          teacher: [
+            "Đàn phím điện tử (Organ / Keyboard) phục vụ luyện thanh và đệm hát.",
+            "Máy tính kết nối Smart Tivi / loa kéo, bài giảng điện tử tương tác và file nhạc beat chuẩn.",
+            "Bộ gõ mẫu: Thanh phách gỗ, song loan, tambourine.",
+          ],
+          student: [
+            "Sách giáo khoa Âm nhạc 7 (Bộ sách Kết Nối Tri Thức / Chân Trời Sáng Tạo).",
+            "Thanh phách gõ tự làm hoặc mua theo quy định của bộ môn.",
+            "Tập ghi chép bài hát và các nốt nhạc.",
+          ],
+          digital: [
+            "Bài giảng điện tử EduMind Music Slides tương tác sinh động.",
+            "Video clip mẫu biểu diễn bài hát của dàn hợp xướng thiếu nhi.",
+          ],
+        },
+        activities: [
+          {
+            id: "act-1",
+            order: 1,
+            name: "Hoạt động 1: Mở đầu / Khởi động (5 phút)",
+            objective: "Tạo tâm thế hào hứng, khai mở giọng hát và dẫn dắt học sinh vào không gian nghệ thuật âm nhạc.",
+            content: "1. Trò chơi âm nhạc 'Nghe giai điệu đoán tên bài hát'. 2. Luyện thanh ngắn theo mẫu âm: 'La - Ma - Mi' theo thang âm Đô trưởng (C major).",
+            product: "Học sinh khởi động giọng hát tự nhiên, mở khẩu hình đúng kỹ thuật và hào hứng đón nhận bài học.",
+            execution: "Bước 1: Giáo viên bấm phím đàn chuỗi giai điệu quen thuộc, học sinh giơ tay đoán tên bài hát.\nBước 2: Giáo viên đàn mẫu âm 1 quãng 5 (Đô - Mi - Sol - Mi - Đô), bắt nhịp cả lớp luyện thanh tăng dần nửa cung.\nBước 3: Giáo viên nhận xét khẩu hình, cột hơi và giới thiệu bài học mới.",
+          },
+          {
+            id: "act-2",
+            order: 2,
+            name: "Hoạt động 2: Hình thành kiến thức mới (Khám phá bài hát - 18 phút)",
+            objective: "Học sinh nắm được xuất xứ tác phẩm, cấu trúc bài hát và học hát từng câu đúng giai điệu, tiết tấu.",
+            content: "1. Giới thiệu tác giả, hoàn cảnh sáng tác và sắc thái bài hát.\n2. Nghe hát mẫu qua video/audio hoặc giáo viên tự đệm đàn hát mẫu.\n3. Đọc lời ca theo tiết tấu bài hát.\n4. Dạy hát từng câu nối tiếp (chia bài làm 4 câu ngắn).",
+            product: "Học sinh hát đúng từng câu theo tiếng đàn, ghép hoàn chỉnh nửa đầu bài hát với cao độ chuẩn xác.",
+            execution: "Bước 1: Giáo viên thuyết minh ngắn gọn về ca khúc, cho cả lớp nghe bản thu chuẩn.\nBước 2: Hướng dẫn học sinh đọc lời ca nhịp nhàng theo tiếng gõ phách.\nBước 3: Giáo viên đàn giai điệu câu 1 (2 lần), bắt nhịp cả lớp hát lại; sửa sai cao độ ngay tại chỗ.\nBước 4: Tiến hành tương tự với các câu tiếp theo rồi ghép nối các câu lại với nhau.",
+          },
+          {
+            id: "act-3",
+            order: 3,
+            name: "Hoạt động 3: Luyện tập (Củng cố hát kết hợp gõ đệm - 15 phút)",
+            objective: "Rèn luyện kỹ năng hát thuần thục, đúng nhịp độ và kết hợp nhạc cụ gõ đệm thanh phách nhịp nhàng.",
+            content: "1. Hát kết hợp gõ đệm theo phách (phách 1 mạnh, phách 2 nhẹ).\n2. Hát kết hợp gõ đệm theo tiết tấu lời ca.\n3. Luyện tập theo các hình thức: Cả lớp -> Dãy bàn -> Nhóm 4 học sinh -> Đơn ca cá nhân.",
+            product: "Học sinh giữ vững nhịp độ, tiếng gõ phách giòn giã đồng đều và thuộc lời ca cơ bản.",
+            execution: "Bước 1: Giáo viên làm mẫu cách cầm thanh phách và tư thế gõ đệm theo phách.\nBước 2: Bật nhạc đệm beat, chỉ huy cả lớp cùng thực hiện.\nBước 3: Mời đại diện 2 nhóm lên bảng thực hành đối đáp (nhóm 1 hát, nhóm 2 gõ đệm và đổi ngược lại).\nBước 4: Học sinh nhận xét chéo, giáo viên tuyên dương nhóm có nhịp phách chuẩn xác nhất.",
+          },
+          {
+            id: "act-4",
+            order: 4,
+            name: "Hoạt động 4: Vận dụng - Sáng tạo & Dặn dò (7 phút)",
+            objective: "Khuyến khích học sinh tự tin biểu diễn trước đám đông và lan tỏa tình yêu âm nhạc.",
+            content: "1. Biểu diễn bài hát kết hợp động tác phụ họa nhẹ nhàng hoặc vận động cơ thể (vỗ tay, giậm chân theo nhịp).\n2. Cảm nhận sau tiết học.\n3. Dặn dò ôn luyện ở nhà và chuẩn bị tiết Đọc nhạc tiếp theo.",
+            product: "Màn trình diễn tự tin, nét mặt tươi vui và tinh thần kết nối bạn bè của học sinh.",
+            execution: "Bước 1: Giáo viên hướng dẫn 2 động tác phụ họa đơn giản (nghiêng người theo nhịp, tay đưa nhẹ sang hai bên).\nBước 2: Cho cả lớp đứng tại chỗ vừa hát vừa nhún nhảy theo giai điệu bài hát kết thúc tiết học.\nBước 3: Dặn dò học sinh luyện tập thêm cùng người thân và ghi nhớ tên tác giả bài hát.",
+          },
+        ],
+      };
+    }
 
     return {
       title: `KẾ HOẠCH BÀI DẠY: ${lessonTitle.toUpperCase()}`,
@@ -287,6 +530,169 @@ export class SmartLocalAIProvider implements AIProvider {
   async generateSlideDeck(params: GenerateSlideParams): Promise<GeneratedSlideDeck> {
     const { lessonTitle, subject, grade } = params;
 
+    const isMusic =
+      subject.includes("Âm nhạc") ||
+      subject === "MUSIC" ||
+      subject.toLowerCase().includes("nhạc") ||
+      lessonTitle.toLowerCase().includes("hát") ||
+      lessonTitle.toLowerCase().includes("nhạc");
+
+    if (isMusic) {
+      return {
+        title: `BÀI GIẢNG ĐIỆN TỬ: ${lessonTitle.toUpperCase()}`,
+        subject: "Âm nhạc",
+        grade,
+        slides: [
+          {
+            slideNumber: 1,
+            title: lessonTitle,
+            subtitle: `Môn Âm nhạc - Khối ${grade} (Chương trình GDPT 2018)`,
+            mainContent: "Chào mừng các em học sinh đến với tiết học Âm nhạc hôm nay!",
+            bullets: [
+              "Giáo viên: Cô Phan Thị Ngọc Huyền",
+              "Trường: THCS Tân Phong - Vĩnh Long",
+              "Thời lượng: 45 phút",
+            ],
+            teacherNote: "Khởi động không khí vui tươi, mời các em ngồi ngay ngắn và chuẩn bị thanh phách.",
+            suggestedVisual: "Hình ảnh phím đàn piano và các nốt nhạc lung linh với tông màu tím - xanh nghệ thuật.",
+          },
+          {
+            slideNumber: 2,
+            title: "Mục Tiêu Bài Học",
+            subtitle: "Yêu cầu cần đạt trọng tâm",
+            mainContent: "Sau khi hoàn thành tiết học, các em sẽ:",
+            bullets: [
+              "Hát đúng cao độ, trường độ và phát âm rõ lời ca",
+              "Biết cách lấy hơi ở đầu câu và duy trì cột hơi ổn định",
+              "Thực hành gõ đệm thanh phách nhịp nhàng theo phách 2/4",
+              "Cảm thụ giai điệu trong sáng và tự tin biểu diễn trước bạn bè",
+            ],
+            teacherNote: "Nhắc nhở học sinh tập trung vào kỹ thuật mở khẩu hình và gõ phách đều tay.",
+            suggestedVisual: "Infographic 4 biểu tượng nốt nhạc, micro, thanh phách và trái tim kết nối.",
+          },
+          {
+            slideNumber: 3,
+            title: "1. Khởi Động Giọng Hát",
+            subtitle: "Luyện thanh theo mẫu âm cơ bản",
+            mainContent: "Khởi động thanh đới với âm La - Ma - Mi theo gam Đô trưởng:",
+            bullets: [
+              "Mẫu âm 1: Đô - Mi - Sol - Mi - Đô (La... La... La...)",
+              "Mẫu âm 2: Đô - Rê - Mi - Pha - Sol - Pha - Mi - Rê - Đô (Ma... Ma...)",
+              "Tư thế ngồi hát: Lưng thẳng, ngực vươn, thả lỏng vai và cổ",
+              "Mở khẩu hình tròn chữ O và ngân vang tự nhiên",
+            ],
+            teacherNote: "Cô Huyền đàn phím mẫu và chỉ huy cả lớp luyện thanh tăng dần từng nửa cung.",
+            suggestedVisual: "Khuông nhạc khóa Sol kèm nốt Đô trưởng và hình minh họa khẩu hình chuẩn.",
+            interactiveActivity: "Cả lớp đứng dậy luyện thanh đồng thanh theo nhịp chỉ huy của giáo viên.",
+          },
+          {
+            slideNumber: 4,
+            title: "2. Khám Phá & Tìm Hiểu Tác Phẩm",
+            subtitle: "Tác giả và xuất xứ bài hát",
+            mainContent: "Tìm hiểu nét đẹp văn hóa và bối cảnh ca khúc:",
+            bullets: [
+              "Tên tác phẩm: Học hát bài Nụ cười (Nhạc Nga)",
+              "Đặc điểm giai điệu: Vui tươi, hồn nhiên, giàu chất thơ",
+              "Nhịp điệu: Viết ở nhịp 2/4 với tiết tấu rộn ràng, nhịp nhàng",
+              "Ý nghĩa lời ca: Nụ cười sưởi ấm tâm hồn và thắt chặt tình bạn học trò",
+            ],
+            teacherNote: "Kể một mẩu chuyện ngắn truyền cảm hứng về tình bạn để khơi gợi cảm xúc.",
+            suggestedVisual: "Hình ảnh các bạn thiếu nhi tươi cười nắm tay nhau trong khung cảnh thiên nhiên tươi đẹp.",
+          },
+          {
+            slideNumber: 5,
+            title: "3. Nghe Hát Mẫu & Cảm Nhận Giai Điệu",
+            subtitle: "Thưởng thức bản thu âm chuẩn",
+            mainContent: "Hãy lắng nghe giai điệu và đung đưa nhẹ theo nhịp bài hát:",
+            bullets: [
+              "Cảm nhận tốc độ: Vừa phải, không quá nhanh, không quá chậm",
+              "Lắng nghe các chỗ lấy hơi và các tiếng ngân dài",
+              "Cảm nhận tính chất âm nhạc: Trong sáng, lạc quan và yêu đời",
+              "Quan sát các câu hát được lặp lại trong bài",
+            ],
+            teacherNote: "Bật file âm thanh chất lượng cao qua hệ thống loa lớp học.",
+            suggestedVisual: "Thanh phát nhạc đa phương tiện kèm dải sóng âm thanh chuyển động nhịp nhàng.",
+          },
+          {
+            slideNumber: 6,
+            title: "4. Đọc Lời Ca Theo Tiết Tấu",
+            subtitle: "Rèn luyện nhịp điệu lời bài hát",
+            mainContent: "Đọc diễn cảm lời ca kết hợp vỗ tay theo phách:",
+            bullets: [
+              "Câu 1: Cho trời sáng lên cùng với bao nụ cười",
+              "Câu 2: Cầu vồng thêm lung linh bao sắc màu hiền hòa",
+              "Câu 3: Nụ cười tươi lòng ta thêm rạng rỡ",
+              "Câu 4: Và tiếng cười rộn vang khắp muôn nơi xa xôi",
+            ],
+            teacherNote: "Cho học sinh đọc nối tiếp giữa dãy bàn 1 và dãy bàn 2.",
+            suggestedVisual: "Bảng lời ca chữ lớn rõ ràng, các từ có phách mạnh được in đậm màu đỏ nổi bật.",
+          },
+          {
+            slideNumber: 7,
+            title: "5. Tập Hát Từng Câu (Học Hát)",
+            subtitle: "Dạy hát kết hợp tiếng đàn Organ",
+            mainContent: "Tập hát nối tiếp từng câu ngắn:",
+            bullets: [
+              "Câu 1: Nghe đàn giai điệu 2 lần -> Cả lớp hát lại",
+              "Câu 2: Tập tương tự -> Ghép nối câu 1 và câu 2",
+              "Câu 3 & Câu 4: Tập kỹ các nốt nhảy quãng và nốt ngân 2 phách",
+              "Ghép toàn bài: Hát hoàn chỉnh cả lời 1 với tiếng đàn đệm",
+            ],
+            teacherNote: "Lắng nghe kỹ để phát hiện những bạn hát chưa chuẩn cao độ và chỉnh sửa nhẹ nhàng.",
+            suggestedVisual: "Khuông nhạc từng câu hiển thị rõ nốt nhạc và ca từ tương ứng.",
+          },
+          {
+            slideNumber: 8,
+            title: "6. Hát Kết Hợp Gõ Đệm Nhạc Cụ",
+            subtitle: "Sử dụng Thanh phách & Song loan",
+            mainContent: "Thực hành gõ đệm theo 2 hình thức:",
+            bullets: [
+              "Hình thức 1 (Theo phách): Gõ đều vào cả phách mạnh và phách nhẹ",
+              "Hình thức 2 (Theo nhịp): Chỉ gõ vào đầu mỗi ô nhịp (phách 1 mạnh)",
+              "Sáng tạo vận động: Động tác Body Percussion (vỗ tay - vỗ đùi theo nhịp)",
+              "Biểu diễn luân phiên: Dãy A hát, Dãy B gõ đệm và ngược lại",
+            ],
+            teacherNote: "Khích lệ các em gõ thật giòn, dứt khoát và giữ nhịp ổn định.",
+            suggestedVisual: "Hình ảnh minh họa vị trí tay cầm thanh phách và các mũi tên chỉ điểm gõ.",
+          },
+          {
+            slideNumber: 9,
+            title: "7. Thử Tài Âm Nhạc Nhanh",
+            subtitle: "Trắc nghiệm tương tác tại lớp",
+            mainContent: "Câu hỏi nhanh dành cho các bạn học sinh giỏi nhạc:",
+            bullets: [
+              "Câu hỏi: Bài hát chúng ta vừa học được viết ở nhịp nào?",
+              "A. Nhịp 2/4 (Chính xác!)",
+              "B. Nhịp 3/4",
+              "C. Nhịp 4/4",
+              "D. Nhịp 6/8",
+            ],
+            teacherNote: "Đếm 1-2-3 cho học sinh cùng giơ tay trả lời nhanh.",
+            suggestedVisual: "Hộp quà may mắn và các nốt nhạc sao sáng rực rỡ.",
+            quizQuestion: {
+              question: "Bài hát chúng ta vừa học được viết ở nhịp nào?",
+              options: ["Nhịp 2/4", "Nhịp 3/4", "Nhịp 4/4", "Nhịp 6/8"],
+              answer: "A",
+            },
+          },
+          {
+            slideNumber: 10,
+            title: "Tổng Kết & Dặn Dò Về Nhà",
+            subtitle: "Lan tỏa niềm vui âm nhạc",
+            mainContent: "Nhiệm vụ rèn luyện sau tiết học:",
+            bullets: [
+              "Tập hát thuộc lời ca và đúng sắc thái bài hát",
+              "Luyện tập gõ thanh phách đệm hát cho người thân trong gia đình nghe",
+              "Xem trước bài Đọc nhạc số 2 cho tiết học tuần sau",
+              "Chúc các em luôn yêu đời và tràn ngập tiếng cười!",
+            ],
+            teacherNote: "Khen ngợi tinh thần học tập sôi nổi và tặng điểm tích lũy cho các nhóm tích cực.",
+            suggestedVisual: "Hình ảnh cô và trò rạng rỡ chào tạm biệt với các nốt nhạc bay bổng.",
+          },
+        ],
+      };
+    }
+
     return {
       title: `BÀI GIẢNG ĐIỆN TỬ: ${lessonTitle.toUpperCase()}`,
       subject,
@@ -296,14 +702,14 @@ export class SmartLocalAIProvider implements AIProvider {
           slideNumber: 1,
           title: lessonTitle,
           subtitle: `Môn ${subject} - Khối ${grade} (Bộ sách Kết Nối Tri Thức)`,
-          mainContent: "Chào mừng các em học sinh đến với tiết học toán hôm nay!",
+          mainContent: "Chào mừng các em học sinh đến với tiết học hôm nay!",
           bullets: [
-            "Giáo viên: Cô Nguyễn Thị Lan",
-            "Trường: THCS Chu Văn An",
+            "Giáo viên: Cô Phan Thị Ngọc Huyền",
+            "Trường: THCS Tân Phong - Vĩnh Long",
             "Thời lượng: 45 phút",
           ],
           teacherNote: "Tạo không khí vui tươi, mời học sinh chuẩn bị SGK và đồ dùng học tập lên bàn.",
-          suggestedVisual: "Hình ảnh đồ họa hiện đại với các biểu tượng toán học, thước kẻ, compa trên nền xanh đậm giáo dục.",
+          suggestedVisual: "Hình ảnh đồ họa hiện đại với các biểu tượng giáo dục trên nền xanh đậm.",
         },
         {
           slideNumber: 2,
@@ -448,6 +854,288 @@ export class SmartLocalAIProvider implements AIProvider {
       durationMinutes,
       totalScore = 10.0,
     } = params;
+
+    const isMusic =
+      subject.includes("Âm nhạc") ||
+      subject === "MUSIC" ||
+      subject.toLowerCase().includes("nhạc");
+
+    if (isMusic) {
+      const musicQuestions: GeneratedQuestion[] = [
+        {
+          content: "Dấu hóa nào sau đây làm tăng cao độ của một nốt nhạc lên nửa cung?",
+          type: "SINGLE_CHOICE",
+          difficulty: "NHAN_BIET",
+          answers: [
+            { label: "A", content: "Dấu thăng (#)", isCorrect: true },
+            { label: "B", content: "Dấu giáng (b)", isCorrect: false },
+            { label: "C", content: "Dấu bình (♮)", isCorrect: false },
+            { label: "D", content: "Dấu nối", isCorrect: false },
+          ],
+          correct_answer: "A",
+          explanation: "Dấu thăng (#) có tác dụng nâng cao độ của nốt nhạc lên nửa cung.",
+          skill: "Nhận biết các loại dấu hóa",
+          tags: ["am-nhac-7", "dau-hoa", "nhan-biet"],
+        },
+        {
+          content: "Bài dân ca 'Lí cây đa' thuộc vùng văn hóa âm nhạc dân gian nào của Việt Nam?",
+          type: "SINGLE_CHOICE",
+          difficulty: "NHAN_BIET",
+          answers: [
+            { label: "A", content: "Dân ca Quan họ Bắc Ninh", isCorrect: true },
+            { label: "B", content: "Dân ca Nam Bộ", isCorrect: false },
+            { label: "C", content: "Dân ca Nam Trung Bộ", isCorrect: false },
+            { label: "D", content: "Hát Then miền núi phía Bắc", isCorrect: false },
+          ],
+          correct_answer: "A",
+          explanation: "'Lí cây đa' là làn điệu dân ca Quan họ Bắc Ninh đặc sắc của vùng đồng bằng Bắc Bộ.",
+          skill: "Thưởng thức âm nhạc dân ca Việt Nam",
+          tags: ["am-nhac-7", "dan-ca", "nhan-biet"],
+        },
+        {
+          content: "Trong số chỉ nhịp 2/4, giá trị độ dài của mỗi phách tương đương với hình nốt nào?",
+          type: "SINGLE_CHOICE",
+          difficulty: "THONG_HIEU",
+          answers: [
+            { label: "A", content: "Một nốt đen", isCorrect: true },
+            { label: "B", content: "Một nốt đơn", isCorrect: false },
+            { label: "C", content: "Một nốt trắng", isCorrect: false },
+            { label: "D", content: "Một nốt móc kép", isCorrect: false },
+          ],
+          correct_answer: "A",
+          explanation: "Số chỉ nhịp 2/4 quy định mỗi ô nhịp có 2 phách, mỗi phách bằng một nốt đen (phách 1 mạnh, phách 2 nhẹ).",
+          skill: "Hiểu số chỉ nhịp 2/4",
+          tags: ["am-nhac-7", "nhip-2-4", "thong-hieu"],
+        },
+        {
+          content: "Xác định nốt nhạc tại khe thứ 1 của khuông nhạc khóa Sol khi có dấu thăng đứng trước:",
+          type: "SINGLE_CHOICE",
+          difficulty: "THONG_HIEU",
+          answers: [
+            { label: "A", content: "Fa thăng (F#)", isCorrect: true },
+            { label: "B", content: "Sol giáng (Gb)", isCorrect: false },
+            { label: "C", content: "Mi thăng (E#)", isCorrect: false },
+            { label: "D", content: "Fa bình (F)", isCorrect: false },
+          ],
+          correct_answer: "A",
+          explanation: "Khe thứ 1 của khuông nhạc khóa Sol là nốt Fa (F), có dấu thăng (#) sẽ tạo thành nốt Fa thăng (F#).",
+          skill: "Đọc nhạc kết hợp dấu hóa",
+          tags: ["am-nhac-7", "doc-nhac", "thong-hieu"],
+        },
+        {
+          content: "Xét các phát biểu sau về Nghệ thuật Đờn ca tài tử Nam Bộ và các nhạc cụ dân tộc. Chọn Đúng hoặc Sai cho mỗi nhận định:",
+          type: "TRUE_FALSE",
+          difficulty: "THONG_HIEU",
+          answers: [
+            { label: "a", content: "Đờn ca tài tử Nam Bộ đã được UNESCO vinh danh là Di sản văn hóa phi vật thể của nhân loại.", isCorrect: true },
+            { label: "b", content: "Nhạc cụ chính của dàn nhạc Đờn ca tài tử là đàn ghi-ta điện kết hợp trống jazz hiện đại.", isCorrect: false },
+            { label: "c", content: "Song loan là nhạc cụ gõ dùng để giữ nhịp cho các bài bản đờn ca tài tử.", isCorrect: true },
+            { label: "d", content: "Đàn kìm (đàn nguyệt) là một trong những nhạc cụ linh hồn của dàn nhạc phương Nam.", isCorrect: true },
+          ],
+          correct_answer: "a-Đ, b-S, c-Đ, d-Đ",
+          explanation: "a) Đúng: UNESCO vinh danh năm 2013.\nb) Sai: Dàn ngũ tuyệt gồm Đàn kìm, tranh, cò, bầu, tam.\nc) Đúng: Song loan giữ nhịp trường canh.\nd) Đúng: Đàn kìm có vai trò chủ đạo.",
+          skill: "Đánh giá hiểu biết di sản âm nhạc dân tộc",
+          tags: ["am-nhac-7", "don-ca-tai-tu", "cv-7991"],
+        },
+        {
+          content: "Điền vào chỗ trống: Trong nhịp 4/4 (nhịp C), mỗi ô nhịp có bao nhiêu phách và phách nào là phách mạnh nhất?",
+          type: "SHORT_ANSWER",
+          difficulty: "VAN_DUNG",
+          answers: [{ label: "A", content: "4 phách, phách 1", isCorrect: true }],
+          correct_answer: "4 phách, phách 1",
+          explanation: "Nhịp 4/4 có 4 phách trong một ô nhịp, mỗi phách bằng một nốt đen. Phách 1 mạnh, phách 2 nhẹ, phách 3 mạnh vừa, phách 4 nhẹ.",
+          skill: "Xác định tính chất nhịp 4/4",
+          tags: ["am-nhac-7", "nhip-4-4", "van-dung"],
+        },
+        {
+          content: "Thực hành (3.0 điểm): Trình bày hoàn chỉnh một bài hát đã học trong học kỳ kết hợp gõ đệm thanh phách theo phách hoặc theo nhịp. Nêu cảm nghĩ của em về ý nghĩa bài hát.",
+          type: "ESSAY",
+          difficulty: "VAN_DUNG_CAO",
+          answers: [{ label: "A", content: "Biểu diễn đúng cao độ, trường độ, gõ phách chuẩn xác và phong thái tự tin", isCorrect: true }],
+          correct_answer: "Biểu diễn tự tin, hát chuẩn cao độ trường độ, gõ phách đều tay",
+          explanation: "Học sinh biểu diễn bài hát với phong thái tự tin, ngắt hơi đúng nhịp, phát âm tròn vành rõ chữ và kết hợp gõ đệm thanh phách nhịp nhàng.",
+          skill: "Thực hành biểu diễn thanh nhạc và gõ đệm",
+          tags: ["am-nhac-7", "thuc-hanh-hat", "cv-7991"],
+        },
+      ];
+
+      const musicMatrix: CV7991MatrixRow[] = [
+        {
+          topic: "Chủ đề: Lí thuyết âm nhạc",
+          knowledgeUnit: "Dấu hóa và các loại nhịp (2/4, 4/4)",
+          learningOutcome: "Nhận biết dấu hóa và xác định tính chất phách trong ô nhịp",
+          nhanBiet: { tn: 1, tl: 0, points: 1.0 },
+          thongHieu: { tn: 1, tl: 0, points: 1.0 },
+          vanDung: { tn: 1, tl: 0, points: 1.5 },
+          vanDungCao: { tn: 0, tl: 0, points: 0 },
+          totalQuestions: 3,
+          totalPoints: 3.5,
+        },
+        {
+          topic: "Chủ đề: Thưởng thức âm nhạc",
+          knowledgeUnit: "Dân ca Việt Nam & Đờn ca tài tử Nam Bộ",
+          learningOutcome: "Hiểu biết nguồn gốc dân ca và đặc trưng dàn nhạc phương Nam",
+          nhanBiet: { tn: 1, tl: 0, points: 1.0 },
+          thongHieu: { tn: 1, tl: 0, points: 1.5 },
+          vanDung: { tn: 0, tl: 0, points: 0 },
+          vanDungCao: { tn: 0, tl: 0, points: 0 },
+          totalQuestions: 2,
+          totalPoints: 2.5,
+        },
+        {
+          topic: "Chủ đề: Đọc nhạc",
+          knowledgeUnit: "Đọc cao độ nốt nhạc trên khuông nhạc khóa Sol",
+          learningOutcome: "Đọc chính xác tên nốt và cao độ có dấu hóa",
+          nhanBiet: { tn: 0, tl: 0, points: 0 },
+          thongHieu: { tn: 1, tl: 0, points: 1.0 },
+          vanDung: { tn: 0, tl: 0, points: 0 },
+          vanDungCao: { tn: 0, tl: 0, points: 0 },
+          totalQuestions: 1,
+          totalPoints: 1.0,
+        },
+        {
+          topic: "Chủ đề: Thực hành Hát & Nhạc cụ",
+          knowledgeUnit: "Hát kết hợp gõ đệm thanh phách",
+          learningOutcome: "Trình diễn bài hát tự tin, đúng cao độ, giữ vững nhịp phách",
+          nhanBiet: { tn: 0, tl: 0, points: 0 },
+          thongHieu: { tn: 0, tl: 0, points: 0 },
+          vanDung: { tn: 0, tl: 0, points: 0 },
+          vanDungCao: { tn: 0, tl: 1, points: 3.0 },
+          totalQuestions: 1,
+          totalPoints: 3.0,
+        },
+      ];
+
+      const musicSpecification: CV7991SpecificationRow[] = [
+        {
+          order: 1,
+          topic: "Lí thuyết âm nhạc",
+          knowledgeUnit: "Dấu hóa",
+          learningOutcome: "Nhận biết tác dụng của dấu thăng đối với cao độ",
+          assessmentLevel: "Nhận biết",
+          questionType: "Trắc nghiệm nhiều lựa chọn",
+          questionCount: 1,
+          points: 1.0,
+          questionNumbers: "Câu 1",
+        },
+        {
+          order: 2,
+          topic: "Thưởng thức âm nhạc",
+          knowledgeUnit: "Dân ca Việt Nam",
+          learningOutcome: "Nhận biết xuất xứ vùng miền của bài hát dân ca Lí cây đa",
+          assessmentLevel: "Nhận biết",
+          questionType: "Trắc nghiệm nhiều lựa chọn",
+          questionCount: 1,
+          points: 1.0,
+          questionNumbers: "Câu 2",
+        },
+        {
+          order: 3,
+          topic: "Lí thuyết âm nhạc",
+          knowledgeUnit: "Số chỉ nhịp 2/4",
+          learningOutcome: "Hiểu giá trị trường độ phách trong nhịp 2/4",
+          assessmentLevel: "Thông hiểu",
+          questionType: "Trắc nghiệm nhiều lựa chọn",
+          questionCount: 1,
+          points: 1.0,
+          questionNumbers: "Câu 3",
+        },
+        {
+          order: 4,
+          topic: "Đọc nhạc",
+          knowledgeUnit: "Đọc nốt có dấu thăng",
+          learningOutcome: "Đọc đúng nốt Fa thăng ở khe 1 khuông nhạc",
+          assessmentLevel: "Thông hiểu",
+          questionType: "Trắc nghiệm nhiều lựa chọn",
+          questionCount: 1,
+          points: 1.0,
+          questionNumbers: "Câu 4",
+        },
+        {
+          order: 5,
+          topic: "Thưởng thức âm nhạc",
+          knowledgeUnit: "Đờn ca tài tử Nam Bộ",
+          learningOutcome: "Đánh giá đúng sai về giá trị di sản và nhạc cụ cổ truyền",
+          assessmentLevel: "Thông hiểu",
+          questionType: "Trắc nghiệm Đúng/Sai (4 ý)",
+          questionCount: 1,
+          points: 1.5,
+          questionNumbers: "Câu 5",
+        },
+        {
+          order: 6,
+          topic: "Lí thuyết âm nhạc",
+          knowledgeUnit: "Nhịp 4/4",
+          learningOutcome: "Xác định số phách và tính chất phách mạnh trong nhịp 4/4",
+          assessmentLevel: "Vận dụng",
+          questionType: "Trắc nghiệm trả lời ngắn",
+          questionCount: 1,
+          points: 1.5,
+          questionNumbers: "Câu 6",
+        },
+        {
+          order: 7,
+          topic: "Thực hành Hát & Nhạc cụ",
+          knowledgeUnit: "Biểu diễn thanh nhạc & gõ thanh phách",
+          learningOutcome: "Thực hành hoàn chỉnh bài hát kết hợp gõ đệm đúng phách",
+          assessmentLevel: "Vận dụng cao",
+          questionType: "Thực hành / Tự luận đánh giá năng lực",
+          questionCount: 1,
+          points: 3.0,
+          questionNumbers: "Câu 7 (TH)",
+        },
+      ];
+
+      const musicScoringGuide = {
+        multipleChoice: [
+          { questionNumber: 1, answer: "A", points: 1.0 },
+          { questionNumber: 2, answer: "A", points: 1.0 },
+          { questionNumber: 3, answer: "A", points: 1.0 },
+          { questionNumber: 4, answer: "A", points: 1.0 },
+        ],
+        trueFalse: [
+          {
+            questionNumber: 5,
+            subItems: [
+              { item: "Ý a", answer: "Đúng" as const, points: 0.375 },
+              { item: "Ý b", answer: "Sai" as const, points: 0.375 },
+              { item: "Ý c", answer: "Đúng" as const, points: 0.375 },
+              { item: "Ý d", answer: "Đúng" as const, points: 0.375 },
+            ],
+          },
+        ],
+        essayRubric: [
+          {
+            questionNumber: 7,
+            criteria: "Thực hành Hát kết hợp gõ đệm thanh phách (3.0 điểm)",
+            steps: [
+              { step: "Hát đúng giai điệu, chuẩn xác cao độ bài hát, không chênh phô", points: 1.0 },
+              { step: "Hát đúng trường độ, lấy hơi đúng chỗ và giữ nhịp độ ổn định", points: 0.75 },
+              { step: "Gõ đệm thanh phách giòn giã, chuẩn xác theo phách mạnh/nhẹ", points: 0.75 },
+              { step: "Phong thái biểu diễn tự tin, nét mặt tươi tắn, biểu cảm phù hợp", points: 0.5 },
+            ],
+            totalPoints: 3.0,
+          },
+        ],
+      };
+
+      return {
+        title: title || `ĐỀ KIỂM TRA ĐỊNH KỲ THEO CÔNG VĂN 7991 - MÔN ÂM NHẠC KHỐI ${grade}`,
+        subject: "Âm nhạc",
+        grade,
+        durationMinutes,
+        totalScore,
+        questions: musicQuestions,
+        matrix: musicMatrix,
+        specification: musicSpecification,
+        scoringGuide: musicScoringGuide,
+        consistencyCheck: {
+          isValid: true,
+          scoreSum: 10.0,
+          warnings: [],
+        },
+      };
+    }
 
     const questions: GeneratedQuestion[] = [
       {
@@ -752,12 +1440,12 @@ export class SmartLocalAIProvider implements AIProvider {
 
     const teacherRemark =
       trend === "DECLINING" || avgScore < 6.0
-        ? `Em ${studentName} có tinh thần học tập nhưng kết quả gần đây có dấu hiệu giảm nhẹ, đặc biệt còn lúng túng ở phần ${weakSkills[0] || "Đại số"}. Đề nghị gia đình phối hợp nhắc nhở em hoàn thành phiếu bài tập rèn luyện mỗi tối.`
-        : `Em ${studentName} tiếp thu bài nhanh, làm chủ tốt các kỹ năng trọng tâm của môn Toán lớp ${grade}. Cần tiếp tục duy trì phong độ và thử sức với các bài toán vận dụng cao.`;
+        ? `Em ${studentName} có tinh thần học tập nhưng kết quả gần đây có dấu hiệu giảm nhẹ, đặc biệt còn lúng túng ở phần ${weakSkills[0] || "gõ đệm và đọc nhạc"}. Đề nghị gia đình phối hợp nhắc nhở em rèn luyện thêm nhạc cụ gõ và luyện thanh tại nhà.`
+        : `Em ${studentName} tiếp thu bài nhanh, cảm thụ âm nhạc tốt, làm chủ tốt các kỹ năng trọng tâm của môn Âm nhạc lớp ${grade}. Cần tiếp tục duy trì phong độ và phát huy năng khiếu biểu diễn tự tin.`;
 
     return {
       summary: `Học sinh ${studentName} (${classTitle}) đạt điểm trung bình gần đây: ${avgScore.toFixed(1)}/10.`,
-      strongSkills: strongSkills.length > 0 ? strongSkills : ["Phép cộng trừ số tự nhiên"],
+      strongSkills: strongSkills.length > 0 ? strongSkills : ["Cảm thụ giai điệu & Hát đúng lời"],
       weakSkills: weakSkills.length > 0 ? weakSkills : ["Chưa phát hiện điểm yếu rõ rệt"],
       trend,
       recommendedActions,
@@ -769,103 +1457,102 @@ export class SmartLocalAIProvider implements AIProvider {
     const lastMessage = messages[messages.length - 1]?.content.toLowerCase() || "";
 
     // Intent detection based on user query
-    if (lastMessage.includes("yếu") || lastMessage.includes("chú ý") || lastMessage.includes("mất gốc")) {
+    if (lastMessage.includes("yếu") || lastMessage.includes("chú ý") || lastMessage.includes("học sinh")) {
       return {
-        content: `Dựa trên dữ liệu tổng hợp lớp **7A1**, hệ thống ghi nhận **5 học sinh** đang có kết quả dưới 60% ở chuyên đề **Tỉ lệ thức và dãy tỉ số bằng nhau**:
-1. **Vũ Gia Huy** (Điểm bài thi: 4.0 | Thành thạo: 42%)
-2. **Dương Minh Khang** (Điểm bài thi: 4.0 | Thành thạo: 44%)
-3. **Trịnh Khắc Huy** (Điểm bài thi: 4.5 | Thành thạo: 48%)
-4. **Bùi Quốc Anh** (Điểm bài thi: 5.0 | Thành thạo: 51%)
-5. **Phùng Thế Vinh** (Điểm bài thi: 5.0 | Thành thạo: 53%)
+        content: `Dựa trên dữ liệu tổng hợp môn **Âm nhạc** lớp **7A1** (Trường THCS Tân Phong), hệ thống ghi nhận **4 học sinh** cần được cô Huyền lưu ý hỗ trợ thêm về nhịp phách và đọc nhạc:
+1. **Dương Minh Khang** (Điểm bài thi: 5.5 | Gõ đệm thanh phách: 44%)
+2. **Trịnh Khắc Huy** (Điểm bài thi: 6.0 | Đọc cao độ nốt thăng: 48%)
+3. **Vũ Gia Huy** (Điểm bài thi: 6.5 | Nhịp 2/4 còn lỡ nhịp: 52%)
+4. **Bùi Quốc Anh** (Điểm bài thi: 6.5 | Lấy hơi chưa sâu: 55%)
 
-Phần lớn các em thường nhầm lẫn khi nhân tích chéo tỉ lệ thức và chưa biết cách rút gọn số hạng trước khi tính.`,
+Các em có giọng hát tốt nhưng còn e dè khi biểu diễn trước lớp và dễ bị lỡ nhịp khi gõ đệm thanh phách.`,
         structuredData: {
           type: "STUDENT_LIST",
           data: [
-            { name: "Vũ Gia Huy", score: 4.0, mastery: 42, reason: "Nhầm tích chéo" },
-            { name: "Dương Minh Khang", score: 4.0, mastery: 44, reason: "Chưa áp dụng được dãy tỉ số" },
-            { name: "Trịnh Khắc Huy", score: 4.5, mastery: 48, reason: "Sai dấu số âm" },
-            { name: "Bùi Quốc Anh", score: 5.0, mastery: 51, reason: "Tính toán chậm" },
-            { name: "Phùng Thế Vinh", score: 5.0, mastery: 53, reason: "Thiếu điều kiện mẫu số" },
+            { name: "Dương Minh Khang", score: 5.5, mastery: 44, reason: "Gõ lệch phách 2" },
+            { name: "Trịnh Khắc Huy", score: 6.0, mastery: 48, reason: "Đọc nốt thăng chưa chuẩn" },
+            { name: "Vũ Gia Huy", score: 6.5, mastery: 52, reason: "Lỡ nhịp khi đổi câu" },
+            { name: "Bùi Quốc Anh", score: 6.5, mastery: 55, reason: "Cần lấy hơi sâu ở nốt cao" },
           ],
         },
         suggestedActions: [
-          { label: "Tạo bài luyện tập 15 phút (5 câu)", action: "CREATE_EXAM", params: { class: "7A1", topic: "Tỉ lệ thức" } },
-          { label: "Xuất phiếu bài tập kèm lời giải", action: "EXPORT_WORKSHEET", params: { class: "7A1" } },
+          { label: "Tạo bài luyện tập thực hành nhóm 7A1", action: "CREATE_EXAM", params: { class: "7A1", topic: "Gõ đệm thanh phách" } },
+          { label: "Xuất phiếu bài tập Lí thuyết âm nhạc", action: "EXPORT_WORKSHEET", params: { class: "7A1" } },
         ],
       };
     }
 
-    if (lastMessage.includes("so sánh") || (lastMessage.includes("7a") && lastMessage.includes("7b"))) {
+    if (lastMessage.includes("so sánh") || (lastMessage.includes("7a") && lastMessage.includes("7b")) || lastMessage.includes("7a2")) {
       return {
-        content: `📊 **Báo cáo so sánh kết quả học tập giữa Lớp 7A1 và Lớp 7A2:**
+        content: `📊 **Báo cáo so sánh kết quả học tập môn Âm nhạc giữa Lớp 7A1 và Lớp 7A2 (THCS Tân Phong):**
 
-- **Điểm trung bình chung**: 
-  - Lớp 7A1: **7.4/10** (Tỉ lệ Khá - Giỏi: 68%)
-  - Lớp 7A2: **6.2/10** (Tỉ lệ Khá - Giỏi: 45%)
-- **Số hữu tỉ**: Hai lớp tương đương nhau (7A1: 82%, 7A2: 78%).
-- **Tỉ lệ thức**: Chênh lệch đáng kể! Lớp 7A1 đạt 65%, trong khi 7A2 chỉ đạt 51%.
-- **Đề xuất**: Cô Lan nên dành thêm 1 tiết phụ đạo chuyên đề Tỉ số cho lớp 7A2 trước khi chuyển sang chương Hình học.`,
+- **Điểm trung bình thực hành**: 
+  - Lớp 7A1: **7.9/10** (Tỉ lệ Khá - Tốt: 85%)
+  - Lớp 7A2: **7.2/10** (Tỉ lệ Khá - Tốt: 70%)
+- **Kỹ năng Hát**: Cả hai lớp hát đều, đúng lời và giai điệu trong sáng (7A1: 88%, 7A2: 82%).
+- **Thực hành Nhạc cụ (Thanh phách / Song loan)**: Lớp 7A1 giữ nhịp rất chắc (80%), trong khi lớp 7A2 còn một số bàn gõ nhanh dần đều (64%).
+- **Đề xuất cho cô Huyền**: Dành 5 phút đầu tiết tới cho lớp 7A2 chơi trò chơi gõ chuyền phách để rèn phản xạ giữ nhịp ổn định.`,
         structuredData: {
           type: "COMPARISON",
           data: {
             classes: ["7A1", "7A2"],
-            averages: [7.4, 6.2],
+            averages: [7.9, 7.2],
             topics: [
-              { name: "Số hữu tỉ", a1: 82, a2: 78 },
-              { name: "Tỉ lệ thức", a1: 65, a2: 51 },
-              { name: "Tam giác bằng nhau", a1: 75, a2: 58 },
+              { name: "Hát đúng giai điệu", a1: 88, a2: 82 },
+              { name: "Gõ đệm thanh phách", a1: 80, a2: 64 },
+              { name: "Đọc nhạc nốt Sol - Fa", a1: 76, a2: 68 },
             ],
           },
         },
         suggestedActions: [
-          { label: "Xem chi tiết lớp 7A2", action: "FILTER_STUDENTS", params: { class: "7A2" } },
-          { label: "Tạo đề ôn tập chung cho khối 7", action: "CREATE_EXAM", params: { grade: 7 } },
+          { label: "Xem danh sách lớp 7A2", action: "FILTER_STUDENTS", params: { class: "7A2" } },
+          { label: "Tạo phiếu thực hành nhịp cho 7A2", action: "CREATE_EXAM", params: { grade: 7 } },
         ],
       };
     }
 
     if (lastMessage.includes("tạo đề") || lastMessage.includes("15 phút") || lastMessage.includes("kiểm tra")) {
       return {
-        content: `Đã cấu hình đề xuất đề kiểm tra **15 phút Toán 7** bám sát ma trận năng lực:
-- **Tên đề**: Kiểm tra 15 phút - Củng cố Tỉ lệ thức và Dãy tỉ số bằng nhau
-- **Số câu**: 5 câu trắc nghiệm khách quan
+        content: `Đã cấu hình đề xuất đề kiểm tra **Âm nhạc 7** bám sát ma trận năng lực theo Công văn 7991:
+- **Tên đề**: Kiểm tra định kỳ Giữa Học kỳ I - Môn Âm nhạc 7
+- **Số câu**: 7 câu tích hợp Lí thuyết & Thực hành
 - **Cấu trúc ma trận**:
-  - Nhận biết (2 câu - 4.0đ): Khái niệm tỉ lệ thức và tính chất tích chéo.
-  - Thông hiểu (2 câu - 4.0đ): Tìm x và tính chất dãy tỉ số bằng nhau.
-  - Vận dụng (1 câu - 2.0đ): Bài toán chia tỉ lệ thực tế.
-- **Mã đề sẵn sàng**: 101, 102, 103, 104 có thể tự động xáo trộn câu hỏi và đáp án.`,
+  - Lí thuyết âm nhạc (Dấu thăng, dấu giáng, nhịp 2/4): 3.0 điểm
+  - Thưởng thức âm nhạc (Dân ca Việt Nam & Đờn ca tài tử): 2.5 điểm
+  - Đọc nhạc (Khuông nhạc khóa Sol): 1.5 điểm
+  - Thực hành Hát & Gõ thanh phách: 3.0 điểm (đánh giá theo Rubric chuẩn)
+- **Mã đề sẵn sàng**: 101, 102, 103, 104 có thể tự động xáo trộn câu hỏi và in ấn ngay kèm tiêu đề **TRƯỜNG THCS TÂN PHONG - VĨNH LONG**.`,
         structuredData: {
           type: "EXAM_PROPOSAL",
           data: {
-            title: "Kiểm tra 15 phút - Củng cố Tỉ lệ thức",
-            questionCount: 5,
-            duration: 15,
-            topics: ["Tỉ lệ thức", "Dãy tỉ số bằng nhau"],
+            title: "Kiểm tra Giữa kỳ - Môn Âm nhạc 7",
+            questionCount: 7,
+            duration: 45,
+            topics: ["Lí thuyết âm nhạc", "Thưởng thức âm nhạc", "Hát và Nhạc cụ"],
           },
         },
         suggestedActions: [
-          { label: "Chuyển sang Trình tạo đề thi", action: "CREATE_EXAM", params: { template: "15min_ratio" } },
-          { label: "Mở ngân hàng câu hỏi tỉ lệ thức", action: "OPEN_QUESTION_BANK", params: { topic: "ti-le-thuc" } },
+          { label: "Mở Trình tạo đề thi Âm nhạc", action: "CREATE_EXAM", params: { template: "music_7_midterm" } },
+          { label: "Xem Ngân hàng câu hỏi Âm nhạc", action: "OPEN_QUESTION_BANK", params: { topic: "am-nhac" } },
         ],
       };
     }
 
     // Default friendly assistant response
     return {
-      content: `Xin chào cô Lan! Em là **EduMind AI Assistant**, trợ lý giảng dạy thông minh của cô tại THCS Chu Văn An. 
+      content: `Xin chào cô Huyền! Em là **EduMind AI Assistant**, trợ lý chuyên môn môn Âm nhạc và quản lý giảng dạy của cô tại **Trường THCS Tân Phong - Vĩnh Long** (phụ trách Khối 6, 7, 8, 9).
 
-Em có thể giúp cô ngay:
-1. 📈 **Phân tích học sinh**: Tìm học sinh có điểm giảm, học sinh đang hổng kiến thức số hữu tỉ / hình học.
-2. 📝 **Ra đề thi thông minh**: Tự động sinh đề 15 phút hoặc 45 phút theo đúng ma trận GDPT 2018 và tạo 4 mã đề (101, 102, 103, 104).
-3. ✍️ **Soạn bài & Phiếu học tập**: Tạo giáo án bài học hoặc phiếu ôn tập cá nhân hóa cho từng nhóm học sinh.
-4. 🗣️ **Viết nhận xét**: Tạo gợi ý nhận xét học bạ / sổ liên lạc chi tiết cho phụ huynh.
+Em có thể hỗ trợ cô ngay:
+1. 🎵 **Soạn Kế hoạch bài dạy (CV 5512)**: Tự động thiết kế giáo án Âm nhạc chuẩn 4 hoạt động với thiết bị đàn Organ, thanh phách, file beat.
+2. 📑 **Tạo bài giảng điện tử (Slides Studio)**: Thiết kế slide trình chiếu sinh động gồm luyện thanh La - Ma, tập hát từng câu và gõ đệm.
+3. 📝 **Ra đề kiểm tra chuẩn CV 7991**: Tạo đề thi 15 phút, giữa kỳ với 4 mã đề (101 - 104), đầy đủ ma trận, bản đặc tả và Rubric thực hành hát.
+4. 📊 **Theo dõi học sinh các lớp**: Thống kê mức độ thành thạo phách nhịp, cao độ của học sinh các lớp 6A1, 7A1, 7A2, 8A1, 9A1.
 
 Cô muốn em hỗ trợ nội dung nào trước ạ?`,
       suggestedActions: [
-        { label: "Lớp 7A1 đang yếu phần nào?", action: "FILTER_STUDENTS", params: { class: "7A1" } },
-        { label: "Tạo đề 15 phút bù hổng kiến thức", action: "CREATE_EXAM", params: { class: "7A1" } },
-        { label: "So sánh kết quả 7A1 và 7A2", action: "FILTER_STUDENTS", params: { compare: ["7A1", "7A2"] } },
+        { label: "Lớp 7A1 học sinh nào cần chú ý phách?", action: "FILTER_STUDENTS", params: { class: "7A1" } },
+        { label: "Tạo giáo án 5512 bài Nụ cười", action: "CREATE_EXAM", params: { class: "7A1" } },
+        { label: "So sánh kết quả Âm nhạc 7A1 và 7A2", action: "FILTER_STUDENTS", params: { compare: ["7A1", "7A2"] } },
       ],
     };
   }
