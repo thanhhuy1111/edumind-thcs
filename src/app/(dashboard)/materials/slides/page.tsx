@@ -352,36 +352,36 @@ function SlidesStudioContent() {
     }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans p-6">
-  <div class="max-w-5xl mx-auto space-y-12">
-    <div class="text-center py-6 no-print border-b border-slate-700">
-      <h1 class="text-3xl font-bold text-indigo-400 mb-2">${lessonTitle}</h1>
-      <p class="text-slate-400">Giáo trình số THCS - Bộ giáo dục & Đào tạo | Phong cách: ${style}</p>
-      <button onclick="window.print()" class="mt-4 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow font-medium">In Slide / Xuất PDF</button>
+<body class="bg-slate-100 text-slate-900 font-sans p-6">
+  <div class="max-w-5xl mx-auto space-y-8">
+    <div class="text-center py-6 no-print border-b border-slate-200">
+      <h1 class="text-3xl font-extrabold text-indigo-700 mb-2">${lessonTitle}</h1>
+      <p class="text-slate-500 font-medium">Giáo trình số THCS - Bộ giáo dục & Đào tạo | Phong cách: ${style}</p>
+      <button onclick="window.print()" class="mt-4 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-xs font-bold text-sm cursor-pointer">In Slide / Xuất PDF</button>
     </div>
     ${slides
       .map(
         (slide) => `
-    <div class="slide-page bg-slate-800 border border-slate-700 rounded-2xl p-10 shadow-2xl flex flex-col justify-between min-h-[580px]">
+    <div class="slide-page bg-white border border-slate-200 rounded-3xl p-10 shadow-sm flex flex-col justify-between min-h-[580px]">
       <div>
-        <div class="flex items-center justify-between border-b border-slate-700 pb-4 mb-6">
-          <span class="px-3 py-1 bg-indigo-500/20 text-indigo-400 text-sm font-semibold rounded-full">Slide ${slide.slideNumber}/${slides.length}</span>
-          <span class="text-xs text-slate-400 font-medium">${subject} ${grade}</span>
+        <div class="flex items-center justify-between border-b border-slate-150 pb-4 mb-6">
+          <span class="px-3 py-1 bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold rounded-full">Slide ${slide.slideNumber}/${slides.length}</span>
+          <span class="text-xs text-slate-500 font-bold uppercase tracking-wider">${subject} ${grade}</span>
         </div>
-        <h2 class="text-3xl font-extrabold text-white mb-4 tracking-tight">${slide.title}</h2>
-        <p class="text-slate-300 text-lg leading-relaxed mb-6 font-medium">${slide.mainContent}</p>
+        <h2 class="text-3xl font-black text-slate-900 mb-4 tracking-tight">${slide.title}</h2>
+        <p class="text-slate-600 text-lg leading-relaxed mb-6 font-normal">${slide.mainContent}</p>
         <ul class="space-y-3 mb-6">
-          ${slide.bullets.map((b) => `<li class="flex items-start text-slate-200 text-base"><span class="text-indigo-400 mr-3">✦</span> <span>${b}</span></li>`).join("")}
+          ${slide.bullets.map((b) => `<li class="flex items-start text-slate-800 text-base font-medium"><span class="text-indigo-600 font-bold mr-3">✦</span> <span>${b}</span></li>`).join("")}
         </ul>
       </div>
-      <div class="pt-6 border-t border-slate-700/80 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-        <div class="bg-indigo-950/40 border border-indigo-500/30 rounded-lg p-3">
-          <span class="font-bold text-indigo-300 block mb-1">💡 Gợi ý trực quan:</span>
-          <span class="text-slate-300">${slide.suggestedVisual}</span>
+      <div class="pt-6 border-t border-slate-150 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="bg-indigo-50/70 border border-indigo-200/80 rounded-xl p-3.5">
+          <span class="font-bold text-indigo-800 block mb-1">💡 Gợi ý trực quan:</span>
+          <span class="text-slate-700">${slide.suggestedVisual}</span>
         </div>
-        <div class="bg-amber-950/40 border border-amber-500/30 rounded-lg p-3">
-          <span class="font-bold text-amber-300 block mb-1">👩‍🏫 Ghi chú sư phạm:</span>
-          <span class="text-slate-300">${slide.teacherNote}</span>
+        <div class="bg-amber-50/70 border border-amber-200/80 rounded-xl p-3.5">
+          <span class="font-bold text-amber-800 block mb-1">👩‍🏫 Ghi chú sư phạm:</span>
+          <span class="text-slate-700">${slide.teacherNote}</span>
         </div>
       </div>
     </div>
@@ -407,33 +407,33 @@ function SlidesStudioContent() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16">
       {/* Top Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 rounded-2xl shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-slate-200/90 p-5 rounded-2xl shadow-xs">
         <div className="flex items-center gap-3">
           <Link
             href={initialLessonId ? `/lessons/${initialLessonId}` : "/materials/lesson-plan"}
-            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-500 transition-colors"
+            className="p-2 hover:bg-slate-100 rounded-xl text-slate-500 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <span className="p-1.5 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 rounded-lg">
+              <span className="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg">
                 <Presentation className="w-5 h-5" />
               </span>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white">AI Slide Bài Giảng</h1>
+              <h1 className="text-xl font-bold text-slate-900">AI Slide Bài Giảng</h1>
               <span
                 className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${
                   status === "APPROVED"
-                    ? "bg-emerald-50 text-emerald-600 border border-emerald-200"
+                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                     : status === "TEACHER_REVIEWED"
-                    ? "bg-blue-50 text-blue-600 border border-blue-200"
-                    : "bg-amber-50 text-amber-600 border border-amber-200"
+                    ? "bg-blue-50 text-blue-700 border border-blue-200"
+                    : "bg-amber-50 text-amber-700 border border-amber-200"
                 }`}
               >
                 {status === "APPROVED" ? "Đã duyệt" : status === "TEACHER_REVIEWED" ? "Đã rà soát" : "Bản thảo AI"}
               </span>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 mt-0.5">
               Soạn slide 16:9 tự động chuẩn GDPT 2018 môn Âm nhạc & các bộ môn THCS, thuyết trình trực quan sống động
             </p>
           </div>
@@ -445,7 +445,7 @@ function SlidesStudioContent() {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value as any)}
-            className="text-xs bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2.5 py-1.5 font-medium text-slate-700 dark:text-slate-200"
+            className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 font-medium text-slate-700"
           >
             <option value="DRAFT">Trạng thái: Bản thảo</option>
             <option value="TEACHER_REVIEWED">Trạng thái: Đã rà soát</option>
@@ -458,7 +458,7 @@ function SlidesStudioContent() {
               setReportSuccess(true);
               setTimeout(() => setReportSuccess(false), 2500);
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 rounded-lg transition-colors font-medium"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg transition-colors font-medium cursor-pointer"
             title="Báo cáo nội dung AI chưa chính xác để cải thiện"
           >
             <AlertTriangle className="w-3.5 h-3.5" />
@@ -467,7 +467,7 @@ function SlidesStudioContent() {
 
           <button
             onClick={() => setIsPresenting(true)}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm text-xs font-semibold transition-all hover:shadow"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-xs text-xs font-semibold transition-all hover:shadow cursor-pointer active:scale-[0.98]"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
             Trình Chiếu
@@ -475,7 +475,7 @@ function SlidesStudioContent() {
 
           <button
             onClick={handleExportHTML}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-semibold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
           >
             <Download className="w-3.5 h-3.5" />
             Xuất HTML / PPTX
@@ -483,7 +483,7 @@ function SlidesStudioContent() {
 
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg text-xs font-semibold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
           >
             <Printer className="w-3.5 h-3.5" />
             In / PDF
@@ -492,7 +492,7 @@ function SlidesStudioContent() {
           <button
             onClick={handleSaveDeck}
             disabled={isSaving}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm text-xs font-semibold transition-all disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-xs text-xs font-semibold transition-all disabled:opacity-50 cursor-pointer active:scale-[0.98]"
           >
             {savedSuccess ? <Check className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
             {savedSuccess ? "Đã lưu!" : isSaving ? "Đang lưu..." : "Lưu Slide"}
@@ -501,17 +501,17 @@ function SlidesStudioContent() {
       </div>
 
       {/* 1-Click Slide Presets */}
-      <div className="bg-gradient-to-r from-blue-50/90 via-indigo-50/80 to-purple-50/70 dark:from-slate-900 dark:via-blue-950/40 dark:to-slate-900 border border-blue-200/80 dark:border-blue-900/60 rounded-2xl p-4 shadow-sm space-y-3">
+      <div className="bg-gradient-to-r from-blue-50/90 via-indigo-50/80 to-purple-50/70 border border-blue-200/80 rounded-2xl p-4 shadow-xs space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
-            <span className="p-1.5 bg-blue-600 text-white rounded-lg shadow-sm">
+            <span className="p-1.5 bg-blue-600 text-white rounded-lg shadow-xs">
               <Sparkles className="w-4 h-4" />
             </span>
             <div>
-              <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+              <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                 Bài giảng điện tử mẫu (1-Click Nạp Nhanh)
               </span>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              <p className="text-[11px] text-slate-500">
                 Nhấp để nạp tức thì bộ slide 16:9 gồm 10 trang bài giảng chuẩn GDPT 2018 theo từng môn:
               </p>
             </div>
@@ -525,70 +525,70 @@ function SlidesStudioContent() {
           <button
             onClick={() => handleSelectPresetSlide("math")}
             disabled={isGeneratingDeck}
-            className={`p-3 rounded-xl border text-left transition-all bg-white dark:bg-slate-800 hover:border-blue-300 shadow-2xs ${
-              subject === "Toán học" ? "border-blue-500 ring-2 ring-blue-500/20" : "border-slate-200 dark:border-slate-700"
+            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-blue-400 hover:bg-blue-50/40 shadow-2xs cursor-pointer active:scale-[0.98] ${
+              subject === "Toán học" ? "border-blue-500 ring-2 ring-blue-500/20" : "border-slate-200"
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-blue-700 dark:text-blue-400">📐 Toán học 7</span>
-              <span className="text-[10px] px-1.5 py-0.2 bg-blue-50 text-blue-600 rounded font-medium">10 Slide</span>
+              <span className="text-xs font-bold text-blue-700">📐 Toán học 7</span>
+              <span className="text-[10px] px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded font-medium">10 Slide</span>
             </div>
-            <p className="text-[11px] text-slate-700 dark:text-slate-200 font-medium mt-1 truncate">Tỉ lệ thức &amp; Dãy tỉ số</p>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Tỉ lệ thức &amp; Dãy tỉ số</p>
             <p className="text-[10px] text-slate-400 mt-0.5">Quiz mini-game • Công thức KaTeX</p>
           </button>
 
           <button
             onClick={() => handleSelectPresetSlide("khtn")}
             disabled={isGeneratingDeck}
-            className={`p-3 rounded-xl border text-left transition-all bg-white dark:bg-slate-800 hover:border-emerald-300 shadow-2xs ${
-              subject === "Khoa học tự nhiên" ? "border-emerald-500 ring-2 ring-emerald-500/20" : "border-slate-200 dark:border-slate-700"
+            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-emerald-400 hover:bg-emerald-50/40 shadow-2xs cursor-pointer active:scale-[0.98] ${
+              subject === "Khoa học tự nhiên" ? "border-emerald-500 ring-2 ring-emerald-500/20" : "border-slate-200"
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">🔬 KHTN 7</span>
-              <span className="text-[10px] px-1.5 py-0.2 bg-emerald-50 text-emerald-600 rounded font-medium">10 Slide</span>
+              <span className="text-xs font-bold text-emerald-700">🔬 KHTN 7</span>
+              <span className="text-[10px] px-1.5 py-0.5 bg-emerald-50 text-emerald-600 rounded font-medium">10 Slide</span>
             </div>
-            <p className="text-[11px] text-slate-700 dark:text-slate-200 font-medium mt-1 truncate">Trao đổi chất &amp; Năng lượng</p>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Trao đổi chất &amp; Năng lượng</p>
             <p className="text-[10px] text-slate-400 mt-0.5">Sơ đồ quang hợp &amp; Thí nghiệm</p>
           </button>
 
           <button
             onClick={() => handleSelectPresetSlide("literature")}
             disabled={isGeneratingDeck}
-            className={`p-3 rounded-xl border text-left transition-all bg-white dark:bg-slate-800 hover:border-amber-300 shadow-2xs ${
-              subject === "Ngữ văn" ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200 dark:border-slate-700"
+            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-amber-400 hover:bg-amber-50/40 shadow-2xs cursor-pointer active:scale-[0.98] ${
+              subject === "Ngữ văn" ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200"
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-amber-700 dark:text-amber-400">📖 Ngữ văn 8</span>
-              <span className="text-[10px] px-1.5 py-0.2 bg-amber-50 text-amber-600 rounded font-medium">10 Slide</span>
+              <span className="text-xs font-bold text-amber-700">📖 Ngữ văn 8</span>
+              <span className="text-[10px] px-1.5 py-0.5 bg-amber-50 text-amber-600 rounded font-medium">10 Slide</span>
             </div>
-            <p className="text-[11px] text-slate-700 dark:text-slate-200 font-medium mt-1 truncate">Thơ Đường luật (Đèo Ngang)</p>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Thơ Đường luật (Đèo Ngang)</p>
             <p className="text-[10px] text-slate-400 mt-0.5">Thi pháp cổ điển • Tranh minh họa</p>
           </button>
 
           <button
             onClick={() => handleSelectPresetSlide("music")}
             disabled={isGeneratingDeck}
-            className={`p-3 rounded-xl border text-left transition-all bg-white dark:bg-slate-800 hover:border-indigo-300 shadow-2xs ${
-              subject === "Âm nhạc" ? "border-indigo-500 ring-2 ring-indigo-500/20" : "border-slate-200 dark:border-slate-700"
+            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-indigo-400 hover:bg-indigo-50/40 shadow-2xs cursor-pointer active:scale-[0.98] ${
+              subject === "Âm nhạc" ? "border-indigo-500 ring-2 ring-indigo-500/20" : "border-slate-200"
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400">🎵 Âm nhạc 7</span>
-              <span className="text-[10px] px-1.5 py-0.2 bg-indigo-50 text-indigo-600 rounded font-medium">10 Slide</span>
+              <span className="text-xs font-bold text-indigo-700">🎵 Âm nhạc 7</span>
+              <span className="text-[10px] px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded font-medium">10 Slide</span>
             </div>
-            <p className="text-[11px] text-slate-700 dark:text-slate-200 font-medium mt-1 truncate">Hát bài Nụ cười &amp; Nhạc lí</p>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Hát bài Nụ cười &amp; Nhạc lí</p>
             <p className="text-[10px] text-slate-400 mt-0.5">Luyện thanh • Gõ phách 2/4</p>
           </button>
         </div>
       </div>
 
       {/* Configuration & Stage Controller */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Môn học</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">Môn học</label>
             <select
               value={subject}
               onChange={(e) => {
@@ -598,7 +598,7 @@ function SlidesStudioContent() {
                   setLessonTitle("Chủ đề 2: Tình bạn - Học hát bài Nụ cười");
                 }
               }}
-              className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-slate-100 font-semibold"
+              className="w-full text-xs rounded-xl border border-slate-200 bg-white p-2.5 text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
             >
               <option value="Âm nhạc">Âm nhạc</option>
               <option value="Toán học">Toán học</option>
@@ -610,11 +610,11 @@ function SlidesStudioContent() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Khối lớp</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">Khối lớp</label>
             <select
               value={grade}
               onChange={(e) => setGrade(e.target.value)}
-              className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-slate-100"
+              className="w-full text-xs rounded-xl border border-slate-200 bg-white p-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
             >
               <option value="6">Lớp 6</option>
               <option value="7">Lớp 7</option>
@@ -624,22 +624,22 @@ function SlidesStudioContent() {
           </div>
 
           <div className="md:col-span-2">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Tên bài học</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">Tên bài học</label>
             <input
               type="text"
               value={lessonTitle}
               onChange={(e) => setLessonTitle(e.target.value)}
-              className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-slate-100 font-medium"
+              className="w-full text-xs rounded-xl border border-slate-200 bg-white p-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
               placeholder="Nhập tên bài học..."
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Phong cách giảng dạy</label>
+            <label className="block text-xs font-semibold text-slate-700 mb-1">Phong cách giảng dạy</label>
             <select
               value={style}
               onChange={(e) => setStyle(e.target.value)}
-              className="w-full text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-2.5 text-slate-900 dark:text-slate-100"
+              className="w-full text-xs rounded-xl border border-slate-200 bg-white p-2.5 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
             >
               <option value="Học tập tương tác & Trực quan">Tương tác & Trực quan</option>
               <option value="Hiện đại & Tối giản thanh lịch">Tối giản thanh lịch</option>
@@ -650,24 +650,24 @@ function SlidesStudioContent() {
         </div>
 
         {/* 2-Step Workflow Buttons */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setWorkflowStage("OUTLINE")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 workflowStage === "OUTLINE"
-                  ? "bg-indigo-600 text-white shadow-sm"
-                  : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200"
+                  ? "bg-indigo-600 text-white shadow-xs"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
               Bước 1: Dàn Ý Slide ({outline.length > 0 ? outline.length : 10} mục)
             </button>
             <button
               onClick={() => setWorkflowStage("STUDIO")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 workflowStage === "STUDIO"
-                  ? "bg-indigo-600 text-white shadow-sm"
-                  : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200"
+                  ? "bg-indigo-600 text-white shadow-xs"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
               Bước 2: Studio Thiết Kế Slide ({slides.length} slides)
@@ -678,7 +678,7 @@ function SlidesStudioContent() {
             <button
               onClick={handleGenerateOutline}
               disabled={isGeneratingOutline}
-              className="flex items-center gap-1.5 px-3 py-1.5 border border-indigo-300 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 rounded-xl text-xs font-semibold transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 border border-indigo-200 text-indigo-600 hover:bg-indigo-50 rounded-xl text-xs font-semibold transition-all cursor-pointer"
             >
               <Sparkles className={`w-3.5 h-3.5 ${isGeneratingOutline ? "animate-spin" : ""}`} />
               {isGeneratingOutline ? "Đang tạo dàn ý..." : "AI Tạo Dàn Ý"}
@@ -687,7 +687,7 @@ function SlidesStudioContent() {
             <button
               onClick={workflowStage === "OUTLINE" ? handleGenerateDeckFromOutline : handleGenerateInitialDeck}
               disabled={isGeneratingDeck}
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white rounded-xl shadow-md text-xs font-bold transition-all disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white rounded-xl shadow-xs text-xs font-bold transition-all disabled:opacity-50 cursor-pointer active:scale-[0.98]"
             >
               <Sparkles className={`w-4 h-4 ${isGeneratingDeck ? "animate-spin" : ""}`} />
               {isGeneratingDeck ? "AI Đang thiết kế toàn bộ bài giảng..." : "AI Tạo Toàn Bộ Slide"}
@@ -698,11 +698,11 @@ function SlidesStudioContent() {
 
       {/* STAGE 1: OUTLINE EDITOR */}
       {workflowStage === "OUTLINE" && (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-6">
+        <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Layers className="w-5 h-5 text-indigo-500" />
+              <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                <Layers className="w-5 h-5 text-indigo-600" />
                 Dàn Ý Tiến Trình Slide (Cấu trúc 10 slides sư phạm)
               </h2>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -721,7 +721,7 @@ function SlidesStudioContent() {
                 ];
                 setOutline(newOutline);
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 rounded-lg text-xs font-semibold"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-semibold border border-indigo-200/60 transition-colors cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" /> Thêm Slide Dàn Ý
             </button>
@@ -731,9 +731,9 @@ function SlidesStudioContent() {
             {outline.map((item, index) => (
               <div
                 key={index}
-                className="flex items-center gap-3 p-3.5 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl hover:border-indigo-300 transition-all"
+                className="flex items-center gap-3 p-3.5 bg-slate-50/80 border border-slate-200/80 rounded-xl hover:border-indigo-300 hover:bg-indigo-50/20 transition-all"
               >
-                <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-950 flex items-center justify-center font-bold text-xs text-indigo-600 dark:text-indigo-400 shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs shrink-0">
                   {item.slideNumber}
                 </div>
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -745,7 +745,7 @@ function SlidesStudioContent() {
                       updated[index].title = e.target.value;
                       setOutline(updated);
                     }}
-                    className="text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-900 dark:text-white"
+                    className="text-xs font-semibold bg-white border border-slate-200 rounded-lg p-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
                   />
                   <input
                     type="text"
@@ -755,7 +755,7 @@ function SlidesStudioContent() {
                       updated[index].subtitle = e.target.value;
                       setOutline(updated);
                     }}
-                    className="text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-slate-600 dark:text-slate-300"
+                    className="text-xs bg-white border border-slate-200 rounded-lg p-2 text-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
                   />
                 </div>
                 <div className="flex items-center gap-1">
@@ -769,7 +769,7 @@ function SlidesStudioContent() {
                       updated.forEach((s, idx) => (s.slideNumber = idx + 1));
                       setOutline(updated);
                     }}
-                    className="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-500 disabled:opacity-30"
+                    className="p-1.5 hover:bg-slate-200 rounded text-slate-500 disabled:opacity-30 cursor-pointer"
                   >
                     <MoveUp className="w-4 h-4" />
                   </button>
@@ -783,7 +783,7 @@ function SlidesStudioContent() {
                       updated.forEach((s, idx) => (s.slideNumber = idx + 1));
                       setOutline(updated);
                     }}
-                    className="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-700 rounded text-slate-500 disabled:opacity-30"
+                    className="p-1.5 hover:bg-slate-200 rounded text-slate-500 disabled:opacity-30 cursor-pointer"
                   >
                     <MoveDown className="w-4 h-4" />
                   </button>
@@ -793,7 +793,7 @@ function SlidesStudioContent() {
                       updated.forEach((s, idx) => (s.slideNumber = idx + 1));
                       setOutline(updated);
                     }}
-                    className="p-1.5 hover:bg-rose-100 dark:hover:bg-rose-950 text-rose-500 rounded"
+                    className="p-1.5 hover:bg-rose-50 text-rose-500 rounded cursor-pointer"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -802,11 +802,11 @@ function SlidesStudioContent() {
             ))}
           </div>
 
-          <div className="flex justify-end pt-4 border-t border-slate-200 dark:border-slate-800">
+          <div className="flex justify-end pt-4 border-t border-slate-100">
             <button
               onClick={handleGenerateDeckFromOutline}
               disabled={isGeneratingDeck}
-              className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow font-semibold text-xs transition-all"
+              className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white rounded-xl shadow-xs font-bold text-xs transition-all cursor-pointer active:scale-[0.98]"
             >
               <Sparkles className="w-4 h-4" />
               Chốt Dàn Ý &amp; Tạo Toàn Bộ {outline.length} Slides Chi Tiết
@@ -819,9 +819,9 @@ function SlidesStudioContent() {
       {workflowStage === "STUDIO" && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left: Thumbnail Strip & Navigation */}
-          <div className="lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm space-y-3">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-              <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+          <div className="lg:col-span-3 bg-white border border-slate-200/90 rounded-2xl p-4 shadow-xs space-y-3">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">
                 Danh Sách Slide ({slides.length})
               </span>
               <button
@@ -838,7 +838,7 @@ function SlidesStudioContent() {
                   setSlides([...slides, newSlide]);
                   setActiveSlideIndex(slides.length);
                 }}
-                className="p-1.5 bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 rounded-lg hover:bg-indigo-100 transition-colors"
+                className="p-1.5 bg-indigo-50 text-indigo-700 rounded-lg hover:bg-indigo-100 border border-indigo-200/60 transition-colors cursor-pointer"
                 title="Thêm slide mới"
               >
                 <Plus className="w-4 h-4" />
@@ -852,8 +852,8 @@ function SlidesStudioContent() {
                   onClick={() => setActiveSlideIndex(idx)}
                   className={`group relative p-3 rounded-xl border text-left cursor-pointer transition-all ${
                     activeSlideIndex === idx
-                      ? "bg-indigo-50/80 dark:bg-indigo-950/50 border-indigo-500 shadow-sm ring-2 ring-indigo-500/20"
-                      : "bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-700/80 hover:border-slate-300"
+                      ? "bg-indigo-50/90 border-2 border-indigo-600 shadow-xs ring-2 ring-indigo-500/10"
+                      : "bg-white border-slate-200/80 hover:border-slate-300 hover:bg-slate-50/70"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -861,7 +861,7 @@ function SlidesStudioContent() {
                       className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                         activeSlideIndex === idx
                           ? "bg-indigo-600 text-white"
-                          : "bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                          : "bg-slate-100 text-slate-600 border border-slate-200/60"
                       }`}
                     >
                       #{s.slideNumber}
@@ -873,7 +873,7 @@ function SlidesStudioContent() {
                           handleMoveSlide(idx, "up");
                         }}
                         disabled={idx === 0}
-                        className="p-1 hover:bg-slate-200 rounded text-slate-500 disabled:opacity-20"
+                        className="p-1 hover:bg-slate-200 rounded text-slate-500 disabled:opacity-20 cursor-pointer"
                       >
                         <MoveUp className="w-3 h-3" />
                       </button>
@@ -883,7 +883,7 @@ function SlidesStudioContent() {
                           handleMoveSlide(idx, "down");
                         }}
                         disabled={idx === slides.length - 1}
-                        className="p-1 hover:bg-slate-200 rounded text-slate-500 disabled:opacity-20"
+                        className="p-1 hover:bg-slate-200 rounded text-slate-500 disabled:opacity-20 cursor-pointer"
                       >
                         <MoveDown className="w-3 h-3" />
                       </button>
@@ -892,7 +892,7 @@ function SlidesStudioContent() {
                           e.stopPropagation();
                           handleDuplicateSlide(idx);
                         }}
-                        className="p-1 hover:bg-slate-200 rounded text-slate-500"
+                        className="p-1 hover:bg-slate-200 rounded text-slate-500 cursor-pointer"
                         title="Nhân đôi slide"
                       >
                         <Copy className="w-3 h-3" />
@@ -900,10 +900,10 @@ function SlidesStudioContent() {
                     </div>
                   </div>
 
-                  <h3 className="text-xs font-bold text-slate-800 dark:text-slate-100 mt-2 truncate">
+                  <h3 className="text-xs font-bold text-slate-900 mt-2 truncate">
                     {s.title}
                   </h3>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
+                  <p className="text-[11px] text-slate-500 mt-1 line-clamp-2">
                     {s.mainContent}
                   </p>
                 </div>
@@ -914,24 +914,24 @@ function SlidesStudioContent() {
           {/* Right: Active Slide Canvas & Live Controls */}
           <div className="lg:col-span-9 space-y-4">
             {/* Quick Action Toolbar */}
-            <div className="flex items-center justify-between flex-wrap gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-3 rounded-2xl shadow-sm">
+            <div className="flex items-center justify-between flex-wrap gap-2 bg-white border border-slate-200/90 p-3 rounded-2xl shadow-xs">
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-xs font-semibold text-slate-500 mr-1">Tác vụ AI Slide:</span>
+                <span className="text-xs font-bold text-slate-600 mr-1">Tác vụ AI Slide:</span>
                 <button
                   onClick={() => handleRegenerateSlide("shorten")}
-                  className="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg transition-colors font-medium"
+                  className="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors font-semibold cursor-pointer"
                 >
                   Rút gọn ý
                 </button>
                 <button
                   onClick={() => handleRegenerateSlide("expand")}
-                  className="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-lg transition-colors font-medium"
+                  className="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors font-semibold cursor-pointer"
                 >
                   Mở rộng liên hệ
                 </button>
                 <button
                   onClick={() => handleRegenerateSlide("add_quiz")}
-                  className="px-2.5 py-1 text-xs bg-indigo-50 hover:bg-indigo-100 dark:bg-indigo-950 dark:hover:bg-indigo-900 text-indigo-600 dark:text-indigo-400 rounded-lg transition-colors font-semibold flex items-center gap-1"
+                  className="px-2.5 py-1 text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200/60 rounded-lg transition-colors font-bold flex items-center gap-1 cursor-pointer"
                 >
                   <Plus className="w-3 h-3" /> Thêm Câu Hỏi Tương Tác
                 </button>
@@ -940,14 +940,14 @@ function SlidesStudioContent() {
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => handleDuplicateSlide(activeSlideIndex)}
-                  className="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-slate-600 dark:text-slate-300 text-xs font-medium flex items-center gap-1"
+                  className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-600 text-xs font-medium flex items-center gap-1 cursor-pointer"
                   title="Nhân bản slide"
                 >
                   <Copy className="w-3.5 h-3.5" /> Nhân đôi
                 </button>
                 <button
                   onClick={() => handleDeleteSlide(activeSlideIndex)}
-                  className="p-1.5 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-lg text-rose-600 text-xs font-medium flex items-center gap-1"
+                  className="p-1.5 hover:bg-rose-50 rounded-lg text-rose-600 text-xs font-medium flex items-center gap-1 cursor-pointer"
                   title="Xóa slide"
                 >
                   <Trash2 className="w-3.5 h-3.5" /> Xóa
@@ -957,38 +957,38 @@ function SlidesStudioContent() {
 
             {/* 16:9 Slide Canvas */}
             {currentSlide ? (
-              <div className="relative aspect-[16/9] w-full bg-gradient-to-br from-slate-900 via-slate-850 to-indigo-950 text-white rounded-3xl p-8 md:p-12 shadow-2xl border border-slate-700/60 flex flex-col justify-between overflow-hidden">
-                {/* Decorative Background Glow */}
-                <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-80 h-80 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="relative aspect-[16/9] w-full bg-white text-slate-900 rounded-3xl p-8 md:p-12 shadow-lg border-2 border-slate-200/90 flex flex-col justify-between overflow-hidden">
+                {/* Decorative Subtle Background Accent */}
+                <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-50/50 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-50/40 rounded-full blur-3xl pointer-events-none" />
 
                 {/* Top Slide Meta */}
-                <div className="relative z-10 flex items-center justify-between border-b border-slate-700/80 pb-4">
+                <div className="relative z-10 flex items-center justify-between border-b border-slate-150 pb-4">
                   <div className="flex items-center gap-3">
-                    <span className="px-3 py-1 bg-indigo-500/30 border border-indigo-400/40 text-indigo-300 text-xs font-bold rounded-full">
+                    <span className="px-3 py-1 bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-xs font-bold rounded-full">
                       Slide {currentSlide.slideNumber} / {slides.length}
                     </span>
-                    <span className="text-xs text-slate-400 font-medium tracking-wide uppercase">
+                    <span className="text-xs text-slate-500 font-bold tracking-wide uppercase">
                       {subject} {grade}
                     </span>
                   </div>
-                  <span className="text-xs text-indigo-300/80 font-semibold">{lessonTitle}</span>
+                  <span className="text-xs text-indigo-700 font-bold truncate max-w-sm">{lessonTitle}</span>
                 </div>
 
                 {/* Middle Content */}
                 <div className="relative z-10 my-auto py-4 space-y-4">
-                  <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-snug">
+                  <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">
                     <MathContent content={currentSlide.title} />
                   </h2>
 
-                  <div className="text-slate-200 text-sm md:text-base leading-relaxed font-medium">
+                  <div className="text-slate-600 text-sm md:text-base leading-relaxed font-normal">
                     <MathContent content={currentSlide.mainContent} />
                   </div>
 
                   <ul className="space-y-2.5 pt-2">
                     {currentSlide.bullets.map((b, idx) => (
-                      <li key={idx} className="flex items-start text-xs md:text-sm text-slate-100">
-                        <span className="text-indigo-400 mr-2.5 text-base leading-none">✦</span>
+                      <li key={idx} className="flex items-start text-xs md:text-sm text-slate-800 font-medium">
+                        <span className="text-indigo-600 mr-2.5 text-base leading-none font-bold">✦</span>
                         <div className="flex-1">
                           <MathContent content={b} />
                         </div>
@@ -998,15 +998,15 @@ function SlidesStudioContent() {
 
                   {/* Interactive Quiz Box on Slide if available */}
                   {currentSlide.quizQuestion && (
-                    <div className="mt-4 p-4 rounded-xl bg-indigo-950/70 border border-indigo-500/40 backdrop-blur-md">
-                      <div className="flex items-center gap-2 text-indigo-300 text-xs font-bold mb-2">
-                        <FileQuestion className="w-4 h-4" />
+                    <div className="mt-4 p-4.5 rounded-2xl bg-gradient-to-br from-amber-50/70 via-indigo-50/30 to-white border border-amber-200/90 shadow-2xs">
+                      <div className="flex items-center gap-2 text-amber-900 text-xs font-bold mb-2">
+                        <FileQuestion className="w-4 h-4 text-amber-600" />
                         Câu hỏi tương tác nhanh:
                       </div>
-                      <p className="text-xs text-white font-semibold mb-3">
+                      <p className="text-xs md:text-sm text-slate-900 font-bold mb-3">
                         <MathContent content={currentSlide.quizQuestion.question} />
                       </p>
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-2.5">
                         {currentSlide.quizQuestion.options.map((opt, oIdx) => {
                           const optKey = ["A", "B", "C", "D"][oIdx];
                           const isSelected = selectedQuizOption === optKey;
@@ -1015,16 +1015,16 @@ function SlidesStudioContent() {
                             <button
                               key={oIdx}
                               onClick={() => setSelectedQuizOption(optKey)}
-                              className={`p-2 rounded-lg text-left text-xs font-medium transition-all flex items-center justify-between ${
+                              className={`p-2.5 rounded-xl text-left text-xs font-semibold transition-all flex items-center justify-between cursor-pointer ${
                                 isSelected
                                   ? isCorrect
-                                    ? "bg-emerald-600 text-white font-bold"
-                                    : "bg-rose-600 text-white font-bold"
-                                  : "bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700"
+                                    ? "bg-emerald-600 text-white font-bold shadow-xs"
+                                    : "bg-rose-600 text-white font-bold shadow-xs"
+                                  : "bg-white hover:bg-slate-50 text-slate-800 border border-slate-200/90 shadow-2xs"
                               }`}
                             >
                               <span>
-                                <strong className="mr-1">{optKey}.</strong>{" "}
+                                <strong className="mr-1 text-indigo-600">{optKey}.</strong>{" "}
                                 <MathContent content={opt} />
                               </span>
                               {isSelected && (isCorrect ? "✓ Đúng" : "✗")}
@@ -1037,9 +1037,9 @@ function SlidesStudioContent() {
                 </div>
 
                 {/* Bottom Footer Details */}
-                <div className="relative z-10 pt-4 border-t border-slate-700/80 flex items-center justify-between text-xs text-slate-400">
+                <div className="relative z-10 pt-4 border-t border-slate-150 flex items-center justify-between text-xs text-slate-500">
                   <div className="flex items-center gap-2">
-                    <ImageIcon className="w-3.5 h-3.5 text-indigo-400" />
+                    <ImageIcon className="w-3.5 h-3.5 text-indigo-600" />
                     <span className="italic truncate max-w-md">
                       Minh họa: {currentSlide.suggestedVisual}
                     </span>
@@ -1048,17 +1048,17 @@ function SlidesStudioContent() {
                     <button
                       disabled={activeSlideIndex === 0}
                       onClick={() => setActiveSlideIndex((prev) => Math.max(0, prev - 1))}
-                      className="p-1 hover:bg-slate-800 rounded disabled:opacity-30"
+                      className="p-1 hover:bg-slate-100 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 cursor-pointer"
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
-                    <span className="font-semibold text-white">
+                    <span className="font-bold text-slate-800 px-1">
                       {activeSlideIndex + 1} / {slides.length}
                     </span>
                     <button
                       disabled={activeSlideIndex === slides.length - 1}
                       onClick={() => setActiveSlideIndex((prev) => Math.min(slides.length - 1, prev + 1))}
-                      className="p-1 hover:bg-slate-800 rounded disabled:opacity-30"
+                      className="p-1 hover:bg-slate-100 rounded-lg border border-slate-200 text-slate-600 disabled:opacity-30 cursor-pointer"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>
@@ -1066,7 +1066,7 @@ function SlidesStudioContent() {
                 </div>
               </div>
             ) : (
-              <div className="aspect-[16/9] w-full bg-slate-100 dark:bg-slate-800 rounded-3xl flex items-center justify-center text-slate-400">
+              <div className="aspect-[16/9] w-full bg-slate-50 border border-slate-200 rounded-3xl flex items-center justify-center text-slate-400 font-medium">
                 Chưa có dữ liệu slide
               </div>
             )}
@@ -1074,8 +1074,8 @@ function SlidesStudioContent() {
             {/* Slide Metadata & Pedagogical Notes Panel */}
             {currentSlide && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-                  <div className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs mb-2">
+                <div className="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-xs">
+                  <div className="flex items-center gap-2 text-indigo-700 font-bold text-xs mb-2">
                     <MessageSquare className="w-4 h-4" />
                     Ghi Chú Sư Phạm (Dành cho giáo viên khi đứng lớp)
                   </div>
@@ -1087,13 +1087,13 @@ function SlidesStudioContent() {
                       newSlides[activeSlideIndex].teacherNote = e.target.value;
                       setSlides(newSlides);
                     }}
-                    className="w-full text-xs bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full text-xs bg-slate-50/70 border border-slate-200 rounded-xl p-3 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                     placeholder="Nhập ghi chú giảng dạy, câu hỏi mở rộng hoặc lưu ý học sinh hay sai..."
                   />
                 </div>
 
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
-                  <div className="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold text-xs mb-2">
+                <div className="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-xs">
+                  <div className="flex items-center gap-2 text-violet-700 font-bold text-xs mb-2">
                     <ImageIcon className="w-4 h-4" />
                     Gợi Ý Trực Quan / Hình Ảnh / Thiết Bị Đi Kèm
                   </div>
@@ -1105,7 +1105,7 @@ function SlidesStudioContent() {
                       newSlides[activeSlideIndex].suggestedVisual = e.target.value;
                       setSlides(newSlides);
                     }}
-                    className="w-full text-xs bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-slate-800 dark:text-slate-200 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full text-xs bg-slate-50/70 border border-slate-200 rounded-xl p-3 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
                     placeholder="Mô tả hình ảnh đồ họa, biểu đồ hoặc video ngắn cần chiếu kèm..."
                   />
                 </div>
