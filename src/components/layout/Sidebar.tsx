@@ -150,15 +150,31 @@ export function Sidebar({ user }: SidebarProps) {
             </Link>
 
             <Link
-              href="/materials"
+              href="/materials/scorm-studio"
               className={cn(
-                "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
-                isActive("/materials") && !isActive("/materials/lesson-plan") && !isActive("/materials/slides")
+                "flex items-center justify-between px-3 py-2 rounded-xl font-medium transition-colors",
+                isActive("/materials/scorm-studio")
                   ? "bg-indigo-50 text-indigo-700 font-semibold"
                   : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
               )}
             >
-              <FolderOpen className={cn("w-4 h-4", isActive("/materials") && !isActive("/materials/lesson-plan") && !isActive("/materials/slides") ? "text-indigo-600" : "text-slate-400")} />
+              <div className="flex items-center gap-2.5">
+                <Sparkles className={cn("w-4 h-4", isActive("/materials/scorm-studio") ? "text-indigo-600" : "text-amber-500")} />
+                <span>SCORM & Voice Studio</span>
+              </div>
+              <span className="text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200/60 px-2 py-0.5 rounded-md">Mới</span>
+            </Link>
+
+            <Link
+              href="/materials"
+              className={cn(
+                "flex items-center gap-2.5 px-3 py-2 rounded-xl font-medium transition-colors",
+                isActive("/materials") && !isActive("/materials/lesson-plan") && !isActive("/materials/slides") && !isActive("/materials/scorm-studio")
+                  ? "bg-indigo-50 text-indigo-700 font-semibold"
+                  : "text-slate-600 hover:bg-slate-100/70 hover:text-slate-900"
+              )}
+            >
+              <FolderOpen className={cn("w-4 h-4", isActive("/materials") && !isActive("/materials/lesson-plan") && !isActive("/materials/slides") && !isActive("/materials/scorm-studio") ? "text-indigo-600" : "text-slate-400")} />
               <span>Phiếu học tập (Worksheet)</span>
             </Link>
           </div>

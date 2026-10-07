@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
   BookOpen,
@@ -124,6 +125,13 @@ function MaterialsContent() {
         </div>
 
         <div className="flex items-center gap-2.5">
+          <Link
+            href="/materials/scorm-studio"
+            className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500/10 to-indigo-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300 font-semibold text-xs shadow-xs hover:bg-amber-500/20 transition-all cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4 text-amber-600" />
+            <span>SCORM &amp; Voice Studio (Mới)</span>
+          </Link>
           <button
             onClick={() => {
               setModalType("WORKSHEET");

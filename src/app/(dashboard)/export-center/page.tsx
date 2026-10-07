@@ -21,6 +21,14 @@ import {
 } from "lucide-react";
 import { MathContent } from "@/components/ui/MathContent";
 import katex from "katex";
+import { CURRICULUM_PRESETS, SubjectCurriculumPreset } from "@/lib/ai/curriculumDatabase";
+import {
+  buildCV7991ExamWordContent,
+  buildLessonPlan5512WordContent,
+  buildSlideDeckWordContent,
+  triggerWordDownload,
+} from "@/lib/export/wordExportHelper";
+
 
 interface TemplateItem {
   id: string;
@@ -62,450 +70,62 @@ export default function ExportCenterPage() {
     }
   };
 
+  const getActivePreset = (): SubjectCurriculumPreset => {
+    if (exportSubject.toLowerCase().includes("toán")) {
+      return CURRICULUM_PRESETS["math-7-ratio"];
+    }
+    if (exportSubject.toLowerCase().includes("khoa học") || exportSubject.toLowerCase().includes("khtn")) {
+      return CURRICULUM_PRESETS["khtn-7-metabolism"];
+    }
+    if (exportSubject.toLowerCase().includes("văn") || exportSubject.toLowerCase().includes("ngữ")) {
+      return CURRICULUM_PRESETS["literature-8-tang-poetry"];
+    }
+    return CURRICULUM_PRESETS["math-7-ratio"];
+  };
+
   const handleExportFullExamPackage = () => {
-    const renderMath = (text: string) => {
-      if (!text) return "";
-      return text.replace(/\$([^$]+)\$/g, (_, math) => {
-        try {
-          return katex.renderToString(math, { throwOnError: false });
-        } catch {
-          return math;
-        }
-      });
-    };
-
-    const isMusic = exportSubject.toLowerCase().includes("nhạc");
-
-    const docContent = isMusic ? `
-<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head>
-  <meta charset="utf-8">
-  <title>Hồ Sơ Kiểm Tra Định Kỳ Môn Âm Nhạc - Chuẩn Công Văn 7991</title>
-  <style>
-    body { font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.4; color: #000; margin: 2cm; }
-    h1 { font-size: 15pt; font-weight: bold; text-align: center; text-transform: uppercase; margin-bottom: 4px; color: #1e3a8a; }
-    h2 { font-size: 13.5pt; font-weight: bold; margin-top: 18px; border-bottom: 1.5pt solid #1e3a8a; padding-bottom: 4px; color: #1e3a8a; }
-    table { width: 100%; border-collapse: collapse; margin-top: 12px; margin-bottom: 12px; }
-    th, td { border: 1pt solid #000; padding: 6px 8px; font-size: 11pt; text-align: left; }
-    th { background-color: #f1f5f9; text-align: center; font-weight: bold; }
-    .page-break { page-break-before: always; }
-  </style>
-</head>
-<body>
-  <table style="border: none; width: 100%; margin-bottom: 16px;">
-    <tr style="border: none;">
-      <td style="border: none; text-align: center; width: 50%; font-size: 11pt;">
-        <strong>SỞ GD&ĐT TỈNH VĨNH LONG</strong><br>
-        <strong>TRƯỜNG THCS TÂN PHONG</strong><br>
-        <strong>TỔ NGHỆ THUẬT (ÂM NHẠC - MĨ THUẬT)</strong>
-      </td>
-      <td style="border: none; text-align: center; width: 50%; font-size: 11pt;">
-        <strong>CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</strong><br>
-        <strong>Độc lập - Tự do - Hạnh phúc</strong><br>
-        <em>Tân Phong, ngày ..... tháng ..... năm 2026</em>
-      </td>
-    </tr>
-  </table>
-
-  <div style="text-align: center; margin-bottom: 18px;">
-    <strong style="font-size: 14pt;">BỘ HỒ SƠ KIỂM TRA ĐÁNH GIÁ ĐỊNH KỲ MÔN ÂM NHẠC</strong><br>
-    <strong>ĐỊNH HƯỚNG CÔNG VĂN 7991/BGDĐT-GDTrH</strong><br>
-    <em>Giáo viên bộ môn: Cô Phan Thị Ngọc Huyền - Số điện thoại: 0987313889</em><br>
-    <em>Lớp: ${exportGrade} - Năm học 2026-2027</em>
-  </div>
-
-  <h1>${exportTitle.toUpperCase()}</h1>
-  <p style="text-align: center;"><em>Thời gian làm bài: 45 phút - Hình thức: Lí thuyết kết hợp Thực hành nghệ thuật</em></p>
-
-  <h2>PHẦN 1. MA TRẬN ĐỀ KIỂM TRA 2 CHIỀU (CHUẨN CV 7991)</h2>
-  <table>
-    <thead>
-      <tr>
-        <th rowspan="2">TT</th>
-        <th rowspan="2">Mạch nội dung / Chủ đề</th>
-        <th colspan="4">Mức độ nhận thức</th>
-        <th rowspan="2">Tổng câu</th>
-        <th rowspan="2">Điểm</th>
-      </tr>
-      <tr>
-        <th>Nhận biết</th>
-        <th>Thông hiểu</th>
-        <th>Vận dụng</th>
-        <th>Vận dụng cao</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="text-align: center;">1</td>
-        <td><strong>Lí thuyết âm nhạc & Đọc nhạc</strong> (Nhịp 4/4, Dấu nối, Thang âm Đô trưởng)</td>
-        <td style="text-align: center;">2 câu (TN)</td>
-        <td style="text-align: center;">1 câu (TN)</td>
-        <td style="text-align: center;">1 câu (TL)</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center; font-weight: bold;">4</td>
-        <td style="text-align: center; font-weight: bold;">3.0đ</td>
-      </tr>
-      <tr>
-        <td style="text-align: center;">2</td>
-        <td><strong>Thưởng thức âm nhạc</strong> (Dân ca Nam Bộ - Lý cây bông, Đàn bầu VN)</td>
-        <td style="text-align: center;">2 câu (TN)</td>
-        <td style="text-align: center;">1 câu (TN)</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center; font-weight: bold;">3</td>
-        <td style="text-align: center; font-weight: bold;">2.0đ</td>
-      </tr>
-      <tr>
-        <td style="text-align: center;">3</td>
-        <td><strong>Thực hành Hát</strong> (Bài hát Nụ cười, Mùa khai trường - Đúng sắc thái, lấy hơi)</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center;">1 bài (TH)</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center; font-weight: bold;">1</td>
-        <td style="text-align: center; font-weight: bold;">3.0đ</td>
-      </tr>
-      <tr>
-        <td style="text-align: center;">4</td>
-        <td><strong>Thực hành Nhạc cụ gõ & Vận động</strong> (Gõ thanh phách, Triangle, Vận động phụ họa)</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center;">1 bài (TH)</td>
-        <td style="text-align: center; font-weight: bold;">1</td>
-        <td style="text-align: center; font-weight: bold;">2.0đ</td>
-      </tr>
-      <tr style="background: #f9f9f9; font-weight: bold;">
-        <td colspan="2" style="text-align: right;">TỔNG CỘNG</td>
-        <td style="text-align: center;">4 câu (25%)</td>
-        <td style="text-align: center;">2 câu (25%)</td>
-        <td style="text-align: center;">2 bài (30%)</td>
-        <td style="text-align: center;">1 bài (20%)</td>
-        <td style="text-align: center;">9 phần</td>
-        <td style="text-align: center;">10.0đ</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="page-break"></div>
-
-  <h2>PHẦN 2. BẢN ĐẶC TẢ MA TRẬN ĐỀ KIỂM TRA MÔN ÂM NHẠC</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>TT</th>
-        <th>Nội dung</th>
-        <th>Yêu cầu cần đạt</th>
-        <th>Mức độ</th>
-        <th>Hình thức</th>
-        <th>Điểm</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="text-align: center;">1</td>
-        <td>Lí thuyết âm nhạc</td>
-        <td>Nhận biết số chỉ nhịp 4/4 và tính chất gõ nhịp</td>
-        <td style="text-align: center;">Nhận biết</td>
-        <td style="text-align: center;">Trắc nghiệm</td>
-        <td style="text-align: center;">1.0đ</td>
-      </tr>
-      <tr>
-        <td style="text-align: center;">2</td>
-        <td>Kí hiệu âm nhạc</td>
-        <td>Phân biệt tác dụng dấu nối và dấu quay lại trong bài</td>
-        <td style="text-align: center;">Thông hiểu</td>
-        <td style="text-align: center;">Trắc nghiệm</td>
-        <td style="text-align: center;">1.0đ</td>
-      </tr>
-      <tr>
-        <td style="text-align: center;">3</td>
-        <td>Thưởng thức âm nhạc</td>
-        <td>Nhận diện nhạc cụ Đàn bầu và làn điệu Lý cây bông</td>
-        <td style="text-align: center;">Nhận biết</td>
-        <td style="text-align: center;">Trắc nghiệm</td>
-        <td style="text-align: center;">2.0đ</td>
-      </tr>
-      <tr>
-        <td style="text-align: center;">4</td>
-        <td>Thực hành biểu diễn Hát</td>
-        <td>Hát đúng cao độ, giai điệu, biểu cảm bài hát Nụ cười</td>
-        <td style="text-align: center;">Vận dụng</td>
-        <td style="text-align: center;">Thực hành</td>
-        <td style="text-align: center;">3.0đ</td>
-      </tr>
-      <tr>
-        <td style="text-align: center;">5</td>
-        <td>Gõ nhạc cụ & Vận động</td>
-        <td>Sử dụng thanh phách đệm chuẩn xác theo phách bài hát</td>
-        <td style="text-align: center;">Vận dụng cao</td>
-        <td style="text-align: center;">Thực hành</td>
-        <td style="text-align: center;">3.0đ</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="page-break"></div>
-
-  <h2>PHẦN 3. ĐỀ KIỂM TRA CHÍNH THỨC (MÃ ĐỀ 101)</h2>
-  <div style="line-height: 1.6;">
-    <h3 style="font-size: 12pt; font-weight: bold; margin-top: 10px;">A. PHẦN TRẮC NGHIỆM & LÍ THUYẾT (4.0 ĐIỂM)</h3>
-    <p><strong>Câu 1 (1.0 điểm):</strong> Trong số chỉ nhịp 4/4, con số 4 ở phía trên có ý nghĩa gì?</p>
-    <p style="margin-left: 20px;">
-      A. Mỗi ô nhịp có 4 phách<br>
-      B. Mỗi phách có giá trị bằng 4 nốt đen<br>
-      C. Bài hát có 4 đoạn nhạc riêng biệt<br>
-      D. Có 4 nhạc cụ cùng tham gia hòa tấu
-    </p>
-
-    <p><strong>Câu 2 (1.0 điểm):</strong> Nhạc cụ dân tộc truyền thống Việt Nam nào chỉ có duy nhất một dây nhưng phát ra âm thanh du dương, da diết?</p>
-    <p style="margin-left: 20px;">
-      A. Đàn T'rưng &nbsp;&nbsp;&nbsp;&nbsp; B. Đàn Tranh &nbsp;&nbsp;&nbsp;&nbsp; C. Đàn Bầu (Độc huyền cầm) &nbsp;&nbsp;&nbsp;&nbsp; D. Đàn Nguyệt
-    </p>
-
-    <p><strong>Câu 3 (1.0 điểm):</strong> Bài hát "Lý cây bông" là một làn điệu dân ca thuộc vùng miền nào của đất nước ta?</p>
-    <p style="margin-left: 20px;">
-      A. Dân ca Bắc Bộ &nbsp;&nbsp;&nbsp;&nbsp; B. Dân ca Quan họ &nbsp;&nbsp;&nbsp;&nbsp; C. Dân ca Nam Bộ &nbsp;&nbsp;&nbsp;&nbsp; D. Dân ca Tây Nguyên
-    </p>
-
-    <p><strong>Câu 4 (1.0 điểm):</strong> Kí hiệu âm nhạc dùng để liên kết hai nốt nhạc có cùng cao độ với nhau được gọi là:</p>
-    <p style="margin-left: 20px;">
-      A. Dấu nối &nbsp;&nbsp;&nbsp;&nbsp; B. Dấu luyến &nbsp;&nbsp;&nbsp;&nbsp; C. Dấu nhắc lại &nbsp;&nbsp;&nbsp;&nbsp; D. Dấu lặng
-    </p>
-
-    <h3 style="font-size: 12pt; font-weight: bold; margin-top: 20px;">B. PHẦN THỰC HÀNH NGHỆ THUẬT (6.0 ĐIỂM)</h3>
-    <p><strong>Nhiệm vụ 1 (3.0 điểm):</strong> Em hãy trình bày bài hát <em>"Nụ cười" (Nhạc Nga)</em> theo hình thức đơn ca hoặc song ca, chú ý sắc thái vui tươi và nhịp nhàng.</p>
-    <p><strong>Nhiệm vụ 2 (3.0 điểm):</strong> Em hãy sử dụng nhạc cụ gõ (thanh phách hoặc triangle) hoặc vận động cơ thể (body percussion) để gõ đệm theo phách cho bài hát vừa trình bày.</p>
-  </div>
-
-  <div class="page-break"></div>
-
-  <h2>PHẦN 4. HƯỚNG DẪN CHẤM & RUBRIC ĐÁNH GIÁ NĂNG LỰC ÂM NHẠC</h2>
-  <h3 style="font-size: 12pt; font-weight: bold;">1. Đáp án trắc nghiệm (4.0 điểm - Mỗi câu đúng 1.0 điểm)</h3>
-  <table>
-    <thead>
-      <tr>
-        <th style="width: 25%;">Câu 1</th>
-        <th style="width: 25%;">Câu 2</th>
-        <th style="width: 25%;">Câu 3</th>
-        <th style="width: 25%;">Câu 4</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="text-align: center; font-weight: bold; color: #1e3a8a;">A</td>
-        <td style="text-align: center; font-weight: bold; color: #1e3a8a;">C</td>
-        <td style="text-align: center; font-weight: bold; color: #1e3a8a;">C</td>
-        <td style="text-align: center; font-weight: bold; color: #1e3a8a;">A</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <h3 style="font-size: 12pt; font-weight: bold; margin-top: 16px;">2. Rubric chấm điểm thực hành Hát và Nhạc cụ (6.0 điểm)</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Tiêu chí đánh giá</th>
-        <th>Mức Tốt (Hoàn thành xuất sắc)</th>
-        <th>Mức Đạt (Hoàn thành)</th>
-        <th>Mức Chưa đạt</th>
-        <th>Điểm tối đa</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong>1. Cao độ & Nhịp điệu</strong></td>
-        <td>Hát đúng hoàn toàn cao độ, trường độ; nhịp phách ổn định, không chênh phô.</td>
-        <td>Hát tương đối đúng, đôi chỗ còn dao động nhẹ về cao độ nhưng sửa kịp.</td>
-        <td>Hát sai giai điệu, chênh phô nhiều đoạn, lệch nhịp.</td>
-        <td style="text-align: center; font-weight: bold;">2.0đ</td>
-      </tr>
-      <tr>
-        <td><strong>2. Phát âm & Sắc thái biểu cảm</strong></td>
-        <td>Phát âm tròn vành rõ chữ, lấy hơi tự nhiên; thể hiện nét mặt vui tươi, xúc cảm.</td>
-        <td>Phát âm rõ ràng, sắc thái phù hợp nhưng chưa thật tự nhiên.</td>
-        <td>Hát lí nhí, không rõ lời ca, thiếu sắc thái biểu cảm.</td>
-        <td style="text-align: center; font-weight: bold;">1.5đ</td>
-      </tr>
-      <tr>
-        <td><strong>3. Thực hành nhạc cụ gõ đệm</strong></td>
-        <td>Gõ thanh phách chắc chắn, đúng nhịp 4/4 xuyên suốt cả bài hát.</td>
-        <td>Gõ đệm đúng phần lớn bài hát, đôi chỗ còn lúng túng khi chuyển đoạn.</td>
-        <td>Không gõ đệm được hoặc gõ sai lệch phách hoàn toàn.</td>
-        <td style="text-align: center; font-weight: bold;">1.5đ</td>
-      </tr>
-      <tr>
-        <td><strong>4. Tự tin & Tác phong biểu diễn</strong></td>
-        <td>Tác phong nghiêm túc, đứng thẳng, tự tin giao lưu ánh mắt, chào hỏi lễ phép.</td>
-        <td>Có tự tin nhưng còn rụt rè nhẹ trước đám đông.</td>
-        <td>Quá rụt rè, cần giáo viên hướng dẫn và động viên nhiều.</td>
-        <td style="text-align: center; font-weight: bold;">1.0đ</td>
-      </tr>
-      <tr style="background: #f1f5f9; font-weight: bold;">
-        <td colspan="4" style="text-align: right;">TỔNG ĐIỂM THỰC HÀNH</td>
-        <td style="text-align: center; color: #1e3a8a;">6.0đ</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div style="margin-top: 30px; text-align: right;">
-    <p><em>Tân Phong, ngày ..... tháng ..... năm 2026</em></p>
-    <strong>GIÁO VIÊN RA ĐỀ & CHẤM THI</strong><br><br><br>
-    <strong>Cô Phan Thị Ngọc Huyền</strong><br>
-    <em>Trường THCS Tân Phong - Vĩnh Long</em>
-  </div>
-</body>
-</html>
-    ` : `
-<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
-<head>
-  <meta charset="utf-8">
-  <title>Hồ Sơ Kiểm Tra Định Kỳ Chuẩn Công Văn 7991</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-  <style>
-    body { font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.4; color: #000; margin: 2cm; }
-    h1 { font-size: 16pt; font-weight: bold; text-align: center; text-transform: uppercase; margin-bottom: 4px; }
-    h2 { font-size: 14pt; font-weight: bold; margin-top: 20px; border-bottom: 1.5pt solid #000; padding-bottom: 4px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 12px; margin-bottom: 12px; }
-    th, td { border: 1pt solid #000; padding: 6px 8px; font-size: 11pt; text-align: left; }
-    th { background-color: #f2f2f2; text-align: center; font-weight: bold; }
-    .page-break { page-break-before: always; }
-  </style>
-</head>
-<body>
-  <div style="text-align: center; margin-bottom: 20px;">
-    <strong>PHÒNG GD&ĐT QUẬN / HUYỆN - TRƯỜNG THCS TÂN PHONG</strong><br>
-    <strong>BỘ HỒ SƠ KIỂM TRA ĐÁNH GIÁ THEO ĐỊNH HƯỚNG CÔNG VĂN 7991/BGDĐT-GDTrH</strong><br>
-    <em>Môn: ${exportSubject} - Lớp ${exportGrade}</em>
-  </div>
-
-  <h1>ĐỀ KIỂM TRA ĐỊNH KỲ: ${exportTitle.toUpperCase()}</h1>
-  <p style="text-align: center;"><em>Thời gian: 45 phút - Thang điểm: 10.0 điểm</em></p>
-
-  <h2>PHẦN 1. MA TRẬN ĐỀ KIỂM TRA 2 CHIỀU</h2>
-  <table>
-    <thead>
-      <tr>
-        <th rowspan="2">TT</th>
-        <th rowspan="2">Chủ đề kiến thức</th>
-        <th colspan="4">Mức độ nhận thức</th>
-        <th rowspan="2">Tổng câu</th>
-        <th rowspan="2">Điểm</th>
-      </tr>
-      <tr>
-        <th>Nhận biết</th>
-        <th>Thông hiểu</th>
-        <th>Vận dụng</th>
-        <th>Vận dụng cao</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="text-align: center;">1</td>
-        <td>Khái niệm và tính chất cơ bản</td>
-        <td style="text-align: center;">2 câu</td>
-        <td style="text-align: center;">1 câu</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center; font-weight: bold;">3</td>
-        <td style="text-align: center; font-weight: bold;">3.0đ</td>
-      </tr>
-      <tr>
-        <td style="text-align: center;">2</td>
-        <td>Vận dụng tính toán và quy tắc biến đổi</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center;">2 câu</td>
-        <td style="text-align: center;">1 câu</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center; font-weight: bold;">3</td>
-        <td style="text-align: center; font-weight: bold;">4.0đ</td>
-      </tr>
-      <tr>
-        <td style="text-align: center;">3</td>
-        <td>Giải quyết vấn đề thực tế</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center;">0</td>
-        <td style="text-align: center;">1 câu</td>
-        <td style="text-align: center;">1 câu</td>
-        <td style="text-align: center; font-weight: bold;">2</td>
-        <td style="text-align: center; font-weight: bold;">3.0đ</td>
-      </tr>
-      <tr style="background: #f9f9f9; font-weight: bold;">
-        <td colspan="2" style="text-align: right;">TỔNG CỘNG</td>
-        <td style="text-align: center;">2 câu (20%)</td>
-        <td style="text-align: center;">3 câu (30%)</td>
-        <td style="text-align: center;">2 câu (30%)</td>
-        <td style="text-align: center;">1 câu (20%)</td>
-        <td style="text-align: center;">8 câu</td>
-        <td style="text-align: center;">10.0đ</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="page-break"></div>
-
-  <h2>PHẦN 2. BẢN ĐẶC TẢ MA TRẬN ĐỀ KIỂM TRA</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>TT</th>
-        <th>Nội dung</th>
-        <th>Yêu cầu cần đạt</th>
-        <th>Mức độ</th>
-        <th>Dạng câu hỏi</th>
-        <th>Điểm</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td style="text-align: center;">1</td>
-        <td>Kiến thức trọng tâm</td>
-        <td>Nhận biết định nghĩa và tính chất cơ bản</td>
-        <td style="text-align: center;">Nhận biết</td>
-        <td style="text-align: center;">Trắc nghiệm</td>
-        <td style="text-align: center;">2.0đ</td>
-      </tr>
-      <tr>
-        <td style="text-align: center;">2</td>
-        <td>Kỹ năng biến đổi</td>
-        <td>Vận dụng định lí tính toán thành thạo</td>
-        <td style="text-align: center;">Thông hiểu</td>
-        <td style="text-align: center;">Tự luận ngắn</td>
-        <td style="text-align: center;">4.0đ</td>
-      </tr>
-      <tr>
-        <td style="text-align: center;">3</td>
-        <td>Toán thực tế</td>
-        <td>Vận dụng giải bài toán thực tiễn</td>
-        <td style="text-align: center;">Vận dụng</td>
-        <td style="text-align: center;">Tự luận</td>
-        <td style="text-align: center;">4.0đ</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="page-break"></div>
-
-  <h2>PHẦN 3. ĐỀ KIỂM TRA CHÍNH THỨC</h2>
-  <div>
-    <p><strong>Câu 1 (2.0 điểm):</strong> Nhận biết và phát biểu định nghĩa theo chuẩn chương trình GDPT 2018.</p>
-    <p><strong>Câu 2 (4.0 điểm):</strong> Thực hiện các yêu cầu tính toán và biến đổi hợp lý.</p>
-    <p><strong>Câu 3 (4.0 điểm):</strong> Vận dụng kiến thức đã học vào tình huống thực tiễn đời sống.</p>
-  </div>
-</body>
-</html>
-    `;
-
-    const blob = new Blob([docContent], { type: "application/msword;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `Full_Package_7991_${exportSubject}_${exportGrade}.doc`;
-    link.click();
-    URL.revokeObjectURL(url);
-
-    setExportSuccess("Đã xuất trọn gói hồ sơ kiểm tra Công văn 7991 sang Word (.doc)!");
+    const preset = getActivePreset();
+    const html = buildCV7991ExamWordContent(preset.examPackage, {
+      schoolName: "TRƯỜNG THCS TÂN PHONG",
+      teacherName: "Phan Thị Ngọc Huyền",
+      departmentName: `TỔ CHUYÊN MÔN ${exportSubject.toUpperCase()}`,
+    });
+    triggerWordDownload(html, `Ho_So_Kiem_Tra_7991_${exportSubject}_Lop${exportGrade}.doc`);
+    setExportSuccess(`Đã xuất trọn gói hồ sơ kiểm tra Công văn 7991 môn ${exportSubject} lớp ${exportGrade}!`);
     setTimeout(() => setExportSuccess(null), 3000);
+  };
+
+  const handleExport3in1Bundle = () => {
+    const preset = getActivePreset();
+
+    // 1. Kế hoạch bài dạy CV 5512
+    const lpDoc = buildLessonPlan5512WordContent(preset.lessonPlan, {
+      schoolName: "TRƯỜNG THCS TÂN PHONG",
+      teacherName: "Phan Thị Ngọc Huyền",
+    });
+    triggerWordDownload(lpDoc, `1_Ke_Hoach_Bai_Day_CV5512_${exportSubject}_Lop${exportGrade}.doc`);
+
+    // 2. Kịch bản Slide bài giảng
+    setTimeout(() => {
+      const slideDoc = buildSlideDeckWordContent(preset.slideDeck, {
+        schoolName: "TRƯỜNG THCS TÂN PHONG",
+        teacherName: "Phan Thị Ngọc Huyền",
+      });
+      triggerWordDownload(slideDoc, `2_Kich_Ban_Slide_Bai_Giang_${exportSubject}_Lop${exportGrade}.doc`);
+    }, 400);
+
+    // 3. Hồ sơ đề kiểm tra CV 7991
+    setTimeout(() => {
+      const examDoc = buildCV7991ExamWordContent(preset.examPackage, {
+        schoolName: "TRƯỜNG THCS TÂN PHONG",
+        teacherName: "Phan Thị Ngọc Huyền",
+        departmentName: `TỔ CHUYÊN MÔN ${exportSubject.toUpperCase()}`,
+      });
+      triggerWordDownload(examDoc, `3_Bo_De_Kiem_Tra_CV7991_${exportSubject}_Lop${exportGrade}.doc`);
+    }, 800);
+
+    setExportSuccess(`Đang tải trọn bộ Siêu Gói 3-trong-1 (Kế hoạch bài dạy 5512 + Slide + Đề thi 7991) môn ${exportSubject}!`);
+    setTimeout(() => setExportSuccess(null), 4000);
   };
 
   return (
@@ -527,12 +147,23 @@ export default function ExportCenterPage() {
             </p>
           </div>
 
-          <button
-            onClick={handleExportFullExamPackage}
-            className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-all self-start md:self-auto cursor-pointer"
-          >
-            <Award className="w-4 h-4" /> Xuất Trọn Gói CV 7991 ({exportSubject} {exportGrade})
-          </button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <button
+              onClick={handleExport3in1Bundle}
+              className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl text-xs font-bold shadow-md shadow-indigo-500/20 transition-all cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-yellow-300 animate-pulse" />
+              <span>🏆 Xuất Siêu Gói 3-Trong-1 (5512 + Slide + 7991)</span>
+            </button>
+
+            <button
+              onClick={handleExportFullExamPackage}
+              className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold shadow-xs transition-all cursor-pointer"
+            >
+              <Award className="w-4 h-4" />
+              <span>Xuất Đề CV 7991 ({exportSubject} {exportGrade})</span>
+            </button>
+          </div>
         </div>
 
         {/* Dynamic Selection Bar for Export */}
@@ -552,9 +183,10 @@ export default function ExportCenterPage() {
               }}
               className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
             >
-              <option value="Âm nhạc">Âm nhạc</option>
-              <option value="Toán học">Toán học</option>
-              <option value="Khoa học tự nhiên">Khoa học tự nhiên</option>
+              <option value="Toán học">Toán học (Bài: Tỉ lệ thức & Dãy tỉ số)</option>
+              <option value="Khoa học tự nhiên">Khoa học tự nhiên (Bài: Trao đổi chất)</option>
+              <option value="Ngữ văn">Ngữ văn (Bài: Thơ Đường luật)</option>
+              <option value="Âm nhạc">Âm nhạc (Bài: Khai trường & Nụ cười)</option>
             </select>
           </div>
 

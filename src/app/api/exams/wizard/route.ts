@@ -5,20 +5,21 @@ import { getAIProvider } from "@/lib/ai/provider";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { action = "GENERATE_PACKAGE", params } = body;
+    const action = body.action || (body.params ? body.action : "GENERATE_PACKAGE");
+    const params = body.params || body;
     const ai = getAIProvider();
     const teacher = await prisma.user.findFirst();
 
     if (action === "GENERATE_PACKAGE") {
       const pkg = await ai.generateExamCV7991({
-        title: params?.title || "Kiểm tra định kỳ môn Âm nhạc theo Công văn 7991",
-        subject: params?.subject || "Âm nhạc",
-        grade: params?.grade || 7,
-        semester: params?.semester || 1,
-        durationMinutes: params?.durationMinutes || 45,
-        totalScore: params?.totalScore || 10.0,
+        title: params?.title || `Kiểm tra định kỳ môn ${params?.subject || "Toán học"} theo Công văn 7991`,
+        subject: params?.subject || "Toán học",
+        grade: Number(params?.grade) || 7,
+        semester: Number(params?.semester) || 1,
+        durationMinutes: Number(params?.durationMinutes || params?.duration) || 45,
+        totalScore: Number(params?.totalScore) || 10.0,
         examType: params?.examType || "GIUA_KY",
-        topics: params?.topics || ["Thực hành Hát & Nhạc cụ gõ", "Lí thuyết âm nhạc & Đọc nhạc"],
+        topics: params?.topics || ["Chương trình chuẩn GDPT 2018"],
         learningOutcomes: params?.learningOutcomes || [],
         matrixRatio: params?.matrixRatio || {
           nhanBiet: 40,

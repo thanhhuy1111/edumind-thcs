@@ -14,9 +14,13 @@ import {
   BookOpen,
   BarChart3,
   HelpCircle,
+  Mic,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MathContent } from "@/components/ui/MathContent";
+import { useVoice } from "@/lib/hooks/useVoice";
 
 interface ChatMessage {
   id: string;
@@ -48,7 +52,36 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
 
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const { speak, stopSpeaking, isSpeaking, startListening, stopListening, isListening, micSupported } = useVoice();
+
+  const handleToggleSpeak = (msg: ChatMessage) => {
+    if (isSpeaking && speakingMsgId === msg.id) {
+      stopSpeaking();
+      setSpeakingMsgId(null);
+    } else {
+      setSpeakingMsgId(msg.id);
+      speak(msg.content);
+    }
+  };
+
+  const handleMicClick = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening((transcript) => {
+        setInput((prev) => (prev ? prev + " " + transcript : transcript));
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (!isSpeaking) {
+      setSpeakingMsgId(null);
+    }
+  }, [isSpeaking]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -227,6 +260,29 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
                   ))}
                 </div>
               )}
+              {/* Assistant Voice Reader */}
+              {msg.role === "assistant" && (
+                <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-200/60 text-[11px] text-slate-400">
+                  <span className="font-medium text-slate-400">EduMind AI Assistant • GDPT 2018</span>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleSpeak(msg)}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-300 transition-all font-semibold cursor-pointer"
+                  >
+                    {isSpeaking && speakingMsgId === msg.id ? (
+                      <>
+                        <VolumeX className="w-3.5 h-3.5 text-rose-500 animate-pulse" />
+                        <span>Dừng đọc</span>
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="w-3.5 h-3.5" />
+                        <span>Đọc to (Voice)</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
 
             {msg.role === "user" && (
@@ -265,6 +321,23 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
             placeholder="Hỏi bất kỳ điều gì về lớp học, điểm số hoặc yêu cầu: 'Tạo bài tập 15 phút cho lớp 7A1'..."
             className="flex-1 px-4 py-2.5 bg-slate-50/80 border border-slate-200/80 rounded-2xl text-xs placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
           />
+
+          {/* Voice Input Microphone */}
+          <button
+            type="button"
+            onClick={handleMicClick}
+            title={isListening ? "Đang ghi âm giọng nói... Bấm để dừng" : "Bấm để nhập bằng giọng nói tiếng Việt"}
+            className={cn(
+              "px-3 py-2.5 rounded-2xl transition-all cursor-pointer flex items-center justify-center gap-1.5 text-xs font-semibold",
+              isListening
+                ? "bg-rose-500 text-white animate-pulse shadow-md shadow-rose-500/30"
+                : "bg-slate-100 hover:bg-slate-200 text-slate-700"
+            )}
+          >
+            <Mic className="w-4 h-4" />
+            <span className="hidden sm:inline">{isListening ? "Đang nghe..." : "Giọng nói"}</span>
+          </button>
+
           <button
             type="submit"
             disabled={!input.trim() || loading}

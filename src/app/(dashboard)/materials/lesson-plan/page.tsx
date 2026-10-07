@@ -87,8 +87,15 @@ function LessonPlanContent() {
     handleGeneratePlan();
   }, []);
 
-  const handleGeneratePlan = async () => {
+  const handleGeneratePlan = async (overrideParams?: any) => {
     setIsGenerating(true);
+    const pSubject = overrideParams?.subject || subject;
+    const pGrade = overrideParams?.grade || grade;
+    const pTitle = overrideParams?.lessonTitle || lessonTitle;
+    const pDuration = overrideParams?.durationMinutes || durationMinutes;
+    const pOutcomes = overrideParams?.learningOutcomes || learningOutcomes;
+    const pMethod = overrideParams?.method || method;
+
     try {
       const res = await fetch("/api/materials/lesson-plan", {
         method: "POST",
@@ -96,12 +103,12 @@ function LessonPlanContent() {
         body: JSON.stringify({
           action: "GENERATE",
           params: {
-            subject,
-            grade: parseInt(grade, 10),
-            lessonTitle,
-            durationMinutes: parseInt(durationMinutes, 10),
-            learningOutcomes,
-            method,
+            subject: pSubject,
+            grade: parseInt(pGrade, 10),
+            lessonTitle: pTitle,
+            durationMinutes: parseInt(pDuration, 10),
+            learningOutcomes: pOutcomes,
+            method: pMethod,
           },
         }),
       });
@@ -114,6 +121,56 @@ function LessonPlanContent() {
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const handleSelectPreset = (presetKey: "math" | "khtn" | "literature" | "music") => {
+    let pParams;
+    if (presetKey === "math") {
+      pParams = {
+        subject: "Toán học",
+        grade: "7",
+        lessonTitle: "Bài 6: Tỉ lệ thức và Dãy tỉ số bằng nhau",
+        durationMinutes: "45",
+        learningOutcomes: "Nắm vững tính chất cơ bản của tỉ lệ thức và dãy tỉ số bằng nhau, vận dụng giải bài toán thực tế chia đại lượng tỉ lệ thuận.",
+        method: "Dạy học phát hiện và giải quyết vấn đề, thảo luận nhóm, trực quan hóa bài toán thực tiễn",
+      };
+    } else if (presetKey === "khtn") {
+      pParams = {
+        subject: "Khoa học tự nhiên",
+        grade: "7",
+        lessonTitle: "Bài 22: Vai trò của trao đổi chất và chuyển hóa năng lượng ở sinh vật",
+        durationMinutes: "45",
+        learningOutcomes: "Nêu được khái niệm, phương trình tổng quát quang hợp và hô hấp tế bào; phân tích vai trò chuyển hóa năng lượng và ứng dụng bảo quản nông sản.",
+        method: "Dạy học trực quan bằng sơ đồ hóa, phân tích thí nghiệm và liên hệ thực tế nông nghiệp",
+      };
+    } else if (presetKey === "literature") {
+      pParams = {
+        subject: "Ngữ văn",
+        grade: "8",
+        lessonTitle: "Bài 2: Vẻ đẹp cổ điển - Thơ Thất ngôn bát cú Đường luật (Qua Đèo Ngang)",
+        durationMinutes: "45",
+        learningOutcomes: "Nhận biết đặc trưng thể thơ Thất ngôn bát cú Đường luật (luật, niêm, vần, đối), phân tích được tâm trạng hoài cổ của tác giả và cảm thụ nét đẹp quê hương.",
+        method: "Dạy học đọc hiểu văn bản nghệ thuật, đàm thoại gợi mở, thảo luận cặp đôi và viết đoạn văn cảm nhận",
+      };
+    } else {
+      pParams = {
+        subject: "Âm nhạc",
+        grade: "7",
+        lessonTitle: "Chủ đề 2: Tình bạn - Bài 3: Học hát bài Nụ cười",
+        durationMinutes: "45",
+        learningOutcomes: "Hát đúng giai điệu và lời ca bài hát Nụ cười, biết gõ đệm thanh phách nhịp nhàng theo phách 2/4, cảm nhận tình bạn trong sáng.",
+        method: "Dạy học thực hành biểu diễn, luyện thanh, hòa âm nhóm và gõ đệm thanh phách",
+      };
+    }
+
+    setSubject(pParams.subject);
+    setGrade(pParams.grade);
+    setLessonTitle(pParams.lessonTitle);
+    setDurationMinutes(pParams.durationMinutes);
+    setLearningOutcomes(pParams.learningOutcomes);
+    setMethod(pParams.method);
+
+    handleGeneratePlan(pParams);
   };
 
   const handleRegenerateActivity = async (activity: ActivityItem, instruction: "shorten" | "expand" | "refresh") => {
@@ -366,6 +423,90 @@ function LessonPlanContent() {
           <span>Đã lưu Kế hoạch bài dạy thành công vào Thư viện học liệu của bạn!</span>
         </div>
       )}
+
+      {/* 1-Click Lesson Plan Presets */}
+      <div className="bg-gradient-to-r from-blue-50/90 via-indigo-50/80 to-purple-50/70 border border-blue-200/80 rounded-2xl p-4 shadow-sm space-y-3">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <span className="p-1.5 bg-blue-600 text-white rounded-lg shadow-sm">
+              <Sparkles className="w-4 h-4" />
+            </span>
+            <div>
+              <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                Giáo án mẫu chuẩn Công văn 5512 (1-Click Nạp Nhanh)
+              </span>
+              <p className="text-[11px] text-slate-500">
+                Nhấp để tải tức thì Kế hoạch bài dạy chuẩn 4 hoạt động GDPT 2018 theo từng môn:
+              </p>
+            </div>
+          </div>
+          <span className="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
+            Đúng 4 Hoạt động &amp; 4 Mục CV 5512
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <button
+            onClick={() => handleSelectPreset("math")}
+            disabled={isGenerating}
+            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-blue-300 shadow-2xs ${
+              subject === "Toán học" ? "border-blue-500 ring-2 ring-blue-500/20" : "border-slate-200"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-blue-700">📐 Toán học 7</span>
+              <span className="text-[10px] px-1.5 py-0.2 bg-blue-50 text-blue-600 rounded font-medium">45 phút</span>
+            </div>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Tỉ lệ thức &amp; Dãy tỉ số</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">4 hoạt động • Toán thực tế</p>
+          </button>
+
+          <button
+            onClick={() => handleSelectPreset("khtn")}
+            disabled={isGenerating}
+            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-emerald-300 shadow-2xs ${
+              subject === "Khoa học tự nhiên" ? "border-emerald-500 ring-2 ring-emerald-500/20" : "border-slate-200"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-emerald-700">🔬 KHTN 7</span>
+              <span className="text-[10px] px-1.5 py-0.2 bg-emerald-50 text-emerald-600 rounded font-medium">45 phút</span>
+            </div>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Trao đổi chất &amp; Năng lượng</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">4 hoạt động • Quang hợp &amp; Hô hấp</p>
+          </button>
+
+          <button
+            onClick={() => handleSelectPreset("literature")}
+            disabled={isGenerating}
+            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-amber-300 shadow-2xs ${
+              subject === "Ngữ văn" ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-amber-700">📖 Ngữ văn 8</span>
+              <span className="text-[10px] px-1.5 py-0.2 bg-amber-50 text-amber-600 rounded font-medium">45 phút</span>
+            </div>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Thơ Đường luật (Đèo Ngang)</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">4 hoạt động • Cảm thụ &amp; Viết</p>
+          </button>
+
+          <button
+            onClick={() => handleSelectPreset("music")}
+            disabled={isGenerating}
+            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-indigo-300 shadow-2xs ${
+              subject === "Âm nhạc" ? "border-indigo-500 ring-2 ring-indigo-500/20" : "border-slate-200"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-indigo-700">🎵 Âm nhạc 7</span>
+              <span className="text-[10px] px-1.5 py-0.2 bg-indigo-50 text-indigo-600 rounded font-medium">45 phút</span>
+            </div>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Học hát bài Nụ cười</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">4 hoạt động • Luyện thanh &amp; Phách</p>
+          </button>
+        </div>
+      </div>
 
       {/* Main Grid: Config Column + Preview/Editor Column */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

@@ -34,12 +34,13 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { action = "GENERATE_DECK", params } = body;
+    const action = body.action || (body.params ? body.action : "GENERATE_DECK");
+    const params = body.params || body;
     const ai = getAIProvider();
     const teacher = await prisma.user.findFirst();
 
     if (action === "GENERATE_OUTLINE") {
-      const { lessonTitle = "Chủ đề 2: Tình bạn - Học hát bài Nụ cười", subject = "Âm nhạc", grade = 7 } = params || {};
+      const { lessonTitle = "Bài học chuẩn GDPT 2018", subject = "Toán học", grade = 7 } = params || {};
       const isMusic = subject.toLowerCase().includes("nhạc");
       const outline = isMusic ? [
         { slideNumber: 1, title: lessonTitle, subtitle: `Môn Âm nhạc ${grade} - Giới thiệu bài học` },
@@ -69,10 +70,10 @@ export async function POST(req: NextRequest) {
 
     if (action === "GENERATE_DECK") {
       const generated = await ai.generateSlideDeck({
-        lessonTitle: params?.lessonTitle || "Chủ đề 2: Tình bạn - Học hát bài Nụ cười",
-        subject: params?.subject || "Âm nhạc",
-        grade: params?.grade || 7,
-        slideCount: params?.slideCount || 10,
+        lessonTitle: params?.lessonTitle || params?.topic || "Bài học chuẩn GDPT 2018",
+        subject: params?.subject || "Toán học",
+        grade: Number(params?.grade) || 7,
+        slideCount: Number(params?.slideCount) || 10,
         style: params?.style || "Học tập tương tác & Trực quan",
       });
 

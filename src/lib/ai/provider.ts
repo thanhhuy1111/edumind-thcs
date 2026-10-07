@@ -17,6 +17,7 @@ import {
   CV7991MatrixRow,
   CV7991SpecificationRow,
 } from "./types";
+import { CURRICULUM_PRESETS } from "./curriculumDatabase";
 
 /**
  * Smart Local AI Provider - High-fidelity curriculum reasoning engine
@@ -448,6 +449,47 @@ export class SmartLocalAIProvider implements AIProvider {
       };
     }
 
+    const isScience =
+      subject.toLowerCase().includes("khoa học") ||
+      subject.toLowerCase().includes("khtn") ||
+      subject.toLowerCase().includes("tự nhiên") ||
+      subject.toLowerCase().includes("sinh") ||
+      subject.toLowerCase().includes("hóa") ||
+      subject.toLowerCase().includes("vật lí") ||
+      lessonTitle.toLowerCase().includes("trao đổi chất") ||
+      lessonTitle.toLowerCase().includes("quang hợp") ||
+      lessonTitle.toLowerCase().includes("tế bào");
+
+    if (isScience) {
+      const base = CURRICULUM_PRESETS["science-7-metabolism"].lessonPlan;
+      return {
+        ...base,
+        title: `KẾ HOẠCH BÀI DẠY: ${lessonTitle.toUpperCase()}`,
+        subject: "Khoa học tự nhiên",
+        grade,
+        duration: `${durationMinutes} phút (${Math.round(durationMinutes / 45)} tiết)`,
+      };
+    }
+
+    const isLiterature =
+      subject.toLowerCase().includes("văn") ||
+      subject.toLowerCase().includes("ngữ văn") ||
+      subject.toLowerCase().includes("tiếng việt") ||
+      lessonTitle.toLowerCase().includes("thơ") ||
+      lessonTitle.toLowerCase().includes("đèo ngang") ||
+      lessonTitle.toLowerCase().includes("đoạn văn");
+
+    if (isLiterature) {
+      const base = CURRICULUM_PRESETS["lit-8-poetry"].lessonPlan;
+      return {
+        ...base,
+        title: `KẾ HOẠCH BÀI DẠY: ${lessonTitle.toUpperCase()}`,
+        subject: "Ngữ văn",
+        grade,
+        duration: `${durationMinutes} phút (${Math.round(durationMinutes / 45)} tiết)`,
+      };
+    }
+
     return {
       title: `KẾ HOẠCH BÀI DẠY: ${lessonTitle.toUpperCase()}`,
       subject,
@@ -691,6 +733,27 @@ export class SmartLocalAIProvider implements AIProvider {
           },
         ],
       };
+    }
+
+    const isScience =
+      subject.toLowerCase().includes("khoa học") ||
+      subject.toLowerCase().includes("khtn") ||
+      subject.toLowerCase().includes("tự nhiên") ||
+      lessonTitle.toLowerCase().includes("trao đổi chất") ||
+      lessonTitle.toLowerCase().includes("quang hợp");
+
+    if (isScience) {
+      return CURRICULUM_PRESETS["science-7-metabolism"].slideDeck;
+    }
+
+    const isLiterature =
+      subject.toLowerCase().includes("văn") ||
+      subject.toLowerCase().includes("ngữ văn") ||
+      lessonTitle.toLowerCase().includes("thơ") ||
+      lessonTitle.toLowerCase().includes("đèo ngang");
+
+    if (isLiterature) {
+      return CURRICULUM_PRESETS["lit-8-poetry"].slideDeck;
     }
 
     return {
@@ -1137,279 +1200,44 @@ export class SmartLocalAIProvider implements AIProvider {
       };
     }
 
-    const questions: GeneratedQuestion[] = [
-      {
-        content: "Từ tỉ lệ thức $\\frac{a}{b} = \\frac{c}{d}$ (với $b, d \\neq 0$), khẳng định nào sau đây là đúng?",
-        type: "SINGLE_CHOICE",
-        difficulty: "NHAN_BIET",
-        answers: [
-          { label: "A", content: "$a \\cdot d = b \\cdot c$", isCorrect: true },
-          { label: "B", content: "$a \\cdot c = b \\cdot d$", isCorrect: false },
-          { label: "C", content: "$a \\cdot b = c \\cdot d$", isCorrect: false },
-          { label: "D", content: "$a + d = b + c$", isCorrect: false },
-        ],
-        correct_answer: "A",
-        explanation: "Theo tính chất cơ bản của tỉ lệ thức, tích ngoại tỉ bằng tích trung tỉ: $ad = bc$.",
-        skill: "Nhận biết tỉ lệ thức",
-        tags: ["ti-le-thuc", "nhan-biet"],
-      },
-      {
-        content: "Số đối của số hữu tỉ $-\\frac{3}{7}$ là:",
-        type: "SINGLE_CHOICE",
-        difficulty: "NHAN_BIET",
-        answers: [
-          { label: "A", content: "$\\frac{3}{7}$", isCorrect: true },
-          { label: "B", content: "$-\\frac{7}{3}$", isCorrect: false },
-          { label: "C", content: "$\\frac{7}{3}$", isCorrect: false },
-          { label: "D", content: "$-\\frac{3}{7}$", isCorrect: false },
-        ],
-        correct_answer: "A",
-        explanation: "Số đối của số hữu tỉ $-a$ là $+a$, do đó số đối của $-\\frac{3}{7}$ là $\\frac{3}{7}$.",
-        skill: "Số hữu tỉ và số đối",
-        tags: ["so-huu-ti", "nhan-biet"],
-      },
-      {
-        content: "Tìm số hữu tỉ $x$ biết: $\\frac{x}{12} = \\frac{5}{6}$.",
-        type: "SINGLE_CHOICE",
-        difficulty: "THONG_HIEU",
-        answers: [
-          { label: "A", content: "$x = 10$", isCorrect: true },
-          { label: "B", content: "$x = 8$", isCorrect: false },
-          { label: "C", content: "$x = 15$", isCorrect: false },
-          { label: "D", content: "$x = 12$", isCorrect: false },
-        ],
-        correct_answer: "A",
-        explanation: "Áp dụng tính chất tỉ lệ thức: $x = \\frac{12 \\cdot 5}{6} = 10$.",
-        skill: "Tìm x trong tỉ lệ thức",
-        tags: ["ti-le-thuc", "thong-hieu"],
-      },
-      {
-        content: "Cho $\\frac{x}{3} = \\frac{y}{5}$ và $x + y = 32$. Giá trị của $x$ và $y$ lần lượt là:",
-        type: "SINGLE_CHOICE",
-        difficulty: "THONG_HIEU",
-        answers: [
-          { label: "A", content: "$x = 12; y = 20$", isCorrect: true },
-          { label: "B", content: "$x = 20; y = 12$", isCorrect: false },
-          { label: "C", content: "$x = 14; y = 18$", isCorrect: false },
-          { label: "D", content: "$x = 10; y = 22$", isCorrect: false },
-        ],
-        correct_answer: "A",
-        explanation: "Theo tính chất dãy tỉ số bằng nhau: $\\frac{x}{3} = \\frac{y}{5} = \\frac{x+y}{3+5} = \\frac{32}{8} = 4$. Do đó $x = 3 \\cdot 4 = 12$, $y = 5 \\cdot 4 = 20$.",
-        skill: "Vận dụng tính chất dãy tỉ số bằng nhau",
-        tags: ["day-ti-so", "thong-hieu"],
-      },
-      {
-        content: "Xét các phát biểu sau về tỉ lệ thức $\\frac{x}{4} = \\frac{y}{7}$ với $x, y \\neq 0$. Chọn Đúng hoặc Sai cho mỗi mệnh đề:",
-        type: "TRUE_FALSE",
-        difficulty: "THONG_HIEU",
-        answers: [
-          { label: "a", content: "Đẳng thức tích chéo tương đương là $7x = 4y$.", isCorrect: true },
-          { label: "b", content: "Tỉ số $\\frac{x}{y}$ bằng $\\frac{7}{4}$.", isCorrect: false },
-          { label: "c", content: "$\\frac{x}{4} = \\frac{y}{7} = \\frac{x+y}{11}$.", isCorrect: true },
-          { label: "d", content: "Nếu $y = 14$ thì $x = 8$.", isCorrect: true },
-        ],
-        correct_answer: "a-Đ, b-S, c-Đ, d-Đ",
-        explanation: "a) Đúng vì tích chéo $7x = 4y$.\nb) Sai vì $\\frac{x}{y} = \\frac{4}{7}$.\nc) Đúng theo tính chất $\\frac{x+y}{4+7} = \\frac{x+y}{11}$.\nd) Đúng vì khi $y=14$ thì $x = \\frac{4 \\cdot 14}{7} = 8$.",
-        skill: "Phân tích tính đúng sai của tỉ lệ thức",
-        tags: ["dung-sai", "cv-7991"],
-      },
-      {
-        content: "Điền kết quả vào chỗ trống: Hai lớp 7A và 7B có số học sinh tỉ lệ với $8$ và $9$. Biết lớp 7B nhiều hơn lớp 7A là $4$ học sinh. Tổng số học sinh của cả hai lớp là bao nhiêu?",
-        type: "SHORT_ANSWER",
-        difficulty: "VAN_DUNG",
-        answers: [{ label: "A", content: "68", isCorrect: true }],
-        correct_answer: "68",
-        explanation: "Gọi số học sinh hai lớp là $x, y$. Ta có: $\\frac{x}{8} = \\frac{y}{9} = \\frac{y-x}{9-8} = \\frac{4}{1} = 4$. Tổng số học sinh là $(8 + 9) \\cdot 4 = 17 \\cdot 4 = 68$ học sinh.",
-        skill: "Giải bài toán thực tế tỉ lệ",
-        tags: ["tra-loi-ngan", "van-dung"],
-      },
-      {
-        content: "Tự luận (2.0 điểm): Ba đội máy cày làm việc trên ba cánh đồng có cùng diện tích. Đội thứ nhất hoàn thành công việc trong 3 ngày, đội thứ hai trong 4 ngày và đội thứ ba trong 6 ngày. Hỏi mỗi đội có bao nhiêu máy cày, biết rằng số máy của đội thứ nhất nhiều hơn đội thứ hai là 2 máy và năng suất các máy như nhau?",
-        type: "ESSAY",
-        difficulty: "VAN_DUNG_CAO",
-        answers: [{ label: "A", content: "Đội 1: 8 máy; Đội 2: 6 máy; Đội 3: 4 máy", isCorrect: true }],
-        correct_answer: "Đội 1: 8 máy, Đội 2: 6 máy, Đội 3: 4 máy",
-        explanation: "Gọi số máy cày của ba đội lần lượt là $x, y, z$ (máy, $x, y, z \\in \\mathbb{N}^*$).\nVì trên cùng diện tích, số máy cày và thời gian hoàn thành là hai đại lượng tỉ lệ nghịch:\n$3x = 4y = 6z \\Rightarrow \\frac{x}{4} = \\frac{y}{3} = \\frac{z}{2}$.\nBiết $x - y = 2$, áp dụng tính chất dãy tỉ số bằng nhau:\n$\\frac{x}{4} = \\frac{y}{3} = \\frac{z}{2} = \\frac{x-y}{4-3} = \\frac{2}{1} = 2$.\nSuy ra:\n$x = 4 \\cdot 2 = 8$ (máy)\n$y = 3 \\cdot 2 = 6$ (máy)\n$z = 2 \\cdot 2 = 4$ (máy).\nVậy số máy của 3 đội lần lượt là 8 máy, 6 máy, 4 máy.",
-        skill: "Giải bài toán tỉ lệ nghịch nâng cao",
-        tags: ["tu-luan", "van-dung-cao", "cv-7991"],
-      },
-    ];
+    const isScience =
+      subject.toLowerCase().includes("khoa học") ||
+      subject.toLowerCase().includes("khtn") ||
+      subject.toLowerCase().includes("tự nhiên");
 
-    const matrix: CV7991MatrixRow[] = [
-      {
-        topic: "Chương 1: Số hữu tỉ",
-        knowledgeUnit: "Số đối và phép toán số hữu tỉ",
-        learningOutcome: "Nhận biết số đối, thực hiện phép cộng trừ số hữu tỉ",
-        nhanBiet: { tn: 1, tl: 0, points: 1.0 },
-        thongHieu: { tn: 0, tl: 0, points: 0 },
-        vanDung: { tn: 0, tl: 0, points: 0 },
-        vanDungCao: { tn: 0, tl: 0, points: 0 },
-        totalQuestions: 1,
-        totalPoints: 1.0,
-      },
-      {
-        topic: "Chương 2: Tỉ lệ thức & Dãy tỉ số",
-        knowledgeUnit: "Định nghĩa và tính chất tỉ lệ thức",
-        learningOutcome: "Nhận biết tỉ lệ thức, vận dụng tính chất tích chéo $ad = bc$",
-        nhanBiet: { tn: 1, tl: 0, points: 1.0 },
-        thongHieu: { tn: 2, tl: 0, points: 2.0 },
-        vanDung: { tn: 0, tl: 0, points: 0 },
-        vanDungCao: { tn: 0, tl: 0, points: 0 },
-        totalQuestions: 3,
-        totalPoints: 3.0,
-      },
-      {
-        topic: "Chương 2: Tỉ lệ thức & Dãy tỉ số",
-        knowledgeUnit: "Tính chất dãy tỉ số bằng nhau",
-        learningOutcome: "Vận dụng tính chất dãy tỉ số tìm hai ẩn $x, y$",
-        nhanBiet: { tn: 0, tl: 0, points: 0 },
-        thongHieu: { tn: 1, tl: 0, points: 1.5 },
-        vanDung: { tn: 1, tl: 0, points: 1.5 },
-        vanDungCao: { tn: 0, tl: 0, points: 0 },
-        totalQuestions: 2,
-        totalPoints: 3.0,
-      },
-      {
-        topic: "Chương 2: Tỉ lệ thức & Dãy tỉ số",
-        knowledgeUnit: "Toán thực tế tỉ lệ nghịch liên môn",
-        learningOutcome: "Mô hình hóa bài toán thực tế năng suất máy cày",
-        nhanBiet: { tn: 0, tl: 0, points: 0 },
-        thongHieu: { tn: 0, tl: 0, points: 0 },
-        vanDung: { tn: 0, tl: 0, points: 0 },
-        vanDungCao: { tn: 0, tl: 1, points: 3.0 },
-        totalQuestions: 1,
-        totalPoints: 3.0,
-      },
-    ];
+    if (isScience) {
+      const pkg = CURRICULUM_PRESETS["science-7-metabolism"].examPackage;
+      return {
+        ...pkg,
+        title: title || `ĐỀ KIỂM TRA ĐỊNH KỲ THEO CÔNG VĂN 7991 - KHOA HỌC TỰ NHIÊN ${grade}`,
+        durationMinutes,
+        totalScore,
+      };
+    }
 
-    const specification: CV7991SpecificationRow[] = [
-      {
-        order: 1,
-        topic: "Số hữu tỉ",
-        knowledgeUnit: "Khái niệm và số đối",
-        learningOutcome: "Nhận biết số đối của một số hữu tỉ cho trước",
-        assessmentLevel: "Nhận biết",
-        questionType: "Trắc nghiệm nhiều lựa chọn",
-        questionCount: 1,
-        points: 1.0,
-        questionNumbers: "Câu 2",
-      },
-      {
-        order: 2,
-        topic: "Tỉ lệ thức",
-        knowledgeUnit: "Định nghĩa và tính chất cơ bản",
-        learningOutcome: "Nhận biết định nghĩa tỉ lệ thức và tính chất tích ngoại tỉ bằng tích trung tỉ",
-        assessmentLevel: "Nhận biết",
-        questionType: "Trắc nghiệm nhiều lựa chọn",
-        questionCount: 1,
-        points: 1.0,
-        questionNumbers: "Câu 1",
-      },
-      {
-        order: 3,
-        topic: "Tỉ lệ thức",
-        knowledgeUnit: "Tìm ẩn trong tỉ lệ thức",
-        learningOutcome: "Tính toán tìm giá trị ẩn số bậc nhất trong tỉ lệ thức",
-        assessmentLevel: "Thông hiểu",
-        questionType: "Trắc nghiệm nhiều lựa chọn",
-        questionCount: 1,
-        points: 1.0,
-        questionNumbers: "Câu 3",
-      },
-      {
-        order: 4,
-        topic: "Dãy tỉ số bằng nhau",
-        knowledgeUnit: "Áp dụng tính chất cơ bản",
-        learningOutcome: "Tìm hai số khi biết tỉ số và tổng của chúng",
-        assessmentLevel: "Thông hiểu",
-        questionType: "Trắc nghiệm nhiều lựa chọn",
-        questionCount: 1,
-        points: 1.0,
-        questionNumbers: "Câu 4",
-      },
-      {
-        order: 5,
-        topic: "Dãy tỉ số bằng nhau",
-        knowledgeUnit: "Phân tích mệnh đề đúng sai",
-        learningOutcome: "Đánh giá tính đúng/sai của các phép biến đổi tỉ lệ thức",
-        assessmentLevel: "Thông hiểu",
-        questionType: "Trắc nghiệm Đúng/Sai (4 ý)",
-        questionCount: 1,
-        points: 1.5,
-        questionNumbers: "Câu 5",
-      },
-      {
-        order: 6,
-        topic: "Toán thực tế",
-        knowledgeUnit: "Bài toán chia tỉ lệ thuận",
-        learningOutcome: "Giải bài toán thực tế tìm số học sinh dựa vào hiệu và tỉ số",
-        assessmentLevel: "Vận dụng",
-        questionType: "Trắc nghiệm trả lời ngắn",
-        questionCount: 1,
-        points: 1.5,
-        questionNumbers: "Câu 6",
-      },
-      {
-        order: 7,
-        topic: "Toán thực tế",
-        knowledgeUnit: "Bài toán tỉ lệ nghịch đa bước",
-        learningOutcome: "Lập luận mô hình hóa bài toán thực tế năng suất máy cày",
-        assessmentLevel: "Vận dụng cao",
-        questionType: "Tự luận trình bày bước",
-        questionCount: 1,
-        points: 3.0,
-        questionNumbers: "Câu 7 (TL)",
-      },
-    ];
+    const isLiterature =
+      subject.toLowerCase().includes("văn") ||
+      subject.toLowerCase().includes("ngữ văn");
 
-    const scoringGuide = {
-      multipleChoice: [
-        { questionNumber: 1, answer: "A", points: 1.0 },
-        { questionNumber: 2, answer: "A", points: 1.0 },
-        { questionNumber: 3, answer: "A", points: 1.0 },
-        { questionNumber: 4, answer: "A", points: 1.0 },
-      ],
-      trueFalse: [
-        {
-          questionNumber: 5,
-          subItems: [
-            { item: "Ý a", answer: "Đúng" as const, points: 0.375 },
-            { item: "Ý b", answer: "Sai" as const, points: 0.375 },
-            { item: "Ý c", answer: "Đúng" as const, points: 0.375 },
-            { item: "Ý d", answer: "Đúng" as const, points: 0.375 },
-          ],
-        },
-      ],
-      essayRubric: [
-        {
-          questionNumber: 7,
-          criteria: "Bài toán thực tế máy cày (3.0 điểm)",
-          steps: [
-            { step: "Gọi ẩn $x, y, z$ và đặt điều kiện thích hợp ($x, y, z \\in \\mathbb{N}^*$)", points: 0.5 },
-            { step: "Lập luận tính chất tỉ lệ nghịch: $3x = 4y = 6z \\Rightarrow \\frac{x}{4} = \\frac{y}{3} = \\frac{z}{2}$", points: 1.0 },
-            { step: "Áp dụng tính chất dãy tỉ số bằng nhau với hiệu $x - y = 2$ tìm được giá trị tỉ số chung $= 2$", points: 0.75 },
-            { step: "Tính đúng số máy mỗi đội (8 máy, 6 máy, 4 máy) và kết luận", points: 0.75 },
-          ],
-          totalPoints: 3.0,
-        },
-      ],
-    };
+    if (isLiterature) {
+      const pkg = CURRICULUM_PRESETS["lit-8-poetry"].examPackage;
+      return {
+        ...pkg,
+        title: title || `ĐỀ KIỂM TRA ĐỊNH KỲ THEO CÔNG VĂN 7991 - MÔN NGỮ VĂN KHỐI ${grade}`,
+        durationMinutes,
+        totalScore,
+      };
+    }
 
+    // Default: Mathematics (Toán học)
+    const mathPkg = CURRICULUM_PRESETS["math-7-ratio"].examPackage;
     return {
+      ...mathPkg,
       title: title || `ĐỀ KIỂM TRA ĐỊNH KỲ THEO CÔNG VĂN 7991 - MÔN ${subject.toUpperCase()} KHỐI ${grade}`,
       subject,
       grade,
       durationMinutes,
       totalScore,
-      questions,
-      matrix,
-      specification,
-      scoringGuide,
-      consistencyCheck: {
-        isValid: true,
-        scoreSum: 10.0,
-        warnings: [],
-      },
     };
   }
 
@@ -1563,10 +1391,30 @@ Cô muốn em hỗ trợ nội dung nào trước ạ?`,
  */
 let currentProvider: AIProvider = new SmartLocalAIProvider();
 
-export function getAIProvider(): AIProvider {
+export function getAIProvider(apiKey?: string): AIProvider {
+  if (apiKey && apiKey.trim().length > 10) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { GeminiAIProvider } = require("./geminiProvider");
+      return new GeminiAIProvider(apiKey);
+    } catch {
+      return currentProvider;
+    }
+  }
+  if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim().length > 10) {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { GeminiAIProvider } = require("./geminiProvider");
+      currentProvider = new GeminiAIProvider(process.env.GEMINI_API_KEY);
+    } catch {
+      currentProvider = new SmartLocalAIProvider();
+    }
+  }
   return currentProvider;
 }
 
 export function setAIProvider(provider: AIProvider) {
   currentProvider = provider;
 }
+
+

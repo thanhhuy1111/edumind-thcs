@@ -141,15 +141,21 @@ function SlidesStudioContent() {
     }
   };
 
-  const handleGenerateInitialDeck = async () => {
+  const handleGenerateInitialDeck = async (overrideParams?: any) => {
     setIsGeneratingDeck(true);
+    const pSubject = overrideParams?.subject || subject;
+    const pGrade = overrideParams?.grade || grade;
+    const pTitle = overrideParams?.lessonTitle || lessonTitle;
+    const pCount = overrideParams?.slideCount || slideCount;
+    const pStyle = overrideParams?.style || style;
+
     try {
       const res = await fetch("/api/materials/slides", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           action: "GENERATE_DECK",
-          params: { lessonTitle, subject, grade: parseInt(grade, 10), slideCount, style },
+          params: { lessonTitle: pTitle, subject: pSubject, grade: parseInt(pGrade, 10), slideCount: pCount, style: pStyle },
         }),
       });
       const data = await res.json();
@@ -163,6 +169,48 @@ function SlidesStudioContent() {
     } finally {
       setIsGeneratingDeck(false);
     }
+  };
+
+  const handleSelectPresetSlide = (presetKey: "math" | "khtn" | "literature" | "music") => {
+    let pParams;
+    if (presetKey === "math") {
+      pParams = {
+        subject: "Toán học",
+        grade: "7",
+        lessonTitle: "Bài 6: Tỉ lệ thức và Dãy tỉ số bằng nhau",
+        slideCount: 10,
+        style: "Học tập tương tác & Trực quan",
+      };
+    } else if (presetKey === "khtn") {
+      pParams = {
+        subject: "Khoa học tự nhiên",
+        grade: "7",
+        lessonTitle: "Bài 22: Vai trò của trao đổi chất và chuyển hóa năng lượng ở sinh vật",
+        slideCount: 10,
+        style: "Học tập tương tác & Trực quan",
+      };
+    } else if (presetKey === "literature") {
+      pParams = {
+        subject: "Ngữ văn",
+        grade: "8",
+        lessonTitle: "Bài 2: Vẻ đẹp cổ điển - Thơ Thất ngôn bát cú Đường luật (Qua Đèo Ngang)",
+        slideCount: 10,
+        style: "Học tập tương tác & Trực quan",
+      };
+    } else {
+      pParams = {
+        subject: "Âm nhạc",
+        grade: "7",
+        lessonTitle: "Chủ đề 2: Tình bạn - Học hát bài Nụ cười",
+        slideCount: 10,
+        style: "Học tập tương tác & Trực quan",
+      };
+    }
+
+    setSubject(pParams.subject);
+    setGrade(pParams.grade);
+    setLessonTitle(pParams.lessonTitle);
+    handleGenerateInitialDeck(pParams);
   };
 
   const handleGenerateDeckFromOutline = async () => {
@@ -448,6 +496,90 @@ function SlidesStudioContent() {
           >
             {savedSuccess ? <Check className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
             {savedSuccess ? "Đã lưu!" : isSaving ? "Đang lưu..." : "Lưu Slide"}
+          </button>
+        </div>
+      </div>
+
+      {/* 1-Click Slide Presets */}
+      <div className="bg-gradient-to-r from-blue-50/90 via-indigo-50/80 to-purple-50/70 dark:from-slate-900 dark:via-blue-950/40 dark:to-slate-900 border border-blue-200/80 dark:border-blue-900/60 rounded-2xl p-4 shadow-sm space-y-3">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <span className="p-1.5 bg-blue-600 text-white rounded-lg shadow-sm">
+              <Sparkles className="w-4 h-4" />
+            </span>
+            <div>
+              <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                Bài giảng điện tử mẫu (1-Click Nạp Nhanh)
+              </span>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Nhấp để nạp tức thì bộ slide 16:9 gồm 10 trang bài giảng chuẩn GDPT 2018 theo từng môn:
+              </p>
+            </div>
+          </div>
+          <span className="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
+            10 Trang • Trực Quan • KaTeX
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <button
+            onClick={() => handleSelectPresetSlide("math")}
+            disabled={isGeneratingDeck}
+            className={`p-3 rounded-xl border text-left transition-all bg-white dark:bg-slate-800 hover:border-blue-300 shadow-2xs ${
+              subject === "Toán học" ? "border-blue-500 ring-2 ring-blue-500/20" : "border-slate-200 dark:border-slate-700"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-blue-700 dark:text-blue-400">📐 Toán học 7</span>
+              <span className="text-[10px] px-1.5 py-0.2 bg-blue-50 text-blue-600 rounded font-medium">10 Slide</span>
+            </div>
+            <p className="text-[11px] text-slate-700 dark:text-slate-200 font-medium mt-1 truncate">Tỉ lệ thức &amp; Dãy tỉ số</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Quiz mini-game • Công thức KaTeX</p>
+          </button>
+
+          <button
+            onClick={() => handleSelectPresetSlide("khtn")}
+            disabled={isGeneratingDeck}
+            className={`p-3 rounded-xl border text-left transition-all bg-white dark:bg-slate-800 hover:border-emerald-300 shadow-2xs ${
+              subject === "Khoa học tự nhiên" ? "border-emerald-500 ring-2 ring-emerald-500/20" : "border-slate-200 dark:border-slate-700"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">🔬 KHTN 7</span>
+              <span className="text-[10px] px-1.5 py-0.2 bg-emerald-50 text-emerald-600 rounded font-medium">10 Slide</span>
+            </div>
+            <p className="text-[11px] text-slate-700 dark:text-slate-200 font-medium mt-1 truncate">Trao đổi chất &amp; Năng lượng</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Sơ đồ quang hợp &amp; Thí nghiệm</p>
+          </button>
+
+          <button
+            onClick={() => handleSelectPresetSlide("literature")}
+            disabled={isGeneratingDeck}
+            className={`p-3 rounded-xl border text-left transition-all bg-white dark:bg-slate-800 hover:border-amber-300 shadow-2xs ${
+              subject === "Ngữ văn" ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200 dark:border-slate-700"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-amber-700 dark:text-amber-400">📖 Ngữ văn 8</span>
+              <span className="text-[10px] px-1.5 py-0.2 bg-amber-50 text-amber-600 rounded font-medium">10 Slide</span>
+            </div>
+            <p className="text-[11px] text-slate-700 dark:text-slate-200 font-medium mt-1 truncate">Thơ Đường luật (Đèo Ngang)</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Thi pháp cổ điển • Tranh minh họa</p>
+          </button>
+
+          <button
+            onClick={() => handleSelectPresetSlide("music")}
+            disabled={isGeneratingDeck}
+            className={`p-3 rounded-xl border text-left transition-all bg-white dark:bg-slate-800 hover:border-indigo-300 shadow-2xs ${
+              subject === "Âm nhạc" ? "border-indigo-500 ring-2 ring-indigo-500/20" : "border-slate-200 dark:border-slate-700"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400">🎵 Âm nhạc 7</span>
+              <span className="text-[10px] px-1.5 py-0.2 bg-indigo-50 text-indigo-600 rounded font-medium">10 Slide</span>
+            </div>
+            <p className="text-[11px] text-slate-700 dark:text-slate-200 font-medium mt-1 truncate">Hát bài Nụ cười &amp; Nhạc lí</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Luyện thanh • Gõ phách 2/4</p>
           </button>
         </div>
       </div>

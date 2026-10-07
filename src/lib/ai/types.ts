@@ -19,6 +19,8 @@ export interface GeneratedAnswerOption {
 }
 
 export interface GeneratedQuestion {
+  id?: string;
+  orderNumber?: number;
   content: string;
   type: QuestionType;
   difficulty: DifficultyLevel;
@@ -28,6 +30,9 @@ export interface GeneratedQuestion {
   skill: string;
   source?: string;
   tags?: string[];
+  subItems?: { label: string; text: string; isCorrect: boolean }[];
+  rubric?: { step: string; points: number }[];
+  scorePoints?: number;
 }
 
 export interface GenerateQuestionsParams {
@@ -151,11 +156,13 @@ export interface SlideItem {
   bullets: string[];
   teacherNote: string;
   suggestedVisual: string;
+  narrationScript?: string;
   interactiveActivity?: string;
   quizQuestion?: {
     question: string;
     options: string[];
     answer: string;
+    explanation?: string;
   };
 }
 
@@ -179,12 +186,19 @@ export interface CV7991MatrixRow {
   topic: string;
   knowledgeUnit: string;
   learningOutcome: string;
+  // 4 question formats according to Official Dispatch 7991/BGDĐT-GDTrH
+  multipleChoice?: { nhanBiet: number; thongHieu: number; vanDung: number; points: number };
+  trueFalse?: { nhanBiet: number; thongHieu: number; vanDung: number; points: number };
+  shortAnswer?: { nhanBiet: number; thongHieu: number; vanDung: number; points: number };
+  essay?: { vanDung: number; vanDungCao: number; points: number };
+  // Aggregated cognitive levels
   nhanBiet: { tn: number; tl: number; points: number };
   thongHieu: { tn: number; tl: number; points: number };
   vanDung: { tn: number; tl: number; points: number };
   vanDungCao: { tn: number; tl: number; points: number };
   totalQuestions: number;
   totalPoints: number;
+  percentage?: number;
 }
 
 export interface CV7991SpecificationRow {
@@ -238,6 +252,39 @@ export interface GenerateExamCV7991Params {
   };
 }
 
+export interface InteractiveLessonCheckpoint {
+  checkpointId: string;
+  order: number;
+  title: string;
+  conceptSummary: string;
+  slideNumber: number;
+  narrationScript: string; // Lời thoại thuyết minh của giáo viên (Voice TTS)
+  quizQuestion?: {
+    question: string;
+    options: string[];
+    answer: string;
+    explanation: string;
+  };
+}
+
+export interface GeneratedInteractiveLesson {
+  lessonTitle: string;
+  subject: string;
+  grade: number;
+  overview: string;
+  slides: SlideItem[];
+  checkpoints: InteractiveLessonCheckpoint[];
+}
+
+export interface GenerateSCORMLessonParams {
+  documentText: string;
+  lessonTitle?: string;
+  subject?: string;
+  grade?: number;
+  slideCount?: number;
+  questionFrequency?: "EACH_CONCEPT" | "MID_AND_END" | "EVERY_SLIDE";
+}
+
 export interface AIProvider {
   name: string;
   generateQuestions(params: GenerateQuestionsParams): Promise<GeneratedQuestion[]>;
@@ -245,6 +292,8 @@ export interface AIProvider {
   generateExamCV7991(params: GenerateExamCV7991Params): Promise<CV7991ExamPackage>;
   generateLessonPlan(params: GenerateLessonPlanParams): Promise<GeneratedLessonPlan>;
   generateSlideDeck(params: GenerateSlideParams): Promise<GeneratedSlideDeck>;
+  generateInteractiveLesson?(params: GenerateSCORMLessonParams): Promise<GeneratedInteractiveLesson>;
   analyzeStudent(params: AnalyzeStudentParams): Promise<StudentAnalysisResult>;
   chat(messages: ChatMessage[], context?: Record<string, unknown>): Promise<AIChatResponse>;
 }
+

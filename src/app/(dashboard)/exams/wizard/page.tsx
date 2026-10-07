@@ -130,6 +130,8 @@ function ExamWizardContent() {
   const [generateProgress, setGenerateProgress] = useState(0);
   const [questions, setQuestions] = useState<QuestionItem[]>([]);
   const [matrix, setMatrix] = useState<MatrixRow[]>([]);
+  const [matrix7991, setMatrix7991] = useState<any[]>([]);
+  const [activePreset, setActivePreset] = useState<string>("music");
   const [specification, setSpecification] = useState<SpecRow[]>([]);
   const [scoringGuide, setScoringGuide] = useState<any[]>([]);
 
@@ -255,12 +257,107 @@ function ExamWizardContent() {
       if (data.questions) {
         setQuestions(data.questions);
         setMatrix(data.matrix || []);
+        if (data.matrix7991) setMatrix7991(data.matrix7991);
         setSpecification(data.specification || []);
         setScoringGuide(data.scoringGuide || []);
       }
     } catch (err) {
       console.error(err);
       alert("Lỗi khi AI khởi tạo đề kiểm tra 7991");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleLoadPreset = async (presetKey: "math" | "khtn" | "literature" | "music") => {
+    setActivePreset(presetKey);
+    let pTitle = "";
+    let pSubject = "";
+    let pGrade = "7";
+    let pSemester = "1";
+    let pDuration = 45;
+    let pTopics: string[] = [];
+    let pOutcomes: string[] = [];
+
+    if (presetKey === "math") {
+      pTitle = "Kiểm tra định kỳ Giữa Học kỳ II - Môn Toán học 7";
+      pSubject = "Toán học";
+      pGrade = "7";
+      pSemester = "2";
+      pDuration = 60;
+      pTopics = ["Tỉ lệ thức và tính chất cơ bản", "Dãy tỉ số bằng nhau", "Toán đố thực tế chia tỉ lệ thuận"];
+      pOutcomes = ["Nhận biết tỉ lệ thức và các tính chất cơ bản ad = bc", "Áp dụng dãy tỉ số bằng nhau tìm các số", "Giải toán thực tế về năng suất lao động"];
+    } else if (presetKey === "khtn") {
+      pTitle = "Kiểm tra định kỳ Giữa Học kỳ II - Môn Khoa học tự nhiên 7";
+      pSubject = "Khoa học tự nhiên";
+      pGrade = "7";
+      pSemester = "2";
+      pDuration = 45;
+      pTopics = ["Trao đổi chất và chuyển hóa năng lượng", "Quang hợp ở thực vật", "Hô hấp tế bào"];
+      pOutcomes = ["Nêu khái niệm và phương trình quang hợp", "Phân tích các yếu tố ảnh hưởng đến hô hấp tế bào", "Vận dụng kiến thức bảo quản nông sản"];
+    } else if (presetKey === "literature") {
+      pTitle = "Kiểm tra định kỳ Giữa Học kỳ I - Môn Ngữ văn 8";
+      pSubject = "Ngữ văn";
+      pGrade = "8";
+      pSemester = "1";
+      pDuration = 90;
+      pTopics = ["Thơ Thất ngôn bát cú Đường luật (Qua Đèo Ngang)", "Thực hành tiếng Việt: Từ tượng hình, từ tượng thanh", "Đoạn văn cảm thụ & Nghị luận xã hội"];
+      pOutcomes = ["Nhận biết đặc điểm thể thơ Thất ngôn bát cú (niêm, luật, vần, đối)", "Phân tích tâm trạng bà Huyện Thanh Quan", "Viết đoạn văn ngắn về tình yêu quê hương đất nước"];
+    } else {
+      pTitle = "Kiểm tra định kỳ Giữa Học kỳ I - Môn Âm nhạc 7";
+      pSubject = "Âm nhạc";
+      pGrade = "7";
+      pSemester = "1";
+      pDuration = 45;
+      pTopics = ["Học hát (Khai trường, Nụ cười)", "Nhạc lí và Đọc nhạc (Nhịp 2/4, Gam Đô trưởng)", "Thưởng thức âm nhạc & Nhạc cụ"];
+      pOutcomes = ["Hát đúng cao độ, trường độ, biểu cảm và rõ lời ca.", "Hiểu khái niệm nhịp 2/4, đọc đúng cao độ các bậc âm gam Đô trưởng.", "Sử dụng được thanh phách gõ đệm theo phách và nhịp của bài hát."];
+    }
+
+    setTitle(pTitle);
+    setSubject(pSubject);
+    setGrade(pGrade);
+    setSemester(pSemester);
+    setDurationMinutes(pDuration);
+    setSelectedTopics(pTopics);
+    setOutcomes(pOutcomes);
+
+    setIsGenerating(true);
+    setGenerateProgress(30);
+
+    try {
+      const res = await fetch("/api/exams/wizard", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "GENERATE_PACKAGE",
+          params: {
+            title: pTitle,
+            subject: pSubject,
+            grade: parseInt(pGrade, 10),
+            semester: parseInt(pSemester, 10),
+            durationMinutes: pDuration,
+            totalScore: 10.0,
+            examType: "GIUA_KY",
+            topics: pTopics,
+            learningOutcomes: pOutcomes,
+          },
+        }),
+      });
+
+      setGenerateProgress(100);
+      const data = await res.json();
+      if (data.questions) {
+        setQuestions(data.questions);
+        setMatrix(data.matrix || []);
+        if (data.matrix7991) setMatrix7991(data.matrix7991);
+        setSpecification(data.specification || []);
+        setScoringGuide(data.scoringGuide || []);
+        setCurrentStep(6);
+        setReviewTab("QUESTIONS");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi khi tải bộ đề mẫu 7991");
     } finally {
       setIsGenerating(false);
     }
@@ -453,6 +550,26 @@ function ExamWizardContent() {
 
   <!-- PHẦN III: NỘI DUNG ĐỀ KIỂM TRA (MÃ ĐỀ 101) -->
   <h2>PHẦN III. ĐỀ KIỂM TRA CHÍNH THỨC (MÃ ĐỀ GỐC - 101)</h2>
+
+  <!-- KHUNG THÔNG TIN HỌC SINH -->
+  <table style="width: 100%; border: 1.5pt solid #000; margin-bottom: 16px; margin-top: 12px;">
+    <tr>
+      <td style="border: 1pt solid #000; width: 65%; padding: 8px;">
+        <strong>Họ và tên học sinh:</strong> ............................................................................<br>
+        <strong>Lớp:</strong> ..................................... <strong>Số báo danh:</strong> ........................................
+      </td>
+      <td style="border: 1pt solid #000; width: 35%; padding: 8px; text-align: center;">
+        <strong>ĐIỂM SỐ</strong><br><br>
+        <em>............................../${totalScore} điểm</em>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" style="border: 1pt solid #000; padding: 6px;">
+        <strong>Lời nhận xét của Thầy / Cô:</strong> ....................................................................................................................................
+      </td>
+    </tr>
+  </table>
+
   <div style="margin-top: 12px;">
     ${questions
       .map(
@@ -528,6 +645,30 @@ function ExamWizardContent() {
         .join("")}
     </tbody>
   </table>
+
+  <!-- KHUNG KÝ DUYỆT CHUYÊN MÔN -->
+  <table style="width: 100%; border: none; margin-top: 35px;">
+    <tr style="border: none;">
+      <td style="border: none; width: 33%; text-align: center;">
+        <strong>DUYỆT CỦA BGH</strong><br>
+        <em>(Ký và ghi rõ họ tên)</em>
+        <br><br><br><br><br>
+        ...................................................
+      </td>
+      <td style="border: none; width: 33%; text-align: center;">
+        <strong>TỔ TRƯỞNG CHUYÊN MÔN</strong><br>
+        <em>(Ký và ghi rõ họ tên)</em>
+        <br><br><br><br><br>
+        ...................................................
+      </td>
+      <td style="border: none; width: 34%; text-align: center;">
+        <strong>GIÁO VIÊN RA ĐỀ</strong><br>
+        <em>(Ký và ghi rõ họ tên)</em>
+        <br><br><br><br><br>
+        Phan Thị Ngọc Huyền
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
     `;
@@ -596,6 +737,130 @@ function ExamWizardContent() {
           >
             {savedSuccess ? <Check className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
             {savedSuccess ? "Đã lưu vào CSDL!" : isSaving ? "Đang lưu..." : "Lưu Đề Kiểm Tra"}
+          </button>
+        </div>
+      </div>
+
+      {/* 1-Click Presets Bar for Judges & Teachers */}
+      <div className="bg-gradient-to-r from-blue-50/90 via-indigo-50/80 to-purple-50/70 dark:from-slate-900 dark:via-blue-950/40 dark:to-slate-900 border border-blue-200/80 dark:border-blue-900/60 rounded-2xl p-4 shadow-sm space-y-3">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <span className="p-1.5 bg-blue-600 text-white rounded-lg shadow-sm">
+              <Sparkles className="w-4 h-4" />
+            </span>
+            <div>
+              <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                Bộ đề mẫu thực tế chuẩn Công văn 7991 (1-Click Presets)
+              </span>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Nhấp để tải tức thì hồ sơ đề thi hoàn chỉnh 4 phần, ma trận 2 chiều và barem chi tiết từng môn:
+              </p>
+            </div>
+          </div>
+          <span className="text-[10px] px-2.5 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
+            Dành cho Giám khảo &amp; Giáo viên trải nghiệm
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+          <button
+            onClick={() => handleLoadPreset("math")}
+            disabled={isGenerating}
+            className={`p-3 rounded-xl border text-left transition-all relative group flex flex-col justify-between ${
+              activePreset === "math"
+                ? "bg-white dark:bg-slate-800 border-blue-500 shadow-sm ring-2 ring-blue-500/20"
+                : "bg-white/80 dark:bg-slate-800/80 hover:bg-white border-slate-200 dark:border-slate-700 hover:border-blue-300"
+            }`}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-blue-700 dark:text-blue-400">📐 Toán học 7</span>
+                <span className="text-[10px] px-1.5 py-0.2 bg-blue-50 text-blue-600 rounded font-medium">60 phút</span>
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium mt-1 line-clamp-1">
+                Tỉ lệ thức &amp; Dãy tỉ số bằng nhau
+              </p>
+              <p className="text-[10px] text-slate-400 mt-0.5">10 câu • Đủ 4 dạng thức CV 7991</p>
+            </div>
+            <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-[10px] text-blue-600 font-semibold">
+              <span>Nạp ngay đề &amp; ma trận</span>
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </button>
+
+          <button
+            onClick={() => handleLoadPreset("khtn")}
+            disabled={isGenerating}
+            className={`p-3 rounded-xl border text-left transition-all relative group flex flex-col justify-between ${
+              activePreset === "khtn"
+                ? "bg-white dark:bg-slate-800 border-emerald-500 shadow-sm ring-2 ring-emerald-500/20"
+                : "bg-white/80 dark:bg-slate-800/80 hover:bg-white border-slate-200 dark:border-slate-700 hover:border-emerald-300"
+            }`}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">🔬 KHTN 7</span>
+                <span className="text-[10px] px-1.5 py-0.2 bg-emerald-50 text-emerald-600 rounded font-medium">45 phút</span>
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium mt-1 line-clamp-1">
+                Trao đổi chất &amp; Năng lượng
+              </p>
+              <p className="text-[10px] text-slate-400 mt-0.5">10 câu • Quang hợp &amp; Hô hấp</p>
+            </div>
+            <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-[10px] text-emerald-600 font-semibold">
+              <span>Nạp ngay đề &amp; ma trận</span>
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </button>
+
+          <button
+            onClick={() => handleLoadPreset("literature")}
+            disabled={isGenerating}
+            className={`p-3 rounded-xl border text-left transition-all relative group flex flex-col justify-between ${
+              activePreset === "literature"
+                ? "bg-white dark:bg-slate-800 border-amber-500 shadow-sm ring-2 ring-amber-500/20"
+                : "bg-white/80 dark:bg-slate-800/80 hover:bg-white border-slate-200 dark:border-slate-700 hover:border-amber-300"
+            }`}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-amber-700 dark:text-amber-400">📖 Ngữ văn 8</span>
+                <span className="text-[10px] px-1.5 py-0.2 bg-amber-50 text-amber-600 rounded font-medium">90 phút</span>
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium mt-1 line-clamp-1">
+                Thơ Đường luật &amp; Nghị luận
+              </p>
+              <p className="text-[10px] text-slate-400 mt-0.5">10 câu • Đọc hiểu &amp; Viết đoạn văn</p>
+            </div>
+            <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-[10px] text-amber-600 font-semibold">
+              <span>Nạp ngay đề &amp; ma trận</span>
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </button>
+
+          <button
+            onClick={() => handleLoadPreset("music")}
+            disabled={isGenerating}
+            className={`p-3 rounded-xl border text-left transition-all relative group flex flex-col justify-between ${
+              activePreset === "music"
+                ? "bg-white dark:bg-slate-800 border-indigo-500 shadow-sm ring-2 ring-indigo-500/20"
+                : "bg-white/80 dark:bg-slate-800/80 hover:bg-white border-slate-200 dark:border-slate-700 hover:border-indigo-300"
+            }`}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400">🎵 Âm nhạc 7</span>
+                <span className="text-[10px] px-1.5 py-0.2 bg-indigo-50 text-indigo-600 rounded font-medium">45 phút</span>
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium mt-1 line-clamp-1">
+                Hát, Nhạc cụ &amp; Nhạc lí
+              </p>
+              <p className="text-[10px] text-slate-400 mt-0.5">7 câu • Rubric thực hành hát</p>
+            </div>
+            <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-[10px] text-indigo-600 font-semibold">
+              <span>Nạp ngay đề &amp; ma trận</span>
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </div>
           </button>
         </div>
       </div>
@@ -1320,88 +1585,202 @@ function ExamWizardContent() {
 
           {/* TAB 2: 2D MATRIX REVIEW */}
           {reviewTab === "MATRIX" && (
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-6">
               <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
                 <div>
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white">
-                    Ma Trận Đề Kiểm Tra 2 Chiều (Chuẩn Công văn 7991)
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>Khung Ma Trận Đề Kiểm Tra Định Kỳ 2 Chiều</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-bold uppercase">
+                      Công văn 7991/BGDĐT-GDTrH
+                    </span>
                   </h3>
-                  <p className="text-xs text-slate-500">
-                    Ma trận liên kết trực tiếp với dữ liệu câu hỏi và tự động tính toán lại khi có thay đổi
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Tích hợp 4 dạng thức câu hỏi $\times$ 4 mức độ nhận thức (Nhận biết, Thông hiểu, Vận dụng, Vận dụng cao)
                   </p>
                 </div>
                 <span className="text-xs px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-lg font-bold border border-emerald-200">
-                  Tự động đồng bộ
+                  Tự động đồng bộ từ câu hỏi
                 </span>
               </div>
 
+              {/* Bảng Ma Trận 4 Dạng Thức Chi Tiết nếu có matrix7991 */}
+              {matrix7991 && matrix7991.length > 0 ? (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs text-left border-collapse border border-slate-200 dark:border-slate-700">
+                    <thead>
+                      <tr className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-center">
+                        <th rowSpan={3} className="p-2 border border-slate-200 dark:border-slate-700 w-8">TT</th>
+                        <th rowSpan={3} className="p-2 border border-slate-200 dark:border-slate-700 text-left min-w-[180px]">
+                          Chủ đề / Đơn vị kiến thức
+                        </th>
+                        <th colSpan={11} className="p-2 border border-slate-200 dark:border-slate-700 bg-blue-50/50 dark:bg-blue-950/20">
+                          Mức độ đánh giá (Số câu theo từng dạng thức)
+                        </th>
+                        <th colSpan={2} rowSpan={2} className="p-2 border border-slate-200 dark:border-slate-700 bg-emerald-50/50 dark:bg-emerald-950/20">
+                          Tổng hợp
+                        </th>
+                        <th rowSpan={3} className="p-2 border border-slate-200 dark:border-slate-700 w-16">
+                          Tỉ lệ %
+                        </th>
+                      </tr>
+                      <tr className="bg-slate-50 dark:bg-slate-800/70 text-slate-700 dark:text-slate-300 font-semibold text-center text-[11px]">
+                        <th colSpan={3} className="p-1.5 border border-slate-200 dark:border-slate-700">
+                          I. TN Nhiều lựa chọn
+                        </th>
+                        <th colSpan={3} className="p-1.5 border border-slate-200 dark:border-slate-700 bg-amber-50/30">
+                          II. TN Đúng - Sai
+                        </th>
+                        <th colSpan={3} className="p-1.5 border border-slate-200 dark:border-slate-700">
+                          III. TN Trả lời ngắn
+                        </th>
+                        <th colSpan={2} className="p-1.5 border border-slate-200 dark:border-slate-700 bg-purple-50/30">
+                          IV. Tự luận
+                        </th>
+                      </tr>
+                      <tr className="bg-slate-100 dark:bg-slate-800 text-[10px] text-slate-600 dark:text-slate-400 font-medium text-center">
+                        <th className="p-1 border border-slate-200 dark:border-slate-700">Biết</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700">Hiểu</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700">VD</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700 bg-amber-50/40">Biết</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700 bg-amber-50/40">Hiểu</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700 bg-amber-50/40">VD</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700">Biết</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700">Hiểu</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700">VD</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700 bg-purple-50/40">VD</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700 bg-purple-50/40">VDC</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700 font-bold">Số câu</th>
+                        <th className="p-1 border border-slate-200 dark:border-slate-700 font-bold">Điểm</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {matrix7991.map((r: any, idx: number) => (
+                        <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 text-center">
+                          <td className="p-2 border border-slate-200 dark:border-slate-700 font-bold">{idx + 1}</td>
+                          <td className="p-2 border border-slate-200 dark:border-slate-700 text-left font-medium">
+                            {r.topic}
+                          </td>
+                          <td className="p-1 border border-slate-200 dark:border-slate-700">{r.multipleChoice?.nhanBiet || "-"}</td>
+                          <td className="p-1 border border-slate-200 dark:border-slate-700">{r.multipleChoice?.thongHieu || "-"}</td>
+                          <td className="p-1 border border-slate-200 dark:border-slate-700">{r.multipleChoice?.vanDung || "-"}</td>
+                          <td className="p-1 border border-slate-200 dark:border-slate-700 bg-amber-50/20">{r.trueFalse?.nhanBiet || "-"}</td>
+                          <td className="p-1 border border-slate-200 dark:border-slate-700 bg-amber-50/20">{r.trueFalse?.thongHieu || "-"}</td>
+                          <td className="p-1 border border-slate-200 dark:border-slate-700 bg-amber-50/20">{r.trueFalse?.vanDung || "-"}</td>
+                          <td className="p-1 border border-slate-200 dark:border-slate-700">{r.shortAnswer?.nhanBiet || "-"}</td>
+                          <td className="p-1 border border-slate-200 dark:border-slate-700">{r.shortAnswer?.thongHieu || "-"}</td>
+                          <td className="p-1 border border-slate-200 dark:border-slate-700">{r.shortAnswer?.vanDung || "-"}</td>
+                          <td className="p-1 border border-slate-200 dark:border-slate-700 bg-purple-50/20">{r.essay?.vanDung || "-"}</td>
+                          <td className="p-1 border border-slate-200 dark:border-slate-700 bg-purple-50/20">{r.essay?.vanDungCao || "-"}</td>
+                          <td className="p-2 border border-slate-200 dark:border-slate-700 font-bold text-blue-600">
+                            {r.totalQuestions}
+                          </td>
+                          <td className="p-2 border border-slate-200 dark:border-slate-700 font-bold text-emerald-600">
+                            {r.totalScore}đ
+                          </td>
+                          <td className="p-2 border border-slate-200 dark:border-slate-700 font-semibold text-slate-600">
+                            {r.percentage ? `${r.percentage}%` : `${Math.round((r.totalScore / totalScore) * 100)}%`}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : null}
+
+              {/* Bảng Ma Trận Tóm Tắt Mức Độ Nhận Thức */}
               <div className="overflow-x-auto">
-                <table className="w-full text-xs text-left border-collapse">
+                <table className="w-full text-xs text-left border-collapse border border-slate-200 dark:border-slate-700">
                   <thead>
                     <tr className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
-                      <th className="p-3 border border-slate-200 dark:border-slate-700">TT</th>
-                      <th className="p-3 border border-slate-200 dark:border-slate-700">Chủ đề / Đơn vị kiến thức</th>
-                      <th className="p-3 border border-slate-200 dark:border-slate-700 text-center">Nhận biết</th>
-                      <th className="p-3 border border-slate-200 dark:border-slate-700 text-center">Thông hiểu</th>
-                      <th className="p-3 border border-slate-200 dark:border-slate-700 text-center">Vận dụng</th>
-                      <th className="p-3 border border-slate-200 dark:border-slate-700 text-center">Vận dụng cao</th>
-                      <th className="p-3 border border-slate-200 dark:border-slate-700 text-center">Tổng câu</th>
-                      <th className="p-3 border border-slate-200 dark:border-slate-700 text-center">Tổng điểm</th>
+                      <th className="p-2.5 border border-slate-200 dark:border-slate-700 w-10 text-center">TT</th>
+                      <th className="p-2.5 border border-slate-200 dark:border-slate-700">Chủ đề / Đơn vị kiến thức</th>
+                      <th className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">Nhận biết</th>
+                      <th className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">Thông hiểu</th>
+                      <th className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">Vận dụng</th>
+                      <th className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">Vận dụng cao</th>
+                      <th className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">Tổng câu</th>
+                      <th className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">Tổng điểm</th>
                     </tr>
                   </thead>
                   <tbody>
                     {matrix.map((row, idx) => (
                       <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
-                        <td className="p-3 border border-slate-200 dark:border-slate-700 text-center font-bold">
+                        <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center font-bold">
                           {idx + 1}
                         </td>
-                        <td className="p-3 border border-slate-200 dark:border-slate-700 font-medium">{row.topic}</td>
-                        <td className="p-3 border border-slate-200 dark:border-slate-700 text-center">
+                        <td className="p-2.5 border border-slate-200 dark:border-slate-700 font-medium">{row.topic}</td>
+                        <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">
                           {row.nhanBiet} câu
                         </td>
-                        <td className="p-3 border border-slate-200 dark:border-slate-700 text-center">
+                        <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">
                           {row.thongHieu} câu
                         </td>
-                        <td className="p-3 border border-slate-200 dark:border-slate-700 text-center">
+                        <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">
                           {row.vanDung} câu
                         </td>
-                        <td className="p-3 border border-slate-200 dark:border-slate-700 text-center">
+                        <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">
                           {row.vanDungCao} câu
                         </td>
-                        <td className="p-3 border border-slate-200 dark:border-slate-700 text-center font-bold text-blue-600">
+                        <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center font-bold text-blue-600">
                           {row.totalQuestions}
                         </td>
-                        <td className="p-3 border border-slate-200 dark:border-slate-700 text-center font-bold text-emerald-600">
+                        <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center font-bold text-emerald-600">
                           {row.totalScore}đ
                         </td>
                       </tr>
                     ))}
                     {/* Summary row */}
                     <tr className="bg-slate-50 dark:bg-slate-800 font-extrabold text-slate-900 dark:text-white">
-                      <td colSpan={2} className="p-3 border border-slate-200 dark:border-slate-700 text-right">
-                        TỔNG CỘNG
+                      <td colSpan={2} className="p-2.5 border border-slate-200 dark:border-slate-700 text-right">
+                        TỔNG CỘNG ({totalScore} điểm)
                       </td>
-                      <td className="p-3 border border-slate-200 dark:border-slate-700 text-center">
+                      <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">
                         {matrix.reduce((s, r) => s + r.nhanBiet, 0)} câu
                       </td>
-                      <td className="p-3 border border-slate-200 dark:border-slate-700 text-center">
+                      <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">
                         {matrix.reduce((s, r) => s + r.thongHieu, 0)} câu
                       </td>
-                      <td className="p-3 border border-slate-200 dark:border-slate-700 text-center">
+                      <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">
                         {matrix.reduce((s, r) => s + r.vanDung, 0)} câu
                       </td>
-                      <td className="p-3 border border-slate-200 dark:border-slate-700 text-center">
+                      <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center">
                         {matrix.reduce((s, r) => s + r.vanDungCao, 0)} câu
                       </td>
-                      <td className="p-3 border border-slate-200 dark:border-slate-700 text-center text-blue-600">
+                      <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center text-blue-600">
                         {matrix.reduce((s, r) => s + r.totalQuestions, 0)} câu
                       </td>
-                      <td className="p-3 border border-slate-200 dark:border-slate-700 text-center text-emerald-600">
+                      <td className="p-2.5 border border-slate-200 dark:border-slate-700 text-center text-emerald-600">
                         {Math.round(matrix.reduce((s, r) => s + r.totalScore, 0) * 10) / 10}đ
                       </td>
                     </tr>
                   </tbody>
                 </table>
+              </div>
+
+              {/* Thông tin chuẩn hóa Công văn 7991 */}
+              <div className="bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 rounded-xl p-4 text-xs space-y-2">
+                <div className="font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-blue-600" />
+                  Quy định chấm điểm dạng thức câu hỏi trắc nghiệm Đúng - Sai theo Công văn 7991/BGDĐT-GDTrH:
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-slate-700 dark:text-slate-300 pt-1">
+                  <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-blue-100 dark:border-blue-800 text-center">
+                    <span className="block text-[11px] text-slate-500">Đúng 1 ý</span>
+                    <strong className="text-blue-600">0,10 điểm</strong>
+                  </div>
+                  <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-blue-100 dark:border-blue-800 text-center">
+                    <span className="block text-[11px] text-slate-500">Đúng 2 ý</span>
+                    <strong className="text-blue-600">0,25 điểm</strong>
+                  </div>
+                  <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-blue-100 dark:border-blue-800 text-center">
+                    <span className="block text-[11px] text-slate-500">Đúng 3 ý</span>
+                    <strong className="text-blue-600">0,50 điểm</strong>
+                  </div>
+                  <div className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-blue-100 dark:border-blue-800 text-center">
+                    <span className="block text-[11px] text-slate-500">Đúng cả 4 ý</span>
+                    <strong className="text-emerald-600 font-extrabold">1,00 điểm</strong>
+                  </div>
+                </div>
               </div>
             </div>
           )}

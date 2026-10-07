@@ -34,17 +34,18 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { action = "GENERATE", params } = body;
+    const action = body.action || (body.params ? body.action : "GENERATE");
+    const params = body.params || body;
     const ai = getAIProvider();
     const teacher = await prisma.user.findFirst();
 
     if (action === "GENERATE") {
       const generated = await ai.generateLessonPlan({
-        subject: params?.subject || "Âm nhạc",
-        grade: params?.grade || 7,
-        chapter: params?.chapter || "Chủ đề 2: Tình bạn",
-        lessonTitle: params?.lessonTitle || "Chủ đề 2: Tình bạn - Bài 3: Học hát bài Nụ cười",
-        durationMinutes: params?.durationMinutes || 45,
+        subject: params?.subject || "Toán học",
+        grade: Number(params?.grade) || 7,
+        chapter: params?.chapter || "Chương trình GDPT 2018",
+        lessonTitle: params?.lessonTitle || params?.topic || "Bài học chuẩn GDPT 2018",
+        durationMinutes: Number(params?.durationMinutes || parseInt(params?.duration || "45", 10)) || 45,
         learningOutcomes: params?.learningOutcomes,
         keyContent: params?.keyContent,
         method: params?.method,

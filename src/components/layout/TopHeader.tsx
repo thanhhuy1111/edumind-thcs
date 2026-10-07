@@ -110,6 +110,14 @@ export function TopHeader({ onOpenAIDrawer }: TopHeaderProps) {
                   <span>Tạo slide bài giảng AI</span>
                 </Link>
                 <Link
+                  href="/materials/scorm-studio"
+                  onClick={() => setQuickActionOpen(false)}
+                  className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-colors"
+                >
+                  <Sparkles className="w-4 h-4 text-amber-500" />
+                  <span>SCORM & Voice Studio (Mới)</span>
+                </Link>
+                <Link
                   href="/questions/generate"
                   onClick={() => setQuickActionOpen(false)}
                   className="flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-xl transition-colors"
