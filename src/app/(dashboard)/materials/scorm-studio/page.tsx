@@ -223,32 +223,33 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
   return (
     <div className="space-y-8 max-w-7xl mx-auto pb-20">
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-slate-800 p-6 md:p-8 rounded-3xl shadow-xl text-white relative overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-600 border border-blue-400/30 p-6 md:p-8 rounded-3xl shadow-xl shadow-blue-600/10 text-white relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Google Gemini 3.8 Flash • AI Voice • Chuẩn SCORM 1.2 / 2004</span>
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/20 border border-white/30 text-amber-200 text-xs font-bold backdrop-blur-xs">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+              <span>Google Gemini 3.8 Flash • AI Voice Học Đường • Chuẩn SCORM 1.2 / GDPT 2018</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">
-              Studio Bài Giảng Tương Tác & Đóng Gói SCORM
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-2.5">
+              <span>Studio Bài Giảng Tương Tác & Đóng Gói SCORM</span>
+              <span className="text-2xl">🏫</span>
             </h1>
-            <p className="text-slate-300 text-sm md:text-base max-w-3xl leading-relaxed">
-              Tải tài liệu bài giảng (PDF, PPTX, DOCX) ➔ Gemini 3.8 Flash tự động chia mốc kiến thức, tạo điểm dừng trắc nghiệm tương tác & lời thoại thuyết minh ➔ Đóng gói SCORM 1.2 nộp thẳng lên LMS của trường!
+            <p className="text-blue-50 text-sm md:text-base max-w-3xl leading-relaxed">
+              Tải tài liệu bài giảng (PDF, PPTX, DOCX) ➔ AI Gemini 3.8 Flash tự động chia mốc kiến thức, tạo điểm dừng trắc nghiệm tương tác & giọng đọc bài giảng ➔ Đóng gói SCORM 1.2 nộp LMS K12Online, Moodle, Canvas, vnEdu!
             </p>
           </div>
 
           <div className="flex items-center space-x-3 self-start md:self-auto">
             <Link
               href="/materials/slides"
-              className="px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all flex items-center space-x-1.5"
+              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white/15 hover:bg-white/25 text-white border border-white/30 backdrop-blur-xs transition-all flex items-center space-x-1.5"
             >
               <Layers className="w-4 h-4" />
               <span>Slide Studio</span>
             </Link>
             <Link
               href="/export-center"
-              className="px-4 py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-lg shadow-indigo-600/30 transition-all flex items-center space-x-1.5"
+              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-amber-400 hover:bg-amber-300 text-slate-900 shadow-lg shadow-amber-500/25 transition-all flex items-center space-x-1.5"
             >
               <Download className="w-4 h-4" />
               <span>Trung tâm Xuất bản</span>
@@ -257,21 +258,21 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
         </div>
 
         {/* Multi-step Breadcrumb */}
-        <div className="mt-8 pt-6 border-t border-slate-800/80 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mt-8 pt-6 border-t border-white/20 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div
             onClick={() => setCurrentStep(1)}
             className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center space-x-3 ${
               currentStep === 1
-                ? "bg-indigo-600/20 border-indigo-500 text-white shadow-md shadow-indigo-500/10"
-                : "bg-slate-900/40 border-slate-800 text-slate-400 hover:text-slate-200"
+                ? "bg-white text-blue-900 border-white shadow-lg shadow-blue-900/20 font-bold"
+                : "bg-white/10 border-white/20 text-white/80 hover:bg-white/15"
             }`}
           >
-            <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs ${currentStep === 1 ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-400"}`}>
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${currentStep === 1 ? "bg-blue-600 text-white" : "bg-white/20 text-white"}`}>
               1
             </div>
             <div>
               <div className="text-xs font-bold">Bước 1: Upload Tài Liệu</div>
-              <div className="text-[11px] text-slate-400">PDF, DOCX, PPTX & bóc tách text</div>
+              <div className={`text-[11px] ${currentStep === 1 ? "text-blue-700" : "text-white/70"}`}>PDF, DOCX, PPTX & bóc tách text</div>
             </div>
           </div>
 
@@ -281,16 +282,16 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
               interactiveLesson ? "cursor-pointer" : "opacity-60 cursor-not-allowed"
             } flex items-center space-x-3 ${
               currentStep === 2
-                ? "bg-indigo-600/20 border-indigo-500 text-white shadow-md shadow-indigo-500/10"
-                : "bg-slate-900/40 border-slate-800 text-slate-400 hover:text-slate-200"
+                ? "bg-white text-blue-900 border-white shadow-lg shadow-blue-900/20 font-bold"
+                : "bg-white/10 border-white/20 text-white/80 hover:bg-white/15"
             }`}
           >
-            <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs ${currentStep === 2 ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-400"}`}>
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${currentStep === 2 ? "bg-blue-600 text-white" : "bg-white/20 text-white"}`}>
               2
             </div>
             <div>
               <div className="text-xs font-bold">Bước 2: AI Tạo Điểm Dừng</div>
-              <div className="text-[11px] text-slate-400">Gemini 3.8 Flash phân tích & tạo Quiz</div>
+              <div className={`text-[11px] ${currentStep === 2 ? "text-blue-700" : "text-white/70"}`}>Gemini 3.8 Flash phân tích & tạo Quiz</div>
             </div>
           </div>
 
@@ -300,16 +301,16 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
               interactiveLesson ? "cursor-pointer" : "opacity-60 cursor-not-allowed"
             } flex items-center space-x-3 ${
               currentStep === 3
-                ? "bg-indigo-600/20 border-indigo-500 text-white shadow-md shadow-indigo-500/10"
-                : "bg-slate-900/40 border-slate-800 text-slate-400 hover:text-slate-200"
+                ? "bg-white text-blue-900 border-white shadow-lg shadow-blue-900/20 font-bold"
+                : "bg-white/10 border-white/20 text-white/80 hover:bg-white/15"
             }`}
           >
-            <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-bold text-xs ${currentStep === 3 ? "bg-indigo-600 text-white" : "bg-slate-800 text-slate-400"}`}>
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs ${currentStep === 3 ? "bg-blue-600 text-white" : "bg-white/20 text-white"}`}>
               3
             </div>
             <div>
               <div className="text-xs font-bold">Bước 3: Đóng Gói SCORM</div>
-              <div className="text-[11px] text-slate-400">Thuyết minh Voice & Tải về ZIP</div>
+              <div className={`text-[11px] ${currentStep === 3 ? "text-blue-700" : "text-white/70"}`}>Thuyết minh Voice & Tải về ZIP</div>
             </div>
           </div>
         </div>
@@ -342,9 +343,9 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
 
                 <button
                   onClick={loadSampleDocument}
-                  className="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 transition-all border border-indigo-200 dark:border-indigo-800/50"
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-50 text-amber-800 hover:bg-amber-100 transition-all border border-amber-200 shadow-2xs flex items-center space-x-1.5 cursor-pointer"
                 >
-                  Nạp tài liệu mẫu thử nghiệm
+                  <span>✨ Nạp bài mẫu thử nghiệm</span>
                 </button>
               </div>
 
@@ -353,7 +354,7 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
                 onDragOver={(e) => e.preventDefault()}
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-indigo-300 dark:border-indigo-800/80 hover:border-indigo-500 dark:hover:border-indigo-500 bg-indigo-50/30 dark:bg-slate-950/40 hover:bg-indigo-50/60 dark:hover:bg-slate-950/70 p-10 rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer transition-all space-y-4 group"
+                className="border-2 border-dashed border-blue-200 hover:border-blue-500 bg-blue-50/30 hover:bg-blue-50/60 p-10 rounded-2xl flex flex-col items-center justify-center text-center cursor-pointer transition-all space-y-4 group"
               >
                 <input
                   ref={fileInputRef}
@@ -363,15 +364,15 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
                   onChange={handleFileSelect}
                 />
 
-                <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs">
                   <Upload className="w-8 h-8" />
                 </div>
 
                 <div>
-                  <div className="text-sm font-bold text-slate-800 dark:text-slate-200">
-                    Kéo & thả file bài giảng vào đây, hoặc <span className="text-indigo-600 dark:text-indigo-400 underline">bấm để chọn file</span>
+                  <div className="text-sm font-bold text-slate-800">
+                    Kéo & thả file bài giảng vào đây, hoặc <span className="text-blue-600 underline">bấm để chọn file từ máy</span>
                   </div>
-                  <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
+                  <p className="text-xs text-slate-500 mt-1">
                     DOCX, PPTX (bóc tách từng slide), PDF hoặc TXT dung lượng tối đa 25MB
                   </p>
                 </div>
@@ -518,7 +519,7 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
                 <button
                   onClick={handleGenerateWithAI}
                   disabled={isGenerating || !documentText.trim()}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold text-sm shadow-xl shadow-indigo-600/30 flex items-center justify-center space-x-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-600 hover:from-blue-500 hover:to-sky-500 text-white font-extrabold text-sm shadow-xl shadow-blue-600/25 flex items-center justify-center space-x-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed group cursor-pointer"
                 >
                   {isGenerating ? (
                     <>
@@ -527,7 +528,7 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                      <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform text-amber-300" />
                       <span>BƯỚC 2: AI TẠO ĐIỂM DỪNG TƯƠNG TÁC →</span>
                     </>
                   )}
@@ -782,16 +783,16 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
 
               <button
                 onClick={handleDownloadStandaloneHTML}
-                className="px-4 py-3 rounded-2xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-all flex items-center space-x-2"
+                className="px-5 py-3 rounded-2xl text-xs font-bold bg-white hover:bg-blue-50/80 text-blue-700 border-2 border-blue-200 transition-all flex items-center space-x-2 shadow-2xs cursor-pointer"
               >
-                <FileText className="w-4 h-4 text-indigo-400" />
+                <FileText className="w-4 h-4 text-blue-600" />
                 <span>Tải File HTML5 Độc Lập</span>
               </button>
 
               <button
                 onClick={handleDownloadSCORM}
                 disabled={isExportingZip}
-                className="px-6 py-3 rounded-2xl text-xs font-extrabold bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white shadow-xl shadow-emerald-600/30 flex items-center space-x-2 transition-all disabled:opacity-50"
+                className="px-6 py-3 rounded-2xl text-xs font-black bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 hover:from-emerald-500 hover:to-blue-500 text-white shadow-xl shadow-emerald-600/25 flex items-center space-x-2 transition-all disabled:opacity-50 cursor-pointer"
               >
                 {isExportingZip ? (
                   <>
@@ -809,24 +810,26 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
           </div>
 
           {/* Interactive Simulation Player (Preview as a student) */}
-          <div className="bg-slate-950 border border-slate-800 rounded-3xl p-6 md:p-10 shadow-2xl text-white space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div className="bg-white border-2 border-slate-200/90 rounded-3xl p-6 md:p-10 shadow-xl shadow-slate-200/50 text-slate-900 space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
               <div className="flex items-center space-x-2">
-                <span className="w-3 h-3 rounded-full bg-rose-500"></span>
-                <span className="w-3 h-3 rounded-full bg-amber-500"></span>
-                <span className="w-3 h-3 rounded-full bg-emerald-500"></span>
-                <span className="text-xs font-mono text-slate-400 ml-2">Trình phát bài giảng tương tác học sinh (SCORM Player)</span>
+                <span className="w-3 h-3 rounded-full bg-rose-400"></span>
+                <span className="w-3 h-3 rounded-full bg-amber-400"></span>
+                <span className="w-3 h-3 rounded-full bg-emerald-400"></span>
+                <span className="text-xs font-bold text-slate-600 ml-2 flex items-center gap-1.5">
+                  <span>🏫 Bảng mô phỏng bài giảng tương tác học sinh (SCORM 1.2 Player)</span>
+                </span>
               </div>
 
-              <div className="flex items-center space-x-2 text-xs">
+              <div className="flex items-center space-x-2.5 text-xs">
                 <button
                   onClick={() => handleNarrateSlide(interactiveLesson.slides[previewSlideIdx])}
-                  className="px-3 py-1.5 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 flex items-center space-x-1.5 font-bold hover:bg-indigo-500/30 transition-all"
+                  className="px-3.5 py-1.5 rounded-xl bg-blue-50 text-blue-700 border border-blue-200/80 flex items-center space-x-1.5 font-bold hover:bg-blue-100 transition-all cursor-pointer shadow-2xs"
                 >
-                  <Volume2 className="w-3.5 h-3.5" />
-                  <span>{isSpeaking ? "Đang phát Voice..." : "Phát Thuyết Minh"}</span>
+                  <Volume2 className="w-3.5 h-3.5 text-blue-600" />
+                  <span>{isSpeaking ? "Đang phát Voice..." : "Phát Thuyết Minh Cô Giáo"}</span>
                 </button>
-                <span className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 font-bold">
+                <span className="px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200 font-bold text-slate-700">
                   Trang {previewSlideIdx + 1} / {interactiveLesson.slides.length}
                 </span>
               </div>
@@ -843,29 +846,29 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
                 <div className="space-y-6 min-h-[380px] flex flex-col justify-between">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-400 text-xs font-bold">
+                      <span className="px-3.5 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold border border-blue-200">
                         Slide {previewSlideIdx + 1}
                       </span>
-                      <span className="text-xs text-slate-400">
+                      <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
                         {interactiveLesson.subject} {interactiveLesson.grade}
                       </span>
                     </div>
 
-                    <h3 className="text-2xl md:text-3xl font-extrabold text-white">
+                    <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-snug">
                       {slide.title}
                     </h3>
                     {slide.subtitle && (
-                      <p className="text-sm text-indigo-300 font-medium">{slide.subtitle}</p>
+                      <p className="text-base text-blue-700 font-semibold">{slide.subtitle}</p>
                     )}
-                    <p className="text-slate-200 text-base leading-relaxed">
+                    <p className="text-slate-700 text-base leading-relaxed">
                       {slide.mainContent}
                     </p>
 
                     {slide.bullets && (
                       <ul className="space-y-2 pt-2">
                         {slide.bullets.map((b, bIdx) => (
-                          <li key={bIdx} className="flex items-start text-sm text-slate-300">
-                            <span className="text-indigo-400 mr-2.5">✦</span>
+                          <li key={bIdx} className="flex items-start text-sm md:text-base text-slate-700 leading-relaxed">
+                            <span className="text-blue-600 mr-2.5 font-bold">✦</span>
                             <span>{b}</span>
                           </li>
                         ))}
@@ -875,25 +878,25 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
 
                   {/* Interactive Checkpoint Quiz */}
                   {q && (
-                    <div className="p-6 rounded-2xl bg-indigo-950/30 border border-indigo-500/30 space-y-4">
-                      <div className="flex items-center space-x-2 text-indigo-400 text-xs font-bold uppercase">
-                        <span>🎯 Điểm dừng kiểm tra kiến thức</span>
-                        <span className="text-slate-400 font-normal">(Em cần trả lời đúng để sang slide kế tiếp)</span>
+                    <div className="p-6 md:p-8 rounded-3xl bg-gradient-to-br from-amber-50/90 via-white to-orange-50/50 border-2 border-amber-300/80 space-y-4 shadow-xs">
+                      <div className="flex items-center space-x-2 text-amber-800 text-xs font-black uppercase tracking-wider">
+                        <span>🎯 Điểm dừng kiểm tra tương tác</span>
+                        <span className="text-amber-700/80 font-normal lowercase">(Em cần trả lời đúng để mở khóa slide kế tiếp)</span>
                       </div>
 
-                      <p className="text-base font-bold text-white">{q.question}</p>
+                      <p className="text-base md:text-xl font-bold text-slate-900 leading-snug">{q.question}</p>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
                         {q.options.map((opt, optIdx) => {
                           const label = String.fromCharCode(65 + optIdx);
                           const isChosen = answered === label;
                           const isCorrect = label === q.answer;
 
-                          let btnStyle = "bg-slate-900 border-slate-700 text-slate-200 hover:border-indigo-400";
+                          let btnStyle = "bg-white border-2 border-slate-200 text-slate-800 hover:border-blue-500 hover:bg-blue-50/50 shadow-2xs";
                           if (answered) {
-                            if (isCorrect) btnStyle = "bg-emerald-500/20 border-emerald-500 text-emerald-300 font-bold";
-                            else if (isChosen) btnStyle = "bg-rose-500/20 border-rose-500 text-rose-300";
-                            else btnStyle = "bg-slate-900/40 border-slate-800 text-slate-500";
+                            if (isCorrect) btnStyle = "bg-emerald-50 border-2 border-emerald-500 text-emerald-900 font-bold shadow-xs";
+                            else if (isChosen) btnStyle = "bg-rose-50 border-2 border-rose-400 text-rose-900 font-semibold";
+                            else btnStyle = "bg-slate-50 border border-slate-200 text-slate-400 opacity-60";
                           }
 
                           return (
@@ -902,7 +905,7 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
                               onClick={() => {
                                 setPreviewUserAnswer((prev) => ({ ...prev, [previewSlideIdx]: label }));
                               }}
-                              className={`p-3.5 rounded-xl border text-sm text-left transition-all font-medium ${btnStyle}`}
+                              className={`p-3.5 md:p-4 rounded-2xl border text-sm text-left transition-all font-semibold cursor-pointer ${btnStyle}`}
                             >
                               {opt}
                             </button>
@@ -912,16 +915,16 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
 
                       {answered && (
                         <div
-                          className={`p-3.5 rounded-xl text-xs ${
+                          className={`p-4 rounded-2xl text-xs md:text-sm font-medium ${
                             answered === q.answer
-                              ? "bg-emerald-950/40 border border-emerald-500/30 text-emerald-300"
-                              : "bg-rose-950/40 border border-rose-500/30 text-rose-300"
+                              ? "bg-emerald-50 border-2 border-emerald-300 text-emerald-900"
+                              : "bg-rose-50 border-2 border-rose-300 text-rose-900"
                           }`}
                         >
                           {answered === q.answer ? (
-                            <span>✅ Chính xác! {q.explanation}</span>
+                            <span>🎉 Hoan hô em đã trả lời rất chính xác! {q.explanation}</span>
                           ) : (
-                            <span>❌ Chưa đúng. Em hãy xem gợi ý và chọn lại nhé: {q.explanation}</span>
+                            <span>💡 Chưa chính xác. Em hãy xem lại gợi ý của cô và chọn lại nhé: {q.explanation}</span>
                           )}
                         </div>
                       )}
@@ -929,27 +932,27 @@ Bài hát "Nụ cười" là bài hát thiếu nhi nổi tiếng của nước N
                   )}
 
                   {/* Player Footer Controls */}
-                  <div className="flex items-center justify-between border-t border-slate-800 pt-6">
+                  <div className="flex items-center justify-between border-t border-slate-100 pt-6">
                     <button
                       disabled={previewSlideIdx === 0}
                       onClick={() => setPreviewSlideIdx((prev) => Math.max(0, prev - 1))}
-                      className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-slate-300 hover:bg-slate-800 disabled:opacity-40 transition-all"
+                      className="px-5 py-2.5 rounded-2xl bg-slate-100 border border-slate-200 text-xs md:text-sm font-bold text-slate-700 hover:bg-slate-200 disabled:opacity-40 transition-all cursor-pointer"
                     >
                       ← Trang trước
                     </button>
 
-                    <div className="text-xs text-slate-400">
+                    <div className="text-xs font-semibold">
                       {isLocked ? (
-                        <span className="text-amber-400 font-bold">🔒 Hoàn thành câu hỏi trắc nghiệm để mở khóa trang kế</span>
+                        <span className="text-amber-800 bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200 font-bold">🔒 Hoàn thành câu trắc nghiệm để mở khóa trang kế</span>
                       ) : (
-                        <span className="text-emerald-400 font-bold">🔓 Đã sẵn sàng chuyển trang</span>
+                        <span className="text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 font-bold">🔓 Đã sẵn sàng chuyển sang trang tiếp theo</span>
                       )}
                     </div>
 
                     <button
                       disabled={isLocked || previewSlideIdx >= interactiveLesson.slides.length - 1}
                       onClick={() => setPreviewSlideIdx((prev) => Math.min(interactiveLesson.slides.length - 1, prev + 1))}
-                      className="px-5 py-2 rounded-xl bg-indigo-600 text-xs font-bold text-white hover:bg-indigo-500 disabled:opacity-40 shadow-lg shadow-indigo-600/30 transition-all"
+                      className="px-6 py-2.5 rounded-2xl bg-blue-600 text-xs md:text-sm font-bold text-white hover:bg-blue-500 disabled:opacity-40 shadow-lg shadow-blue-500/25 transition-all cursor-pointer"
                     >
                       Trang tiếp →
                     </button>

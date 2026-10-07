@@ -62,7 +62,7 @@ export function buildInteractiveHTMLPlayer(lesson: GeneratedInteractiveLesson): 
     @keyframes pulseRing { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); } }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+<body class="bg-gradient-to-b from-sky-50/60 via-slate-50 to-indigo-50/40 text-slate-800 min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
 
   <!-- SCORM API Bridge -->
   <script>
@@ -125,36 +125,36 @@ export function buildInteractiveHTMLPlayer(lesson: GeneratedInteractiveLesson): 
   </script>
 
   <!-- Top Navigation & Header -->
-  <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-6 py-3.5">
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 px-6 py-3.5 shadow-xs">
     <div class="max-w-6xl mx-auto flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
-          EM
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-teal-500 flex items-center justify-center font-bold text-white shadow-md shadow-blue-500/20 text-sm">
+          🏫
         </div>
         <div>
-          <h1 class="text-sm font-bold text-white line-clamp-1" id="headerTitle">EduMind THCS</h1>
-          <p class="text-xs text-slate-400" id="headerSubtitle">Bài giảng điện tử chuẩn SCORM 1.2</p>
+          <h1 class="text-sm md:text-base font-extrabold text-slate-900 line-clamp-1" id="headerTitle">EduMind THCS</h1>
+          <p class="text-xs font-medium text-slate-500" id="headerSubtitle">Bài giảng điện tử tương tác học sinh</p>
         </div>
       </div>
 
       <!-- Controls -->
       <div class="flex items-center space-x-3">
         <!-- Voice narration button -->
-        <button id="btnVoiceNarrate" onclick="toggleVoiceNarration()" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 border border-indigo-500/20 transition-all">
+        <button id="btnVoiceNarrate" onclick="toggleVoiceNarration()" class="flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200/80 transition-all cursor-pointer">
           <span id="voiceIcon">🎙️</span>
           <span id="voiceLabel">Thuyết minh AI</span>
         </button>
 
-        <span class="text-slate-700">|</span>
+        <span class="text-slate-300">|</span>
 
         <!-- Score Badge -->
-        <div class="flex items-center space-x-1 text-xs px-2.5 py-1 bg-amber-500/10 text-amber-300 border border-amber-500/20 rounded-lg font-medium">
+        <div class="flex items-center space-x-1.5 text-xs px-3 py-1.5 bg-amber-50 text-amber-800 border border-amber-200/80 rounded-xl font-bold">
           <span>⭐ Điểm:</span>
-          <span id="scoreDisplay" class="font-bold">0/0</span>
+          <span id="scoreDisplay" class="font-extrabold text-amber-700">0/0</span>
         </div>
 
         <!-- Progress Counter -->
-        <span class="text-xs font-semibold px-2.5 py-1 bg-slate-800 text-slate-300 rounded-lg border border-slate-700" id="slideCounter">
+        <span class="text-xs font-bold px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl border border-slate-200" id="slideCounter">
           1/1
         </span>
       </div>
@@ -162,38 +162,38 @@ export function buildInteractiveHTMLPlayer(lesson: GeneratedInteractiveLesson): 
   </header>
 
   <!-- Progress Bar -->
-  <div class="w-full bg-slate-900 h-1.5">
-    <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-violet-500 h-full transition-all duration-300" style="width: 10%;"></div>
+  <div class="w-full bg-slate-200/60 h-2">
+    <div id="progressBar" class="bg-gradient-to-r from-blue-600 via-teal-500 to-emerald-500 h-full transition-all duration-300 rounded-r-full" style="width: 10%;"></div>
   </div>
 
   <!-- Main Slide Container -->
   <main class="max-w-5xl mx-auto w-full px-6 py-8 flex-1 flex flex-col justify-center">
-    <div id="slideCard" class="fade-in bg-slate-900 border border-slate-800 rounded-2xl p-8 md:p-12 shadow-2xl relative overflow-hidden min-h-[520px] flex flex-col justify-between">
+    <div id="slideCard" class="fade-in bg-white border border-slate-200/80 rounded-3xl p-8 md:p-12 shadow-xl shadow-slate-200/60 relative overflow-hidden min-h-[520px] flex flex-col justify-between">
       
       <!-- Slide Content Injected by JS -->
       <div id="slideContent"></div>
 
       <!-- Interactive Quiz Section (Rendered when checkpoint quiz exists) -->
-      <div id="quizContainer" class="mt-8 border-t border-slate-800 pt-6 hidden"></div>
+      <div id="quizContainer" class="mt-8 border-t border-slate-100 pt-6 hidden"></div>
 
     </div>
   </main>
 
   <!-- Bottom Navigation Bar -->
-  <footer class="bg-slate-900/90 backdrop-blur-md border-t border-slate-800 px-6 py-4">
+  <footer class="bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-6 py-4 shadow-sm">
     <div class="max-w-6xl mx-auto flex items-center justify-between">
-      <button id="btnPrev" onclick="navigateSlide(-1)" class="px-5 py-2 rounded-xl text-sm font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+      <button id="btnPrev" onclick="navigateSlide(-1)" class="px-5 py-2.5 rounded-2xl text-xs md:text-sm font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
         ← Trang trước
       </button>
 
-      <div class="flex items-center space-x-2 text-xs text-slate-400">
+      <div class="flex items-center space-x-2 text-xs font-medium text-slate-600">
         <label class="flex items-center space-x-2 cursor-pointer select-none">
-          <input type="checkbox" id="chkAutoVoice" checked class="rounded border-slate-700 text-indigo-600 focus:ring-0">
-          <span>Tự động phát giọng đọc khi chuyển slide</span>
+          <input type="checkbox" id="chkAutoVoice" checked class="rounded border-slate-300 text-blue-600 focus:ring-0">
+          <span>Tự động phát giọng đọc của cô khi chuyển bài</span>
         </label>
       </div>
 
-      <button id="btnNext" onclick="navigateSlide(1)" class="px-6 py-2 rounded-xl text-sm font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-600/30 transition-all disabled:opacity-40 disabled:cursor-not-allowed">
+      <button id="btnNext" onclick="navigateSlide(1)" class="px-6 py-2.5 rounded-2xl text-xs md:text-sm font-bold bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer">
         Trang tiếp →
       </button>
     </div>
@@ -234,22 +234,22 @@ export function buildInteractiveHTMLPlayer(lesson: GeneratedInteractiveLesson): 
       var quizEl = document.getElementById("quizContainer");
 
       var bulletsHtml = (slide.bullets || []).map(function(b) {
-        return '<li class="flex items-start text-slate-300 text-base md:text-lg"><span class="text-indigo-400 mr-3 font-bold">✦</span><span>' + b + '</span></li>';
+        return '<li class="flex items-start text-slate-700 text-base md:text-lg leading-relaxed"><span class="text-blue-600 mr-3 font-black text-lg">✦</span><span>' + b + '</span></li>';
       }).join('');
 
       var visualHtml = slide.suggestedVisual ? 
-        '<div class="mt-6 p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 text-xs text-indigo-300 flex items-center space-x-2"><span>💡 Minh họa trực quan:</span> <span class="text-slate-300">' + slide.suggestedVisual + '</span></div>' : '';
+        '<div class="mt-6 p-4 rounded-2xl bg-blue-50/90 border border-blue-200/90 text-xs text-blue-900 flex items-center space-x-2.5 shadow-2xs"><span class="text-base">💡</span> <div><strong class="font-bold">Minh họa học tập:</strong> <span class="text-blue-800">' + slide.suggestedVisual + '</span></div></div>' : '';
 
       contentEl.innerHTML = 
         '<div class="space-y-4">' +
           '<div class="flex items-center justify-between">' +
-            '<span class="px-3 py-1 bg-indigo-500/20 text-indigo-400 rounded-full text-xs font-semibold">Mục ' + (index + 1) + ' / ' + total + '</span>' +
-            '<span class="text-xs text-slate-400 font-medium">' + LESSON.subject + ' ' + LESSON.grade + '</span>' +
+            '<span class="px-3.5 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold border border-blue-200">Phần ' + (index + 1) + ' / ' + total + '</span>' +
+            '<span class="text-xs text-slate-500 font-bold bg-slate-100 px-3 py-1 rounded-full">' + LESSON.subject + ' ' + LESSON.grade + '</span>' +
           '</div>' +
-          '<h2 class="text-2xl md:text-4xl font-extrabold text-white tracking-tight">' + slide.title + '</h2>' +
-          (slide.subtitle ? '<p class="text-sm md:text-base text-indigo-300/90 font-medium">' + slide.subtitle + '</p>' : '') +
-          '<p class="text-slate-200 text-base md:text-lg leading-relaxed pt-2">' + slide.mainContent + '</p>' +
-          (bulletsHtml ? '<ul class="space-y-2.5 pt-4">' + bulletsHtml + '</ul>' : '') +
+          '<h2 class="text-2xl md:text-4xl font-black text-slate-900 tracking-tight leading-snug">' + slide.title + '</h2>' +
+          (slide.subtitle ? '<p class="text-base md:text-lg text-blue-700 font-semibold">' + slide.subtitle + '</p>' : '') +
+          '<p class="text-slate-700 text-base md:text-lg leading-relaxed pt-2">' + slide.mainContent + '</p>' +
+          (bulletsHtml ? '<ul class="space-y-3 pt-3">' + bulletsHtml + '</ul>' : '') +
           visualHtml +
         '</div>';
 
@@ -266,35 +266,35 @@ export function buildInteractiveHTMLPlayer(lesson: GeneratedInteractiveLesson): 
         var optionsHtml = q.options.map(function(opt, optIdx) {
           var label = String.fromCharCode(65 + optIdx);
           var isChosen = answered && answered.chosen === label;
-          var btnClass = "w-full text-left p-3.5 rounded-xl border text-sm font-medium transition-all ";
+          var btnClass = "w-full text-left p-4 rounded-2xl border-2 text-sm md:text-base font-semibold transition-all ";
           
           if (!answered) {
-            btnClass += "bg-slate-800/70 border-slate-700 hover:border-indigo-500 hover:bg-slate-800 text-slate-200";
+            btnClass += "bg-white border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 text-slate-800 shadow-2xs cursor-pointer";
           } else if (label === q.answer) {
-            btnClass += "bg-emerald-500/20 border-emerald-500 text-emerald-300 font-bold";
+            btnClass += "bg-emerald-50 border-emerald-500 text-emerald-900 font-bold shadow-xs";
           } else if (isChosen && !answered.isCorrect) {
-            btnClass += "bg-rose-500/20 border-rose-500 text-rose-300";
+            btnClass += "bg-rose-50 border-rose-400 text-rose-900 font-semibold";
           } else {
-            btnClass += "bg-slate-800/40 border-slate-700/50 text-slate-400";
+            btnClass += "bg-slate-50 border-slate-200 text-slate-400 opacity-60";
           }
 
           return '<button onclick="submitAnswer(' + index + ', \\'' + label + '\\')" class="' + btnClass + '">' + opt + '</button>';
         }).join('');
 
         var explanationHtml = answered ? 
-          '<div class="mt-4 p-4 rounded-xl text-xs ' + (answered.isCorrect ? 'bg-emerald-950/40 border border-emerald-500/30 text-emerald-300' : 'bg-rose-950/40 border border-rose-500/30 text-rose-300') + '">' +
-            '<strong>' + (answered.isCorrect ? '✅ Hoan hô em đã trả lời đúng!' : '❌ Chưa chính xác, em hãy xem giải thích và chọn lại:') + '</strong>' +
-            '<p class="mt-1 text-slate-300 leading-relaxed">' + q.explanation + '</p>' +
+          '<div class="mt-4 p-4 rounded-2xl text-xs md:text-sm ' + (answered.isCorrect ? 'bg-emerald-50 border-2 border-emerald-300 text-emerald-900' : 'bg-rose-50 border-2 border-rose-300 text-rose-900') + '">' +
+            '<strong class="font-bold flex items-center gap-1.5">' + (answered.isCorrect ? '🎉 Hoan hô em đã trả lời rất chính xác!' : '💡 Chưa chính xác, em hãy xem gợi ý của cô và thử lại nhé:') + '</strong>' +
+            '<p class="mt-1.5 text-slate-700 leading-relaxed">' + q.explanation + '</p>' +
           '</div>' : '';
 
         quizEl.innerHTML = 
-          '<div class="space-y-3 bg-indigo-950/20 border border-indigo-500/30 rounded-xl p-5">' +
-            '<div class="flex items-center space-x-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">' +
-              '<span>🎯 Điểm dừng kiểm tra tương tác</span>' +
-              '<span class="text-slate-400 font-normal">(Trả lời đúng để tiếp tục)</span>' +
+          '<div class="space-y-4 bg-gradient-to-br from-amber-50/90 via-white to-orange-50/50 border-2 border-amber-300/80 rounded-3xl p-6 md:p-8 shadow-sm">' +
+            '<div class="flex items-center space-x-2 text-amber-800 text-xs font-black uppercase tracking-wider">' +
+              '<span>🎯 Điểm Dừng Kiểm Tra Tương Tác</span>' +
+              '<span class="text-amber-700/80 font-normal lowercase">(chọn đáp án đúng để mở trang tiếp)</span>' +
             '</div>' +
-            '<p class="text-base font-semibold text-white">' + q.question + '</p>' +
-            '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">' + optionsHtml + '</div>' +
+            '<p class="text-base md:text-xl font-bold text-slate-900 leading-snug">' + q.question + '</p>' +
+            '<div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">' + optionsHtml + '</div>' +
             explanationHtml +
           '</div>';
       } else {
@@ -357,20 +357,20 @@ export function buildInteractiveHTMLPlayer(lesson: GeneratedInteractiveLesson): 
       document.getElementById("btnNext").disabled = true;
 
       contentEl.innerHTML = 
-        '<div class="text-center py-12 space-y-6">' +
-          '<div class="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-amber-400 to-indigo-500 flex items-center justify-center text-4xl shadow-xl shadow-indigo-500/30">' +
+        '<div class="text-center py-10 space-y-6">' +
+          '<div class="w-24 h-24 mx-auto rounded-3xl bg-gradient-to-tr from-amber-400 via-orange-400 to-yellow-300 flex items-center justify-center text-5xl shadow-xl shadow-amber-300/50 animate-bounce">' +
             (isPassed ? '🏆' : '👏') +
           '</div>' +
-          '<h2 class="text-3xl font-extrabold text-white">' + (isPassed ? 'Chúc Mừng Em Đã Hoàn Thành Xuất Sắc!' : 'Em Đã Hoàn Thành Bài Học!') + '</h2>' +
-          '<p class="text-slate-300 max-w-lg mx-auto">Em đã vượt qua tất cả các điểm dừng tương tác của bài <strong>' + LESSON.lessonTitle + '</strong>.</p>' +
-          '<div class="inline-flex items-center space-x-6 p-4 rounded-2xl bg-slate-800 border border-slate-700">' +
-            '<div><span class="block text-xs text-slate-400">Kết quả</span><span class="text-2xl font-black text-amber-400">' + scorePercent + '%</span></div>' +
-            '<div class="h-8 w-px bg-slate-700"></div>' +
-            '<div><span class="block text-xs text-slate-400">Câu đúng</span><span class="text-2xl font-black text-indigo-400">' + correctCount + '/' + totalQuizzes + '</span></div>' +
-            '<div class="h-8 w-px bg-slate-700"></div>' +
-            '<div><span class="block text-xs text-slate-400">Trạng thái LMS</span><span class="text-2xl font-black ' + (isPassed ? 'text-emerald-400' : 'text-amber-400') + '">' + (isPassed ? 'ĐẠT' : 'HOÀN TẤT') + '</span></div>' +
+          '<h2 class="text-2xl md:text-4xl font-extrabold text-slate-900">' + (isPassed ? 'Chúc Mừng Em Đã Hoàn Thành Xuất Sắc!' : 'Em Đã Hoàn Thành Bài Học!') + '</h2>' +
+          '<p class="text-slate-600 max-w-lg mx-auto text-base">Em đã vượt qua tất cả các điểm dừng tương tác của bài học <strong>' + LESSON.lessonTitle + '</strong>.</p>' +
+          '<div class="inline-flex items-center space-x-6 p-5 rounded-3xl bg-slate-50 border border-slate-200/90 shadow-xs">' +
+            '<div><span class="block text-xs font-semibold text-slate-500">Điểm số</span><span class="text-3xl font-black text-amber-600">' + scorePercent + '%</span></div>' +
+            '<div class="h-10 w-px bg-slate-200"></div>' +
+            '<div><span class="block text-xs font-semibold text-slate-500">Số câu đúng</span><span class="text-3xl font-black text-blue-600">' + correctCount + '/' + totalQuizzes + '</span></div>' +
+            '<div class="h-10 w-px bg-slate-200"></div>' +
+            '<div><span class="block text-xs font-semibold text-slate-500">Trạng thái LMS</span><span class="text-3xl font-black ' + (isPassed ? 'text-emerald-600' : 'text-amber-600') + '">' + (isPassed ? 'ĐẠT' : 'HOÀN TẤT') + '</span></div>' +
           '</div>' +
-          '<div class="pt-6"><button onclick="currentIndex=0;renderSlide(0);" class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30">Học lại từ đầu</button></div>' +
+          '<div class="pt-4"><button onclick="currentIndex=0;renderSlide(0);" class="px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-2xl shadow-lg shadow-blue-500/25 transition-transform active:scale-95 cursor-pointer">Học lại bài giảng</button></div>' +
         '</div>';
     }
 
