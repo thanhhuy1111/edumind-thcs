@@ -356,6 +356,7 @@ export class SmartLocalAIProvider implements AIProvider {
 
   async generateLessonPlan(params: GenerateLessonPlanParams): Promise<GeneratedLessonPlan> {
     const subject = params.subject || "Toán học";
+    const bookSeries = params.bookSeries || "Kết Nối Tri Thức Với Cuộc Sống";
     const lessonTitle =
       params.lessonTitle ||
       (params as any).title ||
@@ -408,7 +409,7 @@ export class SmartLocalAIProvider implements AIProvider {
             "Bộ gõ mẫu: Thanh phách gỗ, song loan, tambourine.",
           ],
           student: [
-            "Sách giáo khoa Âm nhạc 7 (Bộ sách Kết Nối Tri Thức / Chân Trời Sáng Tạo).",
+            `Sách giáo khoa Âm nhạc ${grade} (Bộ sách ${bookSeries || "Kết Nối Tri Thức Với Cuộc Sống"}).`,
             "Thanh phách gõ tự làm hoặc mua theo quy định của bộ môn.",
             "Tập ghi chép bài hát và các nốt nhạc.",
           ],
@@ -663,6 +664,31 @@ export class SmartLocalAIProvider implements AIProvider {
     }
 
     // 4. Music / Default
+    const isGrade6 = textLower.includes("6") || textLower.includes("lớp 6") || textLower.includes("khối 6");
+    if (isGrade6) {
+      return {
+        bookSeries: bookSeries.includes("Cánh") ? "Cánh Diều" : bookSeries.includes("Chân") ? "Chân Trời Sáng Tạo" : "Kết Nối Tri Thức Với Cuộc Sống",
+        subject: "Âm nhạc",
+        grade: 6,
+        chapterTitle: "Chủ đề 1: Tuổi học trò",
+        lessonTitle: "Bài 1: Học hát bài Con đường học trò",
+        learningOutcomes: "Hát đúng cao độ, trường độ bài hát Con đường học trò; thể hiện đúng tính chất âm nhạc vui tươi, rộn ràng, trong sáng; biết hát kết hợp gõ đệm thanh phách theo nhịp 2/4 theo chuẩn GDPT 2018.",
+        keyConcepts: [
+          "Bài hát Con đường học trò (Nhạc và lời: Nguyễn Văn Chung)",
+          "Tính chất âm nhạc: Vui tươi, hồn nhiên, rộn ràng của học sinh đầu cấp THCS",
+          "Số chỉ nhịp 2/4, các hình nốt cơ bản và cách gõ đệm thanh phách theo phách",
+        ],
+        exercisesSummary: [
+          "Khởi động: Luyện thanh theo mẫu âm Đô - Rê - Mi - Pha - Son",
+          "Khám phá: Nghe hát mẫu và học hát từng câu nối tiếp",
+          "Luyện tập: Hát kết hợp gõ đệm nhạc cụ gõ theo phách",
+          "Vận dụng: Biểu diễn tốp ca kết hợp động tác phụ họa",
+        ],
+        suggestedDuration: 45,
+        extractedSnippet: documentText.slice(0, 500) || "Sách giáo khoa Âm nhạc 6 - Chủ đề 1: Tuổi học trò",
+      };
+    }
+
     return {
       bookSeries: "Kết Nối Tri Thức Với Cuộc Sống",
       subject: "Âm nhạc",

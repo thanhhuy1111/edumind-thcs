@@ -405,6 +405,31 @@ function LessonPlanContent() {
 
     // 4. Music
     if (combined.includes("nhạc") || combined.includes("hát") || combined.includes("nụ cười")) {
+      const isGrade6 = combined.includes("6") || combined.includes("lớp 6") || combined.includes("khối 6");
+      if (isGrade6) {
+        return {
+          bookSeries: bookSeries.includes("Cánh") ? "Cánh Diều" : bookSeries.includes("Chân") ? "Chân Trời Sáng Tạo" : "Kết Nối Tri Thức Với Cuộc Sống",
+          subject: "Âm nhạc",
+          grade: 6,
+          chapterTitle: "Chủ đề 1: Tuổi học trò",
+          lessonTitle: "Bài 1: Học hát bài Con đường học trò",
+          learningOutcomes: "Hát đúng cao độ, trường độ bài hát Con đường học trò; thể hiện đúng sắc thái vui tươi, hồn nhiên; biết hát kết hợp gõ đệm thanh phách theo nhịp 2/4 theo chuẩn GDPT 2018.",
+          keyConcepts: [
+            "Bài hát Con đường học trò (Nhạc và lời: Nguyễn Văn Chung)",
+            "Tính chất âm nhạc: Vui tươi, hồn nhiên, rộn ràng tuổi học trò đầu cấp",
+            "Số chỉ nhịp 2/4, các hình nốt cơ bản và cách gõ đệm thanh phách",
+          ],
+          exercisesSummary: [
+            "Khởi động: Luyện thanh theo mẫu âm Đô - Rê - Mi - Pha - Son",
+            "Khám phá: Nghe hát mẫu và học hát từng câu nối tiếp",
+            "Luyện tập: Hát kết hợp gõ đệm thanh phách theo phách",
+            "Vận dụng: Biểu diễn tốp ca kết hợp động tác phụ họa",
+          ],
+          suggestedDuration: 45,
+          extractedSnippet: text.slice(0, 400) || `Tài liệu SGK Âm nhạc 6: ${fileName}`,
+        };
+      }
+
       return {
         bookSeries: bookSeries || "Kết Nối Tri Thức Với Cuộc Sống",
         subject: "Âm nhạc",

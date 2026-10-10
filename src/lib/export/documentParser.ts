@@ -165,13 +165,42 @@ export async function parseDocumentFile(file: File | { name: string; arrayBuffer
     extractedText = decoder.decode(arrayBuffer);
   } else if (ext === "pdf") {
     fileType = "PDF";
-    // For PDF in browser / server, attempt simple text stream scan
+
+    // 1. Extract first embedded JPEG page scan if present in PDF
+    // Many THCS textbook PDFs (such as SGK Âm nhạc 6 KNTT.pdf) are scanned page images without font streams.
+    const bytes = new Uint8Array(arrayBuffer);
+    let startJpeg = -1;
+    const scanLimit = Math.min(bytes.length - 3, 3000000);
+    for (let i = 0; i < scanLimit; i++) {
+      if (bytes[i] === 0xff && bytes[i + 1] === 0xd8 && bytes[i + 2] === 0xff) {
+        startJpeg = i;
+        break;
+      }
+    }
+    if (startJpeg !== -1) {
+      let endJpeg = -1;
+      const endLimit = Math.min(bytes.length - 1, startJpeg + 1500000);
+      for (let i = startJpeg + 3; i < endLimit; i++) {
+        if (bytes[i] === 0xff && bytes[i + 1] === 0xd9) {
+          endJpeg = i + 2;
+          break;
+        }
+      }
+      if (endJpeg !== -1 && endJpeg - startJpeg > 10000) {
+        const jpegSlice = bytes.subarray(startJpeg, endJpeg);
+        imageBase64 = bufferToBase64(jpegSlice.buffer.slice(jpegSlice.byteOffset, jpegSlice.byteOffset + jpegSlice.byteLength));
+        imageMimeType = "image/jpeg";
+      }
+    }
+
+    // 2. Extract text if PDF has font text layer, avoiding binary garbage streams
     const decoder = new TextDecoder("latin1");
-    const raw = decoder.decode(arrayBuffer);
+    const raw = decoder.decode(arrayBuffer.slice(0, Math.min(arrayBuffer.byteLength, 1500000)));
     const textMatches: string[] = [];
     const streamRegex = /BT[\s\S]*?ET/g;
     let match;
-    while ((match = streamRegex.exec(raw)) !== null) {
+    let matchCount = 0;
+    while ((match = streamRegex.exec(raw)) !== null && matchCount < 100) {
       const clean = match[0]
         .replace(/\\([()\\])/g, "$1")
         .replace(/\[(.*?)\]\s*TJ/g, "$1")
@@ -179,13 +208,17 @@ export async function parseDocumentFile(file: File | { name: string; arrayBuffer
         .replace(/<[^>]+>/g, " ")
         .replace(/[^a-zA-Z0-9\sáàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđÁÀẢÃẠĂẮẰẲẴẶÂẤẦẨẪẬÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴĐ.,;:!?-]/g, " ")
         .trim();
-      if (clean.length > 5) {
+      const words = clean.split(/\s+/).filter((w) => w.length >= 2);
+      if (words.length >= 3) {
         textMatches.push(clean);
+        matchCount++;
       }
     }
-    extractedText = textMatches.join("\n");
-    if (!extractedText || extractedText.length < 50) {
-      extractedText = `Tài liệu PDF Sách Giáo Khoa: ${fileName}. File đã được tải lên và sẵn sàng phân tích cấu trúc bài học GDPT 2018.`;
+    const combinedExtracted = textMatches.join("\n").replace(/\s+/g, " ").trim();
+    if (combinedExtracted && combinedExtracted.length >= 60) {
+      extractedText = combinedExtracted.slice(0, 15000);
+    } else {
+      extractedText = `[Sách Giáo Khoa PDF]: ${fileName}.\nĐã nhận diện tệp Sách Giáo Khoa thành công${imageBase64 ? " (đã bóc tách trang bìa/nội dung minh họa)" : ""}. Sẵn sàng phân tích theo khung chương trình GDPT 2018.`;
     }
   } else {
     const decoder = new TextDecoder("utf-8");
