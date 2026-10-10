@@ -27,6 +27,57 @@ function bufferToBase64(buffer: ArrayBuffer): string {
 }
 
 /**
+ * Compresses large camera photos in browser down to max 1600px width/height and JPEG quality 0.82
+ * to ensure request stays well under Vercel serverless 4.5MB payload limit.
+ */
+async function compressImageInBrowser(file: File | { arrayBuffer: () => Promise<ArrayBuffer> }, mimeType: string): Promise<string> {
+  if (typeof window !== "undefined" && typeof document !== "undefined") {
+    try {
+      const buffer = await file.arrayBuffer();
+      const blob = new Blob([buffer], { type: mimeType });
+      const img = new Image();
+      const url = URL.createObjectURL(blob);
+
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = (e) => reject(e);
+        img.src = url;
+      });
+      URL.revokeObjectURL(url);
+
+      const maxDim = 1600;
+      let width = img.width;
+      let height = img.height;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+        return dataUrl.split(",")[1] || "";
+      }
+    } catch (e) {
+      console.warn("Browser image compression skipped, falling back to direct base64:", e);
+    }
+  }
+  const arrayBuffer = await file.arrayBuffer();
+  return bufferToBase64(arrayBuffer);
+}
+
+/**
  * Extracts raw textual content from DOCX, PPTX, PDF, TXT, and Image files (JPG, PNG, WEBP).
  * Works both on Node.js server and Web browser environment.
  */
@@ -43,18 +94,35 @@ export async function parseDocumentFile(file: File | { name: string; arrayBuffer
 
   if (ext === "jpg" || ext === "jpeg" || ext === "png" || ext === "webp") {
     fileType = "IMAGE";
-    imageMimeType = ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : "image/jpeg";
-    imageBase64 = bufferToBase64(arrayBuffer);
-    extractedText = `[Ảnh chụp trang Sách Giáo Khoa: ${fileName}]\nĐã nạp hình ảnh thành công, chuẩn bị nhận diện nội dung văn bản và kiến thức qua Gemini 3.8 Flash Multimodal OCR.`;
+    imageMimeType = "image/jpeg";
+    imageBase64 = await compressImageInBrowser(file, ext === "png" ? "image/png" : ext === "webp" ? "image/webp" : "image/jpeg");
+    const estimatedKb = Math.round((imageBase64.length * 3) / 4 / 1024);
+    extractedText = `[Ảnh chụp trang Sách Giáo Khoa: ${fileName}]\nĐã nạp hình ảnh thành công (~${estimatedKb} KB), sẵn sàng phân tích cấu trúc bài học GDPT 2018.`;
   } else if (ext === "docx") {
     fileType = "DOCX";
     try {
-      const buffer = Buffer.from(arrayBuffer);
-      const result = await mammoth.extractRawText({ buffer });
-      extractedText = result.value || "";
+      if (typeof Buffer !== "undefined") {
+        const buffer = Buffer.from(arrayBuffer);
+        const result = await mammoth.extractRawText({ buffer });
+        extractedText = result.value || "";
+      } else {
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        extractedText = result.value || "";
+      }
     } catch (err) {
-      console.error("DOCX parsing error:", err);
-      throw new Error("Không thể đọc định dạng file DOCX. Vui lòng kiểm tra lại file.");
+      console.warn("Mammoth parse error, falling back to XML extraction:", err);
+      try {
+        const zip = await JSZip.loadAsync(arrayBuffer);
+        const documentXml = await zip.files["word/document.xml"]?.async("text");
+        if (documentXml) {
+          extractedText = documentXml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+        } else {
+          throw new Error("Không tìm thấy word/document.xml trong file docx");
+        }
+      } catch (zipErr) {
+        console.error("DOCX parsing error:", zipErr);
+        throw new Error("Không thể đọc định dạng file DOCX. Vui lòng kiểm tra lại file.");
+      }
     }
   } else if (ext === "pptx") {
     fileType = "PPTX";

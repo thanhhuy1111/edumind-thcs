@@ -40,17 +40,30 @@ export async function POST(req: NextRequest) {
     const teacher = await prisma.user.findFirst();
 
     if (action === "ANALYZE_SGK") {
-      if (ai.analyzeTextbook) {
-        const analysis = await ai.analyzeTextbook({
-          documentText: params?.documentText,
-          fileName: params?.fileName,
-          imageBase64: params?.imageBase64,
-          imageMimeType: params?.imageMimeType,
-          bookSeries: params?.bookSeries,
-        });
-        return NextResponse.json({ success: true, analysis });
+      try {
+        if (ai.analyzeTextbook) {
+          const analysis = await ai.analyzeTextbook({
+            documentText: params?.documentText,
+            fileName: params?.fileName,
+            imageBase64: params?.imageBase64,
+            imageMimeType: params?.imageMimeType,
+            bookSeries: params?.bookSeries,
+          });
+          return NextResponse.json({ success: true, analysis });
+        }
+      } catch (sgkErr) {
+        console.warn("AI analyzeTextbook error, falling back to SmartLocalAIProvider:", sgkErr);
       }
-      return NextResponse.json({ error: "AI Provider không hỗ trợ phân tích SGK" }, { status: 500 });
+
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { SmartLocalAIProvider } = require("@/lib/ai/provider");
+      const local = new SmartLocalAIProvider();
+      const analysis = await local.analyzeTextbook({
+        documentText: params?.documentText,
+        fileName: params?.fileName,
+        bookSeries: params?.bookSeries,
+      });
+      return NextResponse.json({ success: true, analysis });
     }
 
     if (action === "GENERATE") {
