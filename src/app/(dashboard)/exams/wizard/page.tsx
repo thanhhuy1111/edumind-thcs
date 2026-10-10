@@ -328,17 +328,65 @@ function ExamWizardContent() {
     }
   };
 
-  const handleLoadPreset = async (presetKey: "math" | "khtn" | "literature" | "music") => {
+  const handleLoadPreset = async (presetKey: "music6" | "music7" | "music8" | "music9" | "math" | "khtn" | "literature" | "music") => {
     setActivePreset(presetKey);
     let pTitle = "";
-    let pSubject = "";
+    let pSubject = "Âm nhạc";
     let pGrade = "7";
     let pSemester = "1";
     let pDuration = 45;
     let pTopics: string[] = [];
     let pOutcomes: string[] = [];
 
-    if (presetKey === "math") {
+    if (presetKey === "music6") {
+      pTitle = "Kiểm tra định kỳ Giữa Học kỳ I - Môn Âm nhạc 6";
+      pSubject = "Âm nhạc";
+      pGrade = "6";
+      pSemester = "1";
+      pDuration = 45;
+      pTopics = [
+        "Hát: Mùa khai trường (Phan Trần Bảng)",
+        "Nhạc lí: 4 thuộc tính cơ bản của âm thanh & Khuông nhạc khóa Sol",
+        "Thưởng thức âm nhạc & Nhạc cụ: Đàn Bầu Việt Nam",
+      ];
+      pOutcomes = [
+        "Hát đúng cao độ, trường độ, phong thái rộn ràng vui tươi ngày tựu trường.",
+        "Nhận biết 4 thuộc tính của âm thanh và vị trí nốt Sol trên khuông nhạc.",
+        "Biết gõ đệm thanh phách nhịp 2/4 và nhận biết cây Đàn Bầu Việt Nam.",
+      ];
+    } else if (presetKey === "music8") {
+      pTitle = "Kiểm tra định kỳ Giữa Học kỳ I - Môn Âm nhạc 8";
+      pSubject = "Âm nhạc";
+      pGrade = "8";
+      pSemester = "1";
+      pDuration = 45;
+      pTopics = [
+        "Hát: Mùa thu ngày khai trường (Vũ Trọng Tường)",
+        "Nhạc lí & Đọc nhạc: Gam thứ, Giọng La thứ (Am) & Đọc nhạc số 1",
+        "Thưởng thức âm nhạc: Dân ca Quan họ Bắc Ninh & Kèn Melodica",
+      ];
+      pOutcomes = [
+        "Hát đúng tính chất rộn ràng, tự hào của bài hát Mùa thu ngày khai trường.",
+        "Hiểu cấu tạo gam thứ, nhận biết âm chủ và giọng La thứ tự nhiên.",
+        "Biết đọc nhạc và thực hành hòa tấu kèn Melodica / gõ phách.",
+      ];
+    } else if (presetKey === "music9") {
+      pTitle = "Kiểm tra định kỳ Giữa Học kỳ I - Môn Âm nhạc 9";
+      pSubject = "Âm nhạc";
+      pGrade = "9";
+      pSemester = "1";
+      pDuration = 45;
+      pTopics = [
+        "Hát: Hát hợp xướng thiếu nhi đa bè",
+        "Nhạc lí: Giọng Son trưởng (G) & Giọng Mi thứ (Em)",
+        "Thưởng thức âm nhạc: Danh nhân âm nhạc (Mozart, Beethoven) & Ca khúc cách mạng",
+      ];
+      pOutcomes = [
+        "Biết hát bè đơn giản (bè hòa âm hoặc bè đuổi Canon) với sắc thái hòa quyện.",
+        "Xác định hóa biểu 1 dấu thăng giọng Son trưởng và giọng Mi thứ song song.",
+        "Trình bày được nét đặc sắc trong cuộc đời, tác phẩm của danh nhân Mozart, Beethoven.",
+      ];
+    } else if (presetKey === "math") {
       pTitle = "Kiểm tra định kỳ Giữa Học kỳ II - Môn Toán học 7";
       pSubject = "Toán học";
       pGrade = "7";
@@ -363,13 +411,14 @@ function ExamWizardContent() {
       pTopics = ["Thơ Thất ngôn bát cú Đường luật (Qua Đèo Ngang)", "Thực hành tiếng Việt: Từ tượng hình, từ tượng thanh", "Đoạn văn cảm thụ & Nghị luận xã hội"];
       pOutcomes = ["Nhận biết đặc điểm thể thơ Thất ngôn bát cú (niêm, luật, vần, đối)", "Phân tích tâm trạng bà Huyện Thanh Quan", "Viết đoạn văn ngắn về tình yêu quê hương đất nước"];
     } else {
+      // music7 or music default
       pTitle = "Kiểm tra định kỳ Giữa Học kỳ I - Môn Âm nhạc 7";
       pSubject = "Âm nhạc";
       pGrade = "7";
       pSemester = "1";
       pDuration = 45;
-      pTopics = ["Học hát (Khai trường, Nụ cười)", "Nhạc lí và Đọc nhạc (Nhịp 2/4, Gam Đô trưởng)", "Thưởng thức âm nhạc & Nhạc cụ"];
-      pOutcomes = ["Hát đúng cao độ, trường độ, biểu cảm và rõ lời ca.", "Hiểu khái niệm nhịp 2/4, đọc đúng cao độ các bậc âm gam Đô trưởng.", "Sử dụng được thanh phách gõ đệm theo phách và nhịp của bài hát."];
+      pTopics = ["Học hát (Khai trường, Nụ cười)", "Nhạc lí và Đọc nhạc (Dấu hóa, Nhịp 2/4, Nhịp 4/4)", "Thưởng thức âm nhạc & Nhạc cụ: Đờn ca tài tử Nam Bộ & Song loan"];
+      pOutcomes = ["Hát đúng cao độ, trường độ, biểu cảm và rõ lời ca.", "Hiểu tác dụng dấu hóa (#, b, ♮), đọc đúng cao độ các bậc âm gam Đô trưởng.", "Sử dụng được thanh phách, song loan gõ đệm theo phách và nhịp của bài hát."];
     }
 
     setTitle(pTitle);
@@ -823,85 +872,35 @@ function ExamWizardContent() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
           <button
-            onClick={() => handleLoadPreset("math")}
+            onClick={() => handleLoadPreset("music6")}
             disabled={isGenerating}
             className={`p-3 rounded-xl border text-left transition-all relative group flex flex-col justify-between ${
-              activePreset === "math"
-                ? "bg-white dark:bg-slate-800 border-blue-500 shadow-sm ring-2 ring-blue-500/20"
-                : "bg-white/80 dark:bg-slate-800/80 hover:bg-white border-slate-200 dark:border-slate-700 hover:border-blue-300"
+              activePreset === "music6"
+                ? "bg-white dark:bg-slate-800 border-indigo-500 shadow-sm ring-2 ring-indigo-500/20"
+                : "bg-white/80 dark:bg-slate-800/80 hover:bg-white border-slate-200 dark:border-slate-700 hover:border-indigo-300"
             }`}
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-blue-700 dark:text-blue-400">📐 Toán học 7</span>
-                <span className="text-[10px] px-1.5 py-0.2 bg-blue-50 text-blue-600 rounded font-medium">60 phút</span>
+                <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400">🎵 Âm nhạc 6</span>
+                <span className="text-[10px] px-1.5 py-0.2 bg-indigo-50 text-indigo-600 rounded font-medium">45 phút</span>
               </div>
               <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium mt-1 line-clamp-1">
-                Tỉ lệ thức &amp; Dãy tỉ số bằng nhau
+                Mùa khai trường &amp; Đàn Bầu
               </p>
-              <p className="text-[10px] text-slate-400 mt-0.5">10 câu • Đủ 4 dạng thức CV 7991</p>
+              <p className="text-[10px] text-slate-400 mt-0.5">7 câu • Đủ 4 dạng thức CV 7991</p>
             </div>
-            <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-[10px] text-blue-600 font-semibold">
+            <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-[10px] text-indigo-600 font-semibold">
               <span>Nạp ngay đề &amp; ma trận</span>
               <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </button>
 
           <button
-            onClick={() => handleLoadPreset("khtn")}
+            onClick={() => handleLoadPreset("music7")}
             disabled={isGenerating}
             className={`p-3 rounded-xl border text-left transition-all relative group flex flex-col justify-between ${
-              activePreset === "khtn"
-                ? "bg-white dark:bg-slate-800 border-emerald-500 shadow-sm ring-2 ring-emerald-500/20"
-                : "bg-white/80 dark:bg-slate-800/80 hover:bg-white border-slate-200 dark:border-slate-700 hover:border-emerald-300"
-            }`}
-          >
-            <div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">🔬 KHTN 7</span>
-                <span className="text-[10px] px-1.5 py-0.2 bg-emerald-50 text-emerald-600 rounded font-medium">45 phút</span>
-              </div>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium mt-1 line-clamp-1">
-                Trao đổi chất &amp; Năng lượng
-              </p>
-              <p className="text-[10px] text-slate-400 mt-0.5">10 câu • Quang hợp &amp; Hô hấp</p>
-            </div>
-            <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-[10px] text-emerald-600 font-semibold">
-              <span>Nạp ngay đề &amp; ma trận</span>
-              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-            </div>
-          </button>
-
-          <button
-            onClick={() => handleLoadPreset("literature")}
-            disabled={isGenerating}
-            className={`p-3 rounded-xl border text-left transition-all relative group flex flex-col justify-between ${
-              activePreset === "literature"
-                ? "bg-white dark:bg-slate-800 border-amber-500 shadow-sm ring-2 ring-amber-500/20"
-                : "bg-white/80 dark:bg-slate-800/80 hover:bg-white border-slate-200 dark:border-slate-700 hover:border-amber-300"
-            }`}
-          >
-            <div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-amber-700 dark:text-amber-400">📖 Ngữ văn 8</span>
-                <span className="text-[10px] px-1.5 py-0.2 bg-amber-50 text-amber-600 rounded font-medium">90 phút</span>
-              </div>
-              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium mt-1 line-clamp-1">
-                Thơ Đường luật &amp; Nghị luận
-              </p>
-              <p className="text-[10px] text-slate-400 mt-0.5">10 câu • Đọc hiểu &amp; Viết đoạn văn</p>
-            </div>
-            <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-[10px] text-amber-600 font-semibold">
-              <span>Nạp ngay đề &amp; ma trận</span>
-              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-            </div>
-          </button>
-
-          <button
-            onClick={() => handleLoadPreset("music")}
-            disabled={isGenerating}
-            className={`p-3 rounded-xl border text-left transition-all relative group flex flex-col justify-between ${
-              activePreset === "music"
+              activePreset === "music7" || activePreset === "music"
                 ? "bg-white dark:bg-slate-800 border-indigo-500 shadow-sm ring-2 ring-indigo-500/20"
                 : "bg-white/80 dark:bg-slate-800/80 hover:bg-white border-slate-200 dark:border-slate-700 hover:border-indigo-300"
             }`}
@@ -912,9 +911,59 @@ function ExamWizardContent() {
                 <span className="text-[10px] px-1.5 py-0.2 bg-indigo-50 text-indigo-600 rounded font-medium">45 phút</span>
               </div>
               <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium mt-1 line-clamp-1">
-                Hát, Nhạc cụ &amp; Nhạc lí
+                Hát Nụ cười, Dấu hóa &amp; Nhạc lí
               </p>
               <p className="text-[10px] text-slate-400 mt-0.5">7 câu • Rubric thực hành hát</p>
+            </div>
+            <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-[10px] text-indigo-600 font-semibold">
+              <span>Nạp ngay đề &amp; ma trận</span>
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </button>
+
+          <button
+            onClick={() => handleLoadPreset("music8")}
+            disabled={isGenerating}
+            className={`p-3 rounded-xl border text-left transition-all relative group flex flex-col justify-between ${
+              activePreset === "music8"
+                ? "bg-white dark:bg-slate-800 border-indigo-500 shadow-sm ring-2 ring-indigo-500/20"
+                : "bg-white/80 dark:bg-slate-800/80 hover:bg-white border-slate-200 dark:border-slate-700 hover:border-indigo-300"
+            }`}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400">🎵 Âm nhạc 8</span>
+                <span className="text-[10px] px-1.5 py-0.2 bg-indigo-50 text-indigo-600 rounded font-medium">45 phút</span>
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium mt-1 line-clamp-1">
+                Khai trường &amp; Giọng La thứ
+              </p>
+              <p className="text-[10px] text-slate-400 mt-0.5">7 câu • Kèn Melodica &amp; Quan họ</p>
+            </div>
+            <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-[10px] text-indigo-600 font-semibold">
+              <span>Nạp ngay đề &amp; ma trận</span>
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </button>
+
+          <button
+            onClick={() => handleLoadPreset("music9")}
+            disabled={isGenerating}
+            className={`p-3 rounded-xl border text-left transition-all relative group flex flex-col justify-between ${
+              activePreset === "music9"
+                ? "bg-white dark:bg-slate-800 border-indigo-500 shadow-sm ring-2 ring-indigo-500/20"
+                : "bg-white/80 dark:bg-slate-800/80 hover:bg-white border-slate-200 dark:border-slate-700 hover:border-indigo-300"
+            }`}
+          >
+            <div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-indigo-700 dark:text-indigo-400">🎵 Âm nhạc 9</span>
+                <span className="text-[10px] px-1.5 py-0.2 bg-indigo-50 text-indigo-600 rounded font-medium">45 phút</span>
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-300 font-medium mt-1 line-clamp-1">
+                Hợp xướng &amp; Giọng Son trưởng
+              </p>
+              <p className="text-[10px] text-slate-400 mt-0.5">7 câu • Hòa âm đa bè Mozart</p>
             </div>
             <div className="mt-2 pt-1.5 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between text-[10px] text-indigo-600 font-semibold">
               <span>Nạp ngay đề &amp; ma trận</span>

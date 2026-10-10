@@ -46,9 +46,9 @@ export default function ExportCenterPage() {
   const [loading, setLoading] = useState(true);
 
   // Export package parameters
-  const [exportSubject, setExportSubject] = useState("Toán học");
+  const [exportSubject, setExportSubject] = useState("Âm nhạc");
   const [exportGrade, setExportGrade] = useState("7");
-  const [exportTitle, setExportTitle] = useState("Kiểm tra định kỳ Giữa Học kỳ I - Môn Toán học 7");
+  const [exportTitle, setExportTitle] = useState("Kiểm tra định kỳ Giữa Học kỳ I - Môn Âm nhạc 7");
   const [exportSuccess, setExportSuccess] = useState<string | null>(null);
 
   useEffect(() => {
@@ -71,6 +71,12 @@ export default function ExportCenterPage() {
   };
 
   const getActivePreset = (): SubjectCurriculumPreset => {
+    if (exportSubject.toLowerCase().includes("nhạc")) {
+      if (exportGrade === "6" && CURRICULUM_PRESETS["music-6-school"]) return CURRICULUM_PRESETS["music-6-school"];
+      if (exportGrade === "8" && CURRICULUM_PRESETS["music-8-autumn"]) return CURRICULUM_PRESETS["music-8-autumn"];
+      if (exportGrade === "9" && CURRICULUM_PRESETS["music-9-ensemble"]) return CURRICULUM_PRESETS["music-9-ensemble"];
+      return CURRICULUM_PRESETS["music-7-friendship"] || CURRICULUM_PRESETS["math-7-ratio"];
+    }
     if (exportSubject.toLowerCase().includes("toán")) {
       return CURRICULUM_PRESETS["math-7-ratio"];
     }
@@ -80,10 +86,7 @@ export default function ExportCenterPage() {
     if (exportSubject.toLowerCase().includes("văn") || exportSubject.toLowerCase().includes("ngữ")) {
       return CURRICULUM_PRESETS["lit-8-poetry"];
     }
-    if (exportSubject.toLowerCase().includes("nhạc")) {
-      return CURRICULUM_PRESETS["music-7-friendship"] || CURRICULUM_PRESETS["math-7-ratio"];
-    }
-    return CURRICULUM_PRESETS["math-7-ratio"];
+    return CURRICULUM_PRESETS["music-7-friendship"] || CURRICULUM_PRESETS["math-7-ratio"];
   };
 
   const handleExportFullExamPackage = () => {
@@ -186,10 +189,10 @@ export default function ExportCenterPage() {
               }}
               className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-medium"
             >
+              <option value="Âm nhạc">Âm nhạc (Hát, Nhạc lí, Nhạc cụ & Đọc nhạc - Khối 6, 7, 8, 9)</option>
               <option value="Toán học">Toán học (Bài: Tỉ lệ thức & Dãy tỉ số)</option>
               <option value="Khoa học tự nhiên">Khoa học tự nhiên (Bài: Trao đổi chất)</option>
               <option value="Ngữ văn">Ngữ văn (Bài: Thơ Đường luật)</option>
-              <option value="Âm nhạc">Âm nhạc (Bài: Khai trường & Nụ cười)</option>
             </select>
           </div>
 

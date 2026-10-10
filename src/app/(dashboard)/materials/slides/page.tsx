@@ -207,9 +207,33 @@ function SlidesStudioContent() {
     }
   };
 
-  const handleSelectPresetSlide = (presetKey: "math" | "khtn" | "literature" | "music") => {
+  const handleSelectPresetSlide = (presetKey: "music6" | "music7" | "music8" | "music9" | "math" | "khtn" | "literature" | "music") => {
     let pParams;
-    if (presetKey === "math") {
+    if (presetKey === "music6") {
+      pParams = {
+        subject: "Âm nhạc",
+        grade: "6",
+        lessonTitle: "Chủ đề 1: Tuổi học trò - Học hát bài Mùa khai trường",
+        slideCount: 10,
+        style: "Học tập tương tác & Trực quan",
+      };
+    } else if (presetKey === "music8") {
+      pParams = {
+        subject: "Âm nhạc",
+        grade: "8",
+        lessonTitle: "Chủ đề 1: Rộn ràng ngày mới - Học hát bài Mùa thu ngày khai trường",
+        slideCount: 10,
+        style: "Học tập tương tác & Trực quan",
+      };
+    } else if (presetKey === "music9") {
+      pParams = {
+        subject: "Âm nhạc",
+        grade: "9",
+        lessonTitle: "Chủ đề 1: Giai điệu mùa thu - Hát hợp xướng thiếu nhi & Giọng Son trưởng",
+        slideCount: 10,
+        style: "Học tập tương tác & Trực quan",
+      };
+    } else if (presetKey === "math") {
       pParams = {
         subject: "Toán học",
         grade: "7",
@@ -234,6 +258,7 @@ function SlidesStudioContent() {
         style: "Học tập tương tác & Trực quan",
       };
     } else {
+      // music7 or music default
       pParams = {
         subject: "Âm nhạc",
         grade: "7",
@@ -559,63 +584,63 @@ function SlidesStudioContent() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
           <button
-            onClick={() => handleSelectPresetSlide("math")}
-            disabled={isGeneratingDeck}
-            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-blue-400 hover:bg-blue-50/40 shadow-2xs cursor-pointer active:scale-[0.98] ${
-              subject === "Toán học" ? "border-blue-500 ring-2 ring-blue-500/20" : "border-slate-200"
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-blue-700">📐 Toán học 7</span>
-              <span className="text-[10px] px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded font-medium">10 Slide</span>
-            </div>
-            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Tỉ lệ thức &amp; Dãy tỉ số</p>
-            <p className="text-[10px] text-slate-400 mt-0.5">Quiz mini-game • Công thức KaTeX</p>
-          </button>
-
-          <button
-            onClick={() => handleSelectPresetSlide("khtn")}
-            disabled={isGeneratingDeck}
-            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-emerald-400 hover:bg-emerald-50/40 shadow-2xs cursor-pointer active:scale-[0.98] ${
-              subject === "Khoa học tự nhiên" ? "border-emerald-500 ring-2 ring-emerald-500/20" : "border-slate-200"
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-700">🔬 KHTN 7</span>
-              <span className="text-[10px] px-1.5 py-0.5 bg-emerald-50 text-emerald-600 rounded font-medium">10 Slide</span>
-            </div>
-            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Trao đổi chất &amp; Năng lượng</p>
-            <p className="text-[10px] text-slate-400 mt-0.5">Sơ đồ quang hợp &amp; Thí nghiệm</p>
-          </button>
-
-          <button
-            onClick={() => handleSelectPresetSlide("literature")}
-            disabled={isGeneratingDeck}
-            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-amber-400 hover:bg-amber-50/40 shadow-2xs cursor-pointer active:scale-[0.98] ${
-              subject === "Ngữ văn" ? "border-amber-500 ring-2 ring-amber-500/20" : "border-slate-200"
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-amber-700">📖 Ngữ văn 8</span>
-              <span className="text-[10px] px-1.5 py-0.5 bg-amber-50 text-amber-600 rounded font-medium">10 Slide</span>
-            </div>
-            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Thơ Đường luật (Đèo Ngang)</p>
-            <p className="text-[10px] text-slate-400 mt-0.5">Thi pháp cổ điển • Tranh minh họa</p>
-          </button>
-
-          <button
-            onClick={() => handleSelectPresetSlide("music")}
+            onClick={() => handleSelectPresetSlide("music6")}
             disabled={isGeneratingDeck}
             className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-indigo-400 hover:bg-indigo-50/40 shadow-2xs cursor-pointer active:scale-[0.98] ${
-              subject === "Âm nhạc" ? "border-indigo-500 ring-2 ring-indigo-500/20" : "border-slate-200"
+              grade === "6" && subject === "Âm nhạc" ? "border-indigo-500 ring-2 ring-indigo-500/20" : "border-slate-200"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-indigo-700">🎵 Âm nhạc 6</span>
+              <span className="text-[10px] px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded font-medium">10 Slide</span>
+            </div>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Hát Mùa khai trường &amp; Đàn Bầu</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Luyện thanh • Gõ phách 2/4</p>
+          </button>
+
+          <button
+            onClick={() => handleSelectPresetSlide("music7")}
+            disabled={isGeneratingDeck}
+            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-indigo-400 hover:bg-indigo-50/40 shadow-2xs cursor-pointer active:scale-[0.98] ${
+              grade === "7" && subject === "Âm nhạc" ? "border-indigo-500 ring-2 ring-indigo-500/20" : "border-slate-200"
             }`}
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-indigo-700">🎵 Âm nhạc 7</span>
               <span className="text-[10px] px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded font-medium">10 Slide</span>
             </div>
-            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Hát bài Nụ cười &amp; Nhạc lí</p>
-            <p className="text-[10px] text-slate-400 mt-0.5">Luyện thanh • Gõ phách 2/4</p>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Hát bài Nụ cười &amp; Dấu hóa</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Luyện thanh • Đờn ca tài tử</p>
+          </button>
+
+          <button
+            onClick={() => handleSelectPresetSlide("music8")}
+            disabled={isGeneratingDeck}
+            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-indigo-400 hover:bg-indigo-50/40 shadow-2xs cursor-pointer active:scale-[0.98] ${
+              grade === "8" && subject === "Âm nhạc" ? "border-indigo-500 ring-2 ring-indigo-500/20" : "border-slate-200"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-indigo-700">🎵 Âm nhạc 8</span>
+              <span className="text-[10px] px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded font-medium">10 Slide</span>
+            </div>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Mùa thu khai trường &amp; Giọng La thứ</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Kèn Melodica • Quan họ Bắc Ninh</p>
+          </button>
+
+          <button
+            onClick={() => handleSelectPresetSlide("music9")}
+            disabled={isGeneratingDeck}
+            className={`p-3 rounded-xl border text-left transition-all bg-white hover:border-indigo-400 hover:bg-indigo-50/40 shadow-2xs cursor-pointer active:scale-[0.98] ${
+              grade === "9" && subject === "Âm nhạc" ? "border-indigo-500 ring-2 ring-indigo-500/20" : "border-slate-200"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-indigo-700">🎵 Âm nhạc 9</span>
+              <span className="text-[10px] px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded font-medium">10 Slide</span>
+            </div>
+            <p className="text-[11px] text-slate-700 font-medium mt-1 truncate">Hợp xướng &amp; Giọng Son trưởng</p>
+            <p className="text-[10px] text-slate-400 mt-0.5">Hòa âm đa bè • Danh nhân Mozart</p>
           </button>
         </div>
       </div>

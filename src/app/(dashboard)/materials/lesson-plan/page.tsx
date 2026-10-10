@@ -77,86 +77,34 @@ interface LessonPlanData {
 // 4 Pre-packaged Real Textbook Presets for 1-Click Testing
 const PRESET_TEXTBOOKS = [
   {
-    id: "math-7-ratio",
+    id: "music-6-school",
     bookSeries: "Kết Nối Tri Thức Với Cuộc Sống",
-    subject: "Toán học",
-    grade: "7",
-    lessonTitle: "Bài 6: Tỉ lệ thức và Dãy tỉ số bằng nhau",
+    subject: "Âm nhạc",
+    grade: "6",
+    lessonTitle: "Chủ đề 1: Tuổi học trò - Học hát bài Mùa khai trường",
     durationMinutes: "45",
-    pages: "Trang 6 – 10 (Tập 2)",
-    icon: "📐",
-    snippet: `BÀI 6: TỈ LỆ THỨC VÀ DÃY TỈ SỐ BẰNG NHAU (SGK Toán 7 - Kết Nối Tri Thức)
-1. Tỉ lệ thức: Tỉ lệ thức là đẳng thức của hai tỉ số a/b = c/d (viết dạng a:b = c:d).
-Các số a, d gọi là ngoại tỉ; b, c gọi là trung tỉ.
-Tính chất 1: Nếu a/b = c/d thì a.d = b.c (tích ngoại tỉ bằng tích trung tỉ).
-Tính chất 2: Nếu a.d = b.c (với a, b, c, d khác 0) thì ta có các tỉ lệ thức: a/b = c/d; a/c = b/d; d/b = c/a; d/c = b/a.
-2. Dãy tỉ số bằng nhau:
-Từ a/b = c/d = e/f ta suy ra: a/b = c/d = e/f = (a + c + e)/(b + d + f) = (a - c + e)/(b - d + f) (giả thiết các mẫu số khác 0).
-3. Hoạt động luyện tập & Vận dụng:
-- Ví dụ 1: Tìm x trong tỉ lệ thức x/8 = 9/12.
-- Ví dụ 2: Tìm hai số x, y biết x/2 = y/5 và x + y = 21.
-- Bài toán thực tiễn: Ba lớp 7A, 7B, 7C tham gia phong trào kế hoạch nhỏ gom giấy vụn tỉ lệ với số học sinh 36, 40, 44. Tổng số giấy là 360 kg. Tính số kg mỗi lớp gom được.`,
+    pages: "Trang 6 – 9",
+    icon: "🎵",
+    snippet: `CHỦ ĐỀ 1: TUỔI HỌC TRÒ - HỌC HÁT BÀI MÙA KHAI TRƯỜNG (SGK Âm nhạc 6 - Kết Nối Tri Thức)
+Nhạc và lời: Phan Trần Bảng.
+Nhịp 2/4. Tính chất âm nhạc: Rộn ràng, tươi vui, trong sáng ngày tựu trường.
+1. Khám phá tác phẩm:
+- Giới thiệu tác giả Phan Trần Bảng: Nhạc sĩ gắn bó sâu sắc với tuổi thơ và học đường.
+- Nghe hát mẫu và phân tích cấu trúc bài hát gồm 2 đoạn đơn.
+2. Dạy hát từng câu:
+- Khởi động giọng hát: Luyện thanh theo thang âm Đô trưởng (mẫu âm La - Ma).
+- Đọc lời ca theo tiết tấu nhịp 2/4: "Mùa thu sang là mùa khai trường..."
+- Tập hát câu 1, câu 2 rồi ghép nối; sửa sai cao độ và nhịp thở.
+3. Thực hành gõ đệm thanh phách:
+- Gõ đệm theo phách (phách 1 mạnh, phách 2 nhẹ).
+- Gõ đệm theo tiết tấu lời ca.
+4. Thưởng thức âm nhạc & Nhạc cụ:
+- Tìm hiểu cây Đàn Bầu Việt Nam: Nhạc cụ độc huyền cầm gảy âm bồi độc đáo.
+5. Vận dụng - Biểu diễn:
+- Tốp ca kết hợp động tác phụ họa và thanh phách gõ nhịp.`,
     learningOutcomes:
-      "Nhận biết tỉ lệ thức và các tính chất cơ bản; vận dụng tính chất dãy tỉ số bằng nhau để giải bài toán chia đại lượng tỉ lệ trong đời sống thực tiễn.",
-    method: "Dạy học phát hiện và giải quyết vấn đề, thảo luận nhóm, trực quan hóa bài toán thực tiễn",
-  },
-  {
-    id: "khtn-7-metabolism",
-    bookSeries: "Cánh Diều",
-    subject: "Khoa học tự nhiên",
-    grade: "7",
-    lessonTitle: "Bài 22: Vai trò của trao đổi chất và chuyển hóa năng lượng ở sinh vật",
-    durationMinutes: "45",
-    pages: "Trang 102 – 106",
-    icon: "🔬",
-    snippet: `BÀI 22: VAI TRÒ CỦA TRAO ĐỔI CHẤT VÀ CHUYỂN HÓA NĂNG LƯỢNG Ở SINH VẬT (SGK KHTN 7 - Cánh Diều)
-1. Khái niệm trao đổi chất và chuyển hóa năng lượng:
-- Trao đổi chất là quá trình cơ thể sinh vật lấy các chất từ môi trường ngoài, biến đổi chúng thành các chất cần thiết cho cơ thể và thải các chất cặn bã ra môi trường ngoài.
-- Chuyển hóa năng lượng là sự biến đổi năng lượng từ dạng này sang dạng khác (quang năng thành hóa năng trong quang hợp, hóa năng thành nhiệt năng và ATP trong hô hấp tế bào).
-2. Vai trò của trao đổi chất và chuyển hóa năng lượng:
-- Cung cấp nguyên liệu cấu tạo nên tế bào và cơ thể sinh vật.
-- Cung cấp năng lượng duy trì mọi hoạt động sống (vận động, sinh sản, cảm ứng).
-3. Câu hỏi và bài tập ứng dụng:
-- Câu hỏi khởi động: Vì sao khi vận động mạnh (chạy bộ), chúng ta thở nhanh, tim đập nhanh và toát nhiều mồ hôi?
-- Thảo luận nhóm: Phân tích sơ đồ mối quan hệ giữa quang hợp và hô hấp tế bào.
-- Vận dụng thực tiễn: Giải thích vì sao cần bảo quản hạt giống ở nơi khô ráo, thoáng mát và nhiệt độ thấp.`,
-    learningOutcomes:
-      "Nêu được khái niệm trao đổi chất và chuyển hóa năng lượng; phân tích vai trò chuyển hóa năng lượng đối với sự sống và giải thích các ứng dụng thực tế trong bảo quản nông sản.",
-    method: "Dạy học trực quan bằng sơ đồ hóa, phân tích thí nghiệm và liên hệ thực tế nông nghiệp",
-  },
-  {
-    id: "lit-8-poetry",
-    bookSeries: "Chân Trời Sáng Tạo",
-    subject: "Ngữ văn",
-    grade: "8",
-    lessonTitle: "Bài 2: Vẻ đẹp cổ điển - Thơ Thất ngôn bát cú Đường luật (Qua Đèo Ngang)",
-    durationMinutes: "45",
-    pages: "Trang 38 – 42 (Tập 1)",
-    icon: "📖",
-    snippet: `BÀI 2: VẺ ĐẸP CỔ ĐIỂN - ĐỌC HIỂU VĂN BẢN QUA ĐÈO NGANG (SGK Ngữ văn 8 - Chân Trời Sáng Tạo)
-Tác giả: Bà Huyện Thanh Quan (thế kỉ XIX).
-Văn bản bài thơ:
-Bước tới Đèo Ngang, bóng xế tà,
-Cỏ cây chen đá, lá chen hoa.
-Lom khom dưới núi, tiều vài chú,
-Lác đác bên sông, chợ mấy nhà.
-Nhớ nước đau lòng, con quốc quốc,
-Thương nhà mỏi miệng, cái gia gia.
-Dừng chân đứng lại, trời, non, nước,
-Một mảnh tình riêng, ta với ta.
-1. Thể thơ Thất ngôn bát cú Đường luật:
-- Số câu: 8 câu, số chữ mỗi câu: 7 chữ.
-- Niêm: Câu 1 niêm với câu 8, câu 2 niêm với câu 3, câu 4 niêm với câu 5, câu 6 niêm với câu 7.
-- Luật vần: Hiệp vần ở cuối các câu 1, 2, 4, 6, 8 (tà, hoa, nhà, gia, ta).
-- Phép đối: Đối ý và đối lời ở 2 câu thực (câu 3 - 4) và 2 câu luận (câu 5 - 6).
-2. Câu hỏi đọc hiểu và phân tích:
-- Câu 1: Xác định thời gian, không gian và tâm trạng của tác giả khi đặt chân tới Đèo Ngang.
-- Câu 2: Phân tích hiệu quả nghệ thuật của biện pháp đảo ngữ trong hai câu thực (Lom khom... / Lác đác...).
-- Câu 3: Nghệ thuật chơi chữ qua âm thanh tiếng chim 'quốc quốc', 'gia gia'.
-- Vận dụng: Viết đoạn văn ngắn (7-9 câu) nêu cảm nhận về tâm trạng hoài cổ và tình yêu quê hương của thi nhân.`,
-    learningOutcomes:
-      "Nhận biết đặc trưng thể thơ Thất ngôn bát cú Đường luật (luật, niêm, vần, đối), phân tích được tâm trạng hoài cổ của tác giả và cảm thụ nét đẹp quê hương.",
-    method: "Dạy học đọc hiểu văn bản nghệ thuật, đàm thoại gợi mở, thảo luận cặp đôi và viết đoạn văn cảm nhận",
+      "Hát đúng cao độ, trường độ bài Mùa khai trường; thể hiện đúng sắc thái rộn ràng vui tươi; gõ đệm thanh phách nhịp 2/4 và nhận biết đặc trưng cây Đàn Bầu Việt Nam.",
+    method: "Dạy học thực hành thanh nhạc, luyện thanh khởi động, đồng ca hòa giọng và gõ đệm thanh phách",
   },
   {
     id: "music-7-smile",
@@ -178,15 +126,71 @@ Nhịp 2/4. Tính chất âm nhạc: Vui tươi, hồn nhiên, trong sáng.
 - Đọc lời ca theo tiết tấu nhịp 2/4.
 - Tập hát câu 1: 'Cho trời sáng lên cùng với bao nụ cười...'
 - Ghép nối cả bài và sửa sai cao độ.
-3. Thực hành gõ đệm thanh phách:
+3. Thực hành gõ đệm thanh phách & Nhạc lí:
 - Gõ đệm theo phách (phách 1 mạnh, phách 2 nhẹ).
-- Gõ đệm theo tiết tấu lời ca.
+- Tìm hiểu Dấu hóa: Dấu thăng (#), dấu giáng (b), dấu bình (♮).
 4. Vận dụng - Sáng tạo:
 - Hát kết hợp vận động cơ thể (body percussion): vỗ tay, giậm chân nhịp nhàng.
 - Biểu diễn theo nhóm và nhận xét chéo.`,
     learningOutcomes:
-      "Hát đúng giai điệu và lời ca bài hát Nụ cười, biết gõ đệm thanh phách nhịp nhàng theo phách 2/4, cảm nhận tình bạn trong sáng.",
+      "Hát đúng giai điệu và lời ca bài hát Nụ cười, biết gõ đệm thanh phách nhịp nhàng theo phách 2/4, nắm được tác dụng của dấu hóa và cảm nhận tình bạn trong sáng.",
     method: "Dạy học thực hành biểu diễn, luyện thanh, hòa âm nhóm và gõ đệm thanh phách",
+  },
+  {
+    id: "music-8-autumn",
+    bookSeries: "Cánh Diều",
+    subject: "Âm nhạc",
+    grade: "8",
+    lessonTitle: "Chủ đề 1: Rộn ràng ngày mới - Bài 1: Học hát bài Mùa thu ngày khai trường",
+    durationMinutes: "45",
+    pages: "Trang 8 – 12",
+    icon: "🎵",
+    snippet: `CHỦ ĐỀ 1: RỘN RÀNG NGÀY MỚI - BÀI 1: HỌC HÁT BÀI MÙA THU NGÀY KHAI TRƯỜNG (SGK Âm nhạc 8 - Cánh Diều)
+Nhạc và lời: Vũ Trọng Tường.
+Nhịp 2/4. Sắc thái: Rộn ràng, thiết tha, tự hào tuổi học trò.
+1. Khám phá ca khúc:
+- Giới thiệu tác giả Vũ Trọng Tường và giai điệu quen thuộc ngân vang mỗi mùa tựu trường.
+- Nghe hát mẫu toàn bài; nhận diện giọng điệu và các đoạn tương phản.
+2. Dạy hát và Nhạc lí:
+- Luyện thanh theo gam La thứ (A minor).
+- Học hát từng câu kết hợp lấy hơi đúng chỗ ngân dài.
+- Tìm hiểu Gam thứ & Giọng La thứ tự nhiên: cấu tạo cung và nửa cung.
+3. Đọc nhạc & Nhạc cụ kèn phím Melodica:
+- Bài đọc nhạc số 1 theo thang âm La thứ.
+- Thổi kèn phím Melodica giai điệu câu hát mở đầu.
+4. Vận dụng & Biểu diễn:
+- Trình bày tốp ca kết hợp đệm kèn Melodica và gõ phách.`,
+    learningOutcomes:
+      "Hát đúng giai điệu, tiết tấu rộn ràng bài Mùa thu ngày khai trường; hiểu tính chất giọng La thứ (Am); biết đọc nhạc và ứng dụng kèn phím Melodica.",
+    method: "Dạy học thực hành thanh nhạc, xướng âm đọc nhạc giọng La thứ và ứng dụng kèn phím Melodica",
+  },
+  {
+    id: "music-9-choir",
+    bookSeries: "Chân Trời Sáng Tạo",
+    subject: "Âm nhạc",
+    grade: "9",
+    lessonTitle: "Chủ đề 1: Giai điệu mùa thu - Hát hợp xướng thiếu nhi & Giọng Son trưởng",
+    durationMinutes: "45",
+    pages: "Trang 6 – 10",
+    icon: "🎵",
+    snippet: `CHỦ ĐỀ 1: GIAI ĐIỆU MÙA THU - HÁT HỢP XƯỚNG THIẾU NHI & GIỌNG SON TRƯỞNG (SGK Âm nhạc 9 - Chân Trời Sáng Tạo)
+Nội dung: Kĩ thuật hát hợp xướng 2 bè & Giọng Son trưởng (G major).
+1. Khám phá kĩ thuật hát hợp xướng:
+- Khái niệm hợp xướng: Hát tập thể đa bè hòa quyện (Soprano - Alto).
+- Nghe trích đoạn hợp xướng thiếu nhi thế giới và cảm nhận sự hòa âm phong phú.
+2. Luyện tập hát bè:
+- Luyện thanh 2 bè hòa âm quãng 3 và quãng 5.
+- Thực hành hát bè đuổi (Canon) ca khúc thiếu nhi quen thuộc.
+- Lắng nghe và kiểm soát âm lượng để không lấn át bè bạn.
+3. Nhạc lí: Giọng Son trưởng & Giọng Mi thứ:
+- Hóa biểu có 1 dấu thăng (Fa#) tại dòng kẻ thứ 5.
+- Xác định quan hệ song song giữa Son trưởng và Mi thứ.
+4. Thưởng thức âm nhạc & Nhạc cụ:
+- Tìm hiểu nhà soạn nhạc thiên tài W.A. Mozart và L.V. Beethoven.
+- Hòa tấu kèn Melodica / sáo Recorder kết hợp tiết tấu gõ đệm.`,
+    learningOutcomes:
+      "Biết hát bè đơn giản (bè hòa âm hoặc bè đuổi Canon) với sắc thái hòa quyện; nhận biết hóa biểu 1 dấu thăng giọng Son trưởng; cảm thụ nghệ thuật hợp xướng và danh nhân âm nhạc thế giới.",
+    method: "Dạy học hát hợp xướng đa bè, luyện tai nghe hòa âm, đàm thoại thưởng thức âm nhạc cổ điển và hòa tấu nhạc cụ",
   },
 ];
 
@@ -210,13 +214,13 @@ function LessonPlanContent() {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
   // Form State (Can be auto-filled from SGK analysis or manually edited)
-  const [subject, setSubject] = useState("Toán học");
+  const [subject, setSubject] = useState("Âm nhạc");
   const [grade, setGrade] = useState("7");
-  const [lessonTitle, setLessonTitle] = useState("Bài 6: Tỉ lệ thức và Dãy tỉ số bằng nhau");
+  const [lessonTitle, setLessonTitle] = useState("Chủ đề 2: Tình bạn - Bài 3: Học hát bài Nụ cười");
   const [durationMinutes, setDurationMinutes] = useState("45");
-  const [method, setMethod] = useState("Dạy học phát hiện và giải quyết vấn đề, thảo luận nhóm, trực quan hóa bài toán thực tiễn");
+  const [method, setMethod] = useState("Dạy học thực hành biểu diễn thanh nhạc, luyện thanh khởi động, hòa âm bè nhóm và gõ đệm thanh phách");
   const [learningOutcomes, setLearningOutcomes] = useState(
-    "Nắm vững tính chất cơ bản của tỉ lệ thức và dãy tỉ số bằng nhau, vận dụng giải bài toán thực tế chia đại lượng tỉ lệ thuận."
+    "Hát đúng giai điệu và lời ca bài hát Nụ cười, biết lấy hơi đúng nhịp, biết gõ đệm thanh phách nhịp nhàng theo phách 2/4, cảm nhận tình bạn trong sáng."
   );
 
   // Generation & Interactive State
@@ -230,7 +234,7 @@ function LessonPlanContent() {
 
   // Load initial demo plan on mount
   useEffect(() => {
-    handleSelectPresetTextbook("math-7-ratio");
+    handleSelectPresetTextbook("music-7-smile");
   }, []);
 
   // Handle Drag & Drop / File Select
@@ -454,27 +458,27 @@ function LessonPlanContent() {
       };
     }
 
-    // 5. Default General THCS Lesson
+    // 5. Default General THCS Lesson (Default to Âm nhạc for secondary music teachers)
     const match = text.match(/(Bài\s+\d+[:\s][^\n\r.]+)/i);
     const extractedTitle = match ? match[1].trim() : `Bài học từ tài liệu ${fileName.replace(/\.[^/.]+$/, "")}`;
 
     return {
       bookSeries: bookSeries || "Kết Nối Tri Thức Với Cuộc Sống",
-      subject: "Toán học",
+      subject: "Âm nhạc",
       grade: 7,
-      chapterTitle: "Chương trình Giáo dục Phổ thông 2018",
+      chapterTitle: "Chương trình Âm nhạc THCS - GDPT 2018",
       lessonTitle: extractedTitle,
-      learningOutcomes: "Nắm vững kiến thức cốt lõi của bài học; phát triển năng lực tự chủ và giải quyết vấn đề theo chuẩn GDPT 2018.",
+      learningOutcomes: "Nắm vững kiến thức âm nhạc cốt lõi của bài học; phát triển năng lực thể hiện, cảm thụ và sáng tạo âm nhạc theo chuẩn GDPT 2018.",
       keyConcepts: [
-        "Kiến thức trọng tâm bám sát nội dung Sách Giáo Khoa",
-        "Kĩ năng thực hành và phương pháp giải quyết nhiệm vụ học tập",
-        "Vận dụng kiến thức vào bài tập và tình huống thực tiễn",
+        "Kiến thức âm nhạc trọng tâm bám sát nội dung Sách Giáo Khoa",
+        "Kĩ năng thực hành thanh nhạc, gõ đệm và đọc nhạc theo nhịp phách",
+        "Cảm thụ âm nhạc và vận dụng biểu diễn tự tin trước tập thể",
       ],
       exercisesSummary: [
-        "Khởi động: Tình huống dẫn nhập gợi mở",
-        "Khám phá: Hình thành kiến thức mới",
-        "Luyện tập: Bài tập củng cố kĩ năng",
-        "Vận dụng: Mở rộng và thực tiễn",
+        "Khởi động: Luyện thanh theo thang âm và trò chơi âm nhạc",
+        "Khám phá: Nghe hát mẫu và học hát từng câu chuẩn xác",
+        "Luyện tập: Hát kết hợp gõ đệm thanh phách theo phách 2/4",
+        "Vận dụng: Biểu diễn nhóm kết hợp vận động cơ thể",
       ],
       suggestedDuration: 45,
       extractedSnippet: text.slice(0, 400) || fileName,

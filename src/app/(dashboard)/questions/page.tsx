@@ -45,7 +45,7 @@ export default function QuestionsPage() {
   const [questions, setQuestions] = useState<QuestionItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [subjectFilter, setSubjectFilter] = useState("ALL");
+  const [subjectFilter, setSubjectFilter] = useState("MUSIC");
   const [gradeFilter, setGradeFilter] = useState("ALL");
   const [difficultyFilter, setDifficultyFilter] = useState("ALL");
   const [typeFilter, setTypeFilter] = useState("ALL");
@@ -68,7 +68,20 @@ export default function QuestionsPage() {
       const data: QuestionItem[] = await res.json();
       if (Array.isArray(data)) {
         if (subjectFilter !== "ALL") {
-          setQuestions(data.filter(q => q.subject?.code === subjectFilter || q.subject?.name?.toLowerCase().includes(subjectFilter.toLowerCase())));
+          setQuestions(
+            data.filter(
+              (q) =>
+                q.subject?.code === subjectFilter ||
+                q.subject?.name?.toLowerCase().includes(subjectFilter.toLowerCase()) ||
+                (subjectFilter === "MUSIC" &&
+                  (q.tags?.toLowerCase().includes("nhac") ||
+                    q.tags?.toLowerCase().includes("music") ||
+                    q.content?.toLowerCase().includes("âm nhạc") ||
+                    q.content?.toLowerCase().includes("hát") ||
+                    q.content?.toLowerCase().includes("nhịp") ||
+                    q.content?.toLowerCase().includes("khóa sol")))
+            )
+          );
         } else {
           setQuestions(data);
         }
@@ -180,8 +193,8 @@ export default function QuestionsPage() {
               onChange={(e) => setSubjectFilter(e.target.value)}
               className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-700 outline-none"
             >
+              <option value="MUSIC">Môn Âm nhạc (Mặc định)</option>
               <option value="ALL">Tất cả môn học</option>
-              <option value="MUSIC">Môn Âm nhạc</option>
               <option value="MATH">Môn Toán học</option>
             </select>
 

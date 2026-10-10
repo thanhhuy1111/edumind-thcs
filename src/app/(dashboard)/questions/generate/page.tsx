@@ -70,7 +70,7 @@ export default function AIQuestionGeneratorPage() {
         method: "POST",
         headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
-          subject: subjectMap[subject] || "Toán học",
+          subject: subjectMap[subject] || "Âm nhạc",
           grade: parseInt(grade, 10),
           difficulty,
           questionType,
@@ -110,8 +110,8 @@ export default function AIQuestionGeneratorPage() {
             answers: q.answers,
             answer: q.correct_answer,
             explanation: q.explanation,
-            source: q.source || "EduMind AI Studio",
-            tags: q.tags?.join(",") || "ai-generated,toan-thcs",
+            source: q.source || "EduMind Music AI Studio",
+            tags: q.tags?.join(",") || "ai-generated,am-nhac-thcs",
           }),
         });
       }
@@ -207,7 +207,21 @@ export default function AIQuestionGeneratorPage() {
                   <label className="block font-semibold text-slate-700 mb-1">Khối lớp</label>
                   <select
                     value={grade}
-                    onChange={(e) => setGrade(e.target.value)}
+                    onChange={(e) => {
+                      const g = e.target.value;
+                      setGrade(g);
+                      if (subject === "MUSIC") {
+                        if (g === "6") {
+                          setPromptNote("Tạo các câu trắc nghiệm Âm nhạc lớp 6 về 4 thuộc tính cơ bản của âm thanh, khóa Sol và nhạc cụ dân tộc Đàn Bầu theo chuẩn GDPT 2018.");
+                        } else if (g === "7") {
+                          setPromptNote("Tạo các câu trắc nghiệm Âm nhạc lớp 7 về bài hát Nụ cười, các loại dấu hóa (#, b, ♮) và Đờn ca tài tử Nam Bộ theo chuẩn GDPT 2018.");
+                        } else if (g === "8") {
+                          setPromptNote("Tạo các câu trắc nghiệm Âm nhạc lớp 8 về gam thứ, giọng La thứ, kèn Melodica và Dân ca Quan họ Bắc Ninh theo chuẩn GDPT 2018.");
+                        } else if (g === "9") {
+                          setPromptNote("Tạo các câu trắc nghiệm Âm nhạc lớp 9 về giọng Son trưởng, Mi thứ, nghệ thuật hát bè hợp xướng và nhạc sĩ cổ điển thế giới.");
+                        }
+                      }
+                    }}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 outline-none"
                   >
                     <option value="6">Khối 6</option>
