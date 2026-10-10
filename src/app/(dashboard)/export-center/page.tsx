@@ -80,6 +80,9 @@ export default function ExportCenterPage() {
     if (exportSubject.toLowerCase().includes("văn") || exportSubject.toLowerCase().includes("ngữ")) {
       return CURRICULUM_PRESETS["lit-8-poetry"];
     }
+    if (exportSubject.toLowerCase().includes("nhạc")) {
+      return CURRICULUM_PRESETS["music-7-friendship"] || CURRICULUM_PRESETS["math-7-ratio"];
+    }
     return CURRICULUM_PRESETS["math-7-ratio"];
   };
 

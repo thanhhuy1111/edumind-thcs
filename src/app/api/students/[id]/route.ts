@@ -45,7 +45,7 @@ export async function GET(
     }
 
     // Call AI Provider to generate deep individual student insight
-    const aiProvider = getAIProvider();
+    const aiProvider = getAIProvider(req);
     const aiAnalysis = await aiProvider.analyzeStudent({
       studentName: student.name,
       grade: student.class.gradeLevel,

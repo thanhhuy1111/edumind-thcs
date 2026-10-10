@@ -57,8 +57,14 @@ export async function POST(req: NextRequest) {
 
     // Update AI Provider configuration if changed
     if (aiEngine === "GEMINI") {
-      const activeKey = apiKey || process.env.GEMINI_API_KEY || "AIzaSyA8GyEXlqo77FrnMEncgmQu0ujXoFUUbYg";
-      setAIProvider(new GeminiAIProvider(activeKey));
+      const activeKey = apiKey || process.env.GEMINI_API_KEY || "";
+      if (activeKey && !activeKey.startsWith("AIzaSyA8GyEXlqo")) {
+        setAIProvider(new GeminiAIProvider(activeKey));
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const { SmartLocalAIProvider } = require("@/lib/ai/provider");
+        setAIProvider(new SmartLocalAIProvider());
+      }
     } else {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { SmartLocalAIProvider } = require("@/lib/ai/provider");

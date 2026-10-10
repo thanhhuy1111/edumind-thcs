@@ -35,6 +35,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { MathContent } from "@/components/ui/MathContent";
+import { getGeminiAuthHeaders } from "@/lib/aiClient";
 
 export const dynamic = "force-dynamic";
 
@@ -82,6 +83,7 @@ function SlidesStudioContent() {
   const [outline, setOutline] = useState<OutlineItem[]>([]);
   const [slides, setSlides] = useState<SlideItem[]>([]);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [curriculumLessons, setCurriculumLessons] = useState<Array<{ title: string; chapterTitle?: string }>>([]);
 
   // Loading & UI States
   const [isGeneratingOutline, setIsGeneratingOutline] = useState(false);
@@ -101,6 +103,37 @@ function SlidesStudioContent() {
   useEffect(() => {
     handleGenerateInitialDeck();
   }, []);
+
+  // Tải danh mục bài học gợi ý theo môn và khối
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCurriculum = async () => {
+      try {
+        let code = "MUSIC";
+        const sLower = subject.toLowerCase();
+        if (sLower.includes("toán")) code = "MATH";
+        else if (sLower.includes("khoa học") || sLower.includes("khtn")) code = "SCIENCE";
+        else if (sLower.includes("văn") || sLower.includes("ngữ")) code = "LITERATURE";
+
+        const res = await fetch(`/api/lessons?subject=${code}&grade=${grade}`);
+        const data = await res.json();
+        if (isMounted && Array.isArray(data)) {
+          setCurriculumLessons(
+            data.map((item: any) => ({
+              title: item.title,
+              chapterTitle: item.chapter?.title || item.chapterTitle,
+            }))
+          );
+        }
+      } catch (err) {
+        console.error("Lỗi nạp bài học gợi ý cho Slide:", err);
+      }
+    };
+    fetchCurriculum();
+    return () => {
+      isMounted = false;
+    };
+  }, [subject, grade]);
 
   // Keyboard navigation for presentation mode
   useEffect(() => {
@@ -125,7 +158,7 @@ function SlidesStudioContent() {
     try {
       const res = await fetch("/api/materials/slides", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           action: "GENERATE_OUTLINE",
           params: { lessonTitle, subject, grade: parseInt(grade, 10) },
@@ -155,7 +188,7 @@ function SlidesStudioContent() {
     try {
       const res = await fetch("/api/materials/slides", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           action: "GENERATE_DECK",
           params: { lessonTitle: pTitle, subject: pSubject, grade: parseInt(pGrade, 10), slideCount: pCount, style: pStyle },
@@ -221,7 +254,7 @@ function SlidesStudioContent() {
     try {
       const res = await fetch("/api/materials/slides", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           action: "GENERATE_DECK",
           params: { lessonTitle, subject, grade: parseInt(grade, 10), slideCount: outline.length, style },
@@ -249,7 +282,7 @@ function SlidesStudioContent() {
     try {
       const res = await fetch("/api/materials/slides", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           action: "REGENERATE_SLIDE",
           params: { slide: current, instruction },
@@ -309,7 +342,7 @@ function SlidesStudioContent() {
     try {
       const res = await fetch("/api/materials/slides", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           action: "SAVE",
           params: {
@@ -599,6 +632,16 @@ function SlidesStudioContent() {
                 setSubject(val);
                 if (val === "Âm nhạc") {
                   setLessonTitle("Chủ đề 2: Tình bạn - Học hát bài Nụ cười");
+                } else if (val === "Toán học") {
+                  setLessonTitle("Bài 6: Tỉ lệ thức và Dãy tỉ số bằng nhau");
+                } else if (val === "Khoa học tự nhiên") {
+                  setLessonTitle("Bài 22: Vai trò của trao đổi chất và chuyển hóa năng lượng");
+                } else if (val === "Ngữ văn") {
+                  setLessonTitle("Bài 2: Thơ Thất ngôn bát cú Đường luật (Qua Đèo Ngang)");
+                } else if (val === "Lịch sử & Địa lí") {
+                  setLessonTitle("Bài 1: Vị trí địa lí và phạm vi lãnh thổ Việt Nam");
+                } else if (val === "Tin học") {
+                  setLessonTitle("Bài 1: Thiết bị vào - ra và an toàn dữ liệu");
                 }
               }}
               className="w-full text-xs rounded-xl border border-slate-200 bg-white p-2.5 text-slate-900 font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
@@ -635,6 +678,22 @@ function SlidesStudioContent() {
               className="w-full text-xs rounded-xl border border-slate-200 bg-white p-2.5 text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
               placeholder="Nhập tên bài học..."
             />
+            {curriculumLessons.length > 0 && (
+              <div className="mt-1.5 flex items-center gap-1.5 overflow-x-auto text-[11px] py-0.5 text-slate-500">
+                <span className="shrink-0 text-[10px] font-semibold text-indigo-600 bg-indigo-50 px-1 rounded">GDPT 2018:</span>
+                {curriculumLessons.slice(0, 3).map((item, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setLessonTitle(item.title)}
+                    className="shrink-0 px-2 py-0.5 rounded-md bg-slate-100 hover:bg-indigo-50 hover:text-indigo-700 text-slate-600 transition-colors border border-slate-200/60 truncate max-w-[180px] cursor-pointer"
+                    title={item.title}
+                  >
+                    {item.title}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div>

@@ -22,18 +22,20 @@ import {
 
 /**
  * Google Gemini AI Provider - Direct REST integration with Google Gemini 3.8 Flash & 2.5 Flash
- * Models: models/gemini-3.8-flash (Primary with auto-fallback to 2.5-flash)
- * Supports Google Search Grounding tool, medium thinking level, 65536 max tokens.
+ * Models: models/gemini-2.5-flash (Primary with auto-fallback to 2.5-pro and 1.5-flash)
+ * Supports Google Search Grounding tool, multimodal vision, 65536 max tokens.
  */
 export class GeminiAIProvider implements AIProvider {
-  name = "Google Gemini 3.8 Flash AI (GDPT 2018)";
+  name = "Google Gemini AI (GDPT 2018)";
   private fallbackProvider: any = null;
   private apiKey: string | null = null;
-  private primaryModel: string = "gemini-3.8-flash";
-  private fallbackModels: string[] = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-2.5-flash", "gemini-flash-latest"];
+  private primaryModel: string = "gemini-2.5-flash";
+  private fallbackModels: string[] = ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-1.5-flash-latest", "gemini-1.5-flash", "gemini-flash-latest"];
 
   constructor(apiKey?: string) {
-    this.apiKey = apiKey || process.env.GEMINI_API_KEY || "AIzaSyA8GyEXlqo77FrnMEncgmQu0ujXoFUUbYg";
+    const rawKey = apiKey || process.env.GEMINI_API_KEY || "";
+    // Ignore dead/leaked placeholder keys
+    this.apiKey = rawKey && !rawKey.startsWith("AIzaSyA8GyEXlqo") ? rawKey : null;
   }
 
   private getFallback() {
@@ -46,11 +48,63 @@ export class GeminiAIProvider implements AIProvider {
   }
 
   public setApiKey(key: string) {
-    this.apiKey = key;
+    this.apiKey = key && !key.startsWith("AIzaSyA8GyEXlqo") ? key.trim() : null;
   }
 
   public hasApiKey(): boolean {
     return !!(this.apiKey && this.apiKey.trim().length > 10);
+  }
+
+  /**
+   * Ping Gemini API with lightweight request to verify key validity and calculate latency
+   */
+  public async testConnection(): Promise<{ success: boolean; model?: string; latencyMs?: number; error?: string }> {
+    if (!this.hasApiKey()) {
+      return { success: false, error: "Chưa cấu hình API Key hoặc key không hợp lệ." };
+    }
+    const key = this.apiKey!;
+    const startTime = Date.now();
+
+    for (const model of this.fallbackModels) {
+      try {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 8000);
+
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ role: "user", parts: [{ text: "Kiểm tra kết nối EduMind THCS. Trả lời: Sẵn sàng." }] }],
+            generationConfig: { maxOutputTokens: 20 },
+          }),
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+
+        if (res.ok) {
+          return {
+            success: true,
+            model,
+            latencyMs: Date.now() - startTime,
+          };
+        }
+
+        if (res.status === 403 || res.status === 400) {
+          const errText = await res.text();
+          let parsedMsg = "API key không được cấp quyền hoặc đã hết hạn";
+          try {
+            const jsonErr = JSON.parse(errText);
+            if (jsonErr.error?.message) parsedMsg = jsonErr.error.message;
+          } catch {}
+          return { success: false, error: `Google API (${res.status}): ${parsedMsg}` };
+        }
+      } catch (err: any) {
+        // try next fallback model
+      }
+    }
+
+    return { success: false, error: "Không thể kết nối đến máy chủ Google Gemini. Vui lòng kiểm tra lại mạng hoặc API key." };
   }
 
   private cleanJsonText(raw: string): string {
@@ -80,8 +134,8 @@ export class GeminiAIProvider implements AIProvider {
       images?: Array<{ mimeType: string; data: string }>;
     }
   ): Promise<string> {
-    const key = this.apiKey || process.env.GEMINI_API_KEY || "AIzaSyA8GyEXlqo77FrnMEncgmQu0ujXoFUUbYg";
-    if (!key) {
+    const key = this.apiKey || "";
+    if (!key || key.startsWith("AIzaSyA8GyEXlqo")) {
       throw new Error("NO_GEMINI_KEY");
     }
 

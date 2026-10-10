@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const ai = getAIProvider();
+    const ai = getAIProvider(req);
 
     // Call interactive lesson generation on provider
     if (ai.generateInteractiveLesson) {

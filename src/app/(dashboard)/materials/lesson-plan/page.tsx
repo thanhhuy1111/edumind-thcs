@@ -42,6 +42,7 @@ import {
   triggerWordDownload,
 } from "@/lib/export/wordExportHelper";
 import { TextbookAnalysisResult } from "@/lib/ai/types";
+import { getGeminiAuthHeaders } from "@/lib/aiClient";
 
 export const dynamic = "force-dynamic";
 
@@ -486,7 +487,7 @@ function LessonPlanContent() {
     try {
       const res = await fetch("/api/materials/lesson-plan", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           action: "ANALYZE_SGK",
           params: {
@@ -592,7 +593,7 @@ function LessonPlanContent() {
     try {
       const res = await fetch("/api/materials/lesson-plan", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           action: "GENERATE",
           params: {
@@ -624,7 +625,7 @@ function LessonPlanContent() {
     try {
       const res = await fetch("/api/materials/lesson-plan", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           action: "REGENERATE_ACTIVITY",
           params: {

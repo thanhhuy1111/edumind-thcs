@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const aiProvider = getAIProvider();
+    const aiProvider = getAIProvider(req);
     const response = await aiProvider.chat(
       [{ role: "user", content: message }],
       { teacher, classes }

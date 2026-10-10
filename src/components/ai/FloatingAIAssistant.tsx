@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MathContent } from "@/components/ui/MathContent";
+import { getGeminiAuthHeaders } from "@/lib/aiClient";
 
 interface FloatingAIAssistantProps {
   isOpen: boolean;
@@ -73,7 +74,7 @@ export function FloatingAIAssistant({ isOpen, onClose }: FloatingAIAssistantProp
     try {
       const res = await fetch("/api/ai/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({ message: query }),
       });
 

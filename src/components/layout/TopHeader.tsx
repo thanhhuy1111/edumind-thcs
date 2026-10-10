@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { getActiveGeminiKey } from "@/lib/aiClient";
 import {
   Search,
   Bell,
@@ -17,6 +18,7 @@ import {
   Presentation,
   Award,
   Music,
+  Cpu,
 } from "lucide-react";
 
 interface TopHeaderProps {
@@ -26,6 +28,11 @@ interface TopHeaderProps {
 export function TopHeader({ onOpenAIDrawer }: TopHeaderProps) {
   const [quickActionOpen, setQuickActionOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [hasGeminiKey, setHasGeminiKey] = useState(false);
+
+  useEffect(() => {
+    setHasGeminiKey(!!getActiveGeminiKey());
+  }, []);
 
   return (
     <header className="h-16 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-6 flex items-center justify-between sticky top-0 z-20">
@@ -45,14 +52,28 @@ export function TopHeader({ onOpenAIDrawer }: TopHeaderProps) {
       </div>
 
       {/* Right Controls */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2.5">
+        {/* Dynamic AI Status Badge */}
+        <Link
+          href="/settings"
+          title={hasGeminiKey ? "Mô hình Google Gemini 2.5 Flash đang hoạt động. Nhấn để quản lý." : "Đang sử dụng AI Cục bộ GDPT 2018. Nhấn để nhập Gemini API Key."}
+          className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+            hasGeminiKey
+              ? "bg-emerald-50/80 text-emerald-800 border-emerald-200 hover:bg-emerald-100/70"
+              : "bg-amber-50/80 text-amber-800 border-amber-200 hover:bg-amber-100/70"
+          }`}
+        >
+          <span className={`w-2 h-2 rounded-full ${hasGeminiKey ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`} />
+          <span>{hasGeminiKey ? "Gemini 2.5 Flash" : "Local AI GDPT"}</span>
+        </Link>
+
         {/* Academic Context Badge */}
         <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 font-medium">
           <Calendar className="w-3.5 h-3.5 text-slate-400" />
           <span>Năm học 2026–2027</span>
           <span className="w-1 h-1 rounded-full bg-slate-300" />
           <Music className="w-3.5 h-3.5 text-indigo-600" />
-          <span className="text-slate-900 font-semibold">Âm nhạc THCS (K6-K9)</span>
+          <span className="text-slate-900 font-semibold">Âm nhạc THCS</span>
         </div>
 
         {/* AI Quick Assistant Trigger Button */}

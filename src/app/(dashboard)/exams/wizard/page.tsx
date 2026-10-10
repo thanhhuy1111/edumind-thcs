@@ -30,6 +30,7 @@ import {
   FileSpreadsheet,
 } from "lucide-react";
 import { MathContent } from "@/components/ui/MathContent";
+import { getGeminiAuthHeaders } from "@/lib/aiClient";
 import katex from "katex";
 
 export const dynamic = "force-dynamic";
@@ -109,6 +110,8 @@ function ExamWizardContent() {
     "Thưởng thức âm nhạc & Nhạc cụ (Dân ca Nam Bộ - Lý cây bông)",
   ]);
   const [newTopicInput, setNewTopicInput] = useState("");
+  const [curriculumLessons, setCurriculumLessons] = useState<Array<{ title: string; chapterTitle?: string; learningOutcomes?: string }>>([]);
+  const [loadingCurriculum, setLoadingCurriculum] = useState(false);
 
   // Step 3: Learning Outcomes (YCCĐ)
   const [outcomes, setOutcomes] = useState<string[]>([
@@ -237,6 +240,41 @@ function ExamWizardContent() {
     handleRunAIGeneration();
   }, []);
 
+  // Tải danh mục bài học phân phối chương trình GDPT 2018 theo môn & khối
+  useEffect(() => {
+    let isMounted = true;
+    const fetchCurriculum = async () => {
+      setLoadingCurriculum(true);
+      try {
+        let code = "MUSIC";
+        const sLower = subject.toLowerCase();
+        if (sLower.includes("toán")) code = "MATH";
+        else if (sLower.includes("khoa học") || sLower.includes("khtn")) code = "SCIENCE";
+        else if (sLower.includes("văn") || sLower.includes("ngữ")) code = "LITERATURE";
+
+        const res = await fetch(`/api/lessons?subject=${code}&grade=${grade}`);
+        const data = await res.json();
+        if (isMounted && Array.isArray(data)) {
+          setCurriculumLessons(
+            data.map((item: any) => ({
+              title: item.title,
+              chapterTitle: item.chapter?.title || item.chapterTitle,
+              learningOutcomes: item.learningOutcomes,
+            }))
+          );
+        }
+      } catch (err) {
+        console.error("Lỗi tải chương trình bài học:", err);
+      } finally {
+        if (isMounted) setLoadingCurriculum(false);
+      }
+    };
+    fetchCurriculum();
+    return () => {
+      isMounted = false;
+    };
+  }, [subject, grade]);
+
   const handleRunAIGeneration = async () => {
     setIsGenerating(true);
     setGenerateProgress(15);
@@ -248,7 +286,7 @@ function ExamWizardContent() {
 
       const res = await fetch("/api/exams/wizard", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           action: "GENERATE_PACKAGE",
           params: {
@@ -348,7 +386,7 @@ function ExamWizardContent() {
     try {
       const res = await fetch("/api/exams/wizard", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           action: "GENERATE_PACKAGE",
           params: {
@@ -408,7 +446,7 @@ function ExamWizardContent() {
     try {
       const res = await fetch("/api/exams/wizard", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           action: "SAVE_EXAM_PACKAGE",
           params: {
@@ -1065,6 +1103,48 @@ function ExamWizardContent() {
               Chọn một hoặc nhiều bài học / chuyên đề từ chương trình GDPT 2018
             </p>
           </div>
+
+          {/* Gợi ý bài học từ chương trình GDPT 2018 */}
+          {curriculumLessons.length > 0 && (
+            <div className="p-4 rounded-xl bg-indigo-50/70 border border-indigo-100 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+                  Gợi ý bài học từ Chương trình GDPT 2018 ({subject} Lớp {grade})
+                </span>
+                <span className="text-[11px] text-indigo-600 font-medium">Nhấp để chọn / bỏ chọn</span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {curriculumLessons.map((item, idx) => {
+                  const isSelected = selectedTopics.includes(item.title);
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        if (isSelected) {
+                          setSelectedTopics(selectedTopics.filter((t) => t !== item.title));
+                        } else {
+                          setSelectedTopics([...selectedTopics, item.title]);
+                          if (item.learningOutcomes && !outcomes.includes(item.learningOutcomes)) {
+                            setOutcomes([...outcomes, item.learningOutcomes]);
+                          }
+                        }
+                      }}
+                      className={`text-xs px-3 py-1.5 rounded-lg border font-medium transition-all text-left flex items-center gap-1.5 cursor-pointer ${
+                        isSelected
+                          ? "bg-indigo-600 text-white border-indigo-600 shadow-2xs"
+                          : "bg-white text-slate-700 border-slate-200 hover:border-indigo-300 hover:bg-white"
+                      }`}
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : "bg-indigo-400"}`} />
+                      <span className="truncate max-w-xs">{item.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <div className="space-y-3">
             <div className="flex items-center gap-2">

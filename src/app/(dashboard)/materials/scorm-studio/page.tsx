@@ -42,6 +42,7 @@ import { GeneratedInteractiveLesson, SlideItem } from "@/lib/ai/types";
 import { createSCORM12Zip, buildInteractiveHTMLPlayer } from "@/lib/scorm/scormPackager";
 import { useVoice } from "@/lib/hooks/useVoice";
 import { MathContent } from "@/components/ui/MathContent";
+import { getGeminiAuthHeaders } from "@/lib/aiClient";
 
 interface SubjectPreset {
   id: string;
@@ -299,7 +300,7 @@ function SCORMStudioContent() {
     try {
       const res = await fetch("/api/materials/scorm/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           documentText,
           lessonTitle,

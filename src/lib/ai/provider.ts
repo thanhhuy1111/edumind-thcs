@@ -1534,24 +1534,42 @@ Cô muốn em hỗ trợ nội dung nào trước ạ?`,
  */
 let currentProvider: AIProvider = new SmartLocalAIProvider();
 
-export function getAIProvider(apiKey?: string): AIProvider {
-  if (apiKey && apiKey.trim().length > 10) {
+export function getAIProvider(apiKeyOrReq?: string | any): AIProvider {
+  let key: string | undefined;
+
+  if (typeof apiKeyOrReq === "string") {
+    key = apiKeyOrReq.trim();
+  } else if (apiKeyOrReq && typeof apiKeyOrReq.headers?.get === "function") {
+    key = apiKeyOrReq.headers.get("x-gemini-key") || apiKeyOrReq.headers.get("authorization")?.replace(/^Bearer\s+/i, "") || undefined;
+  }
+
+  // 1. If explicit valid key passed in argument or header
+  if (key && key.length > 10 && !key.startsWith("AIzaSyA8GyEXlqo")) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { GeminiAIProvider } = require("./geminiProvider");
-      return new GeminiAIProvider(apiKey);
+      return new GeminiAIProvider(key);
     } catch {
       return currentProvider;
     }
   }
-  if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim().length > 10) {
+
+  // 2. Check process.env.GEMINI_API_KEY
+  const envKey = process.env.GEMINI_API_KEY?.trim();
+  if (envKey && envKey.length > 10 && !envKey.startsWith("AIzaSyA8GyEXlqo")) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { GeminiAIProvider } = require("./geminiProvider");
-      currentProvider = new GeminiAIProvider(process.env.GEMINI_API_KEY);
+      currentProvider = new GeminiAIProvider(envKey);
+      return currentProvider;
     } catch {
       currentProvider = new SmartLocalAIProvider();
     }
+  }
+
+  // 3. Clean fallback to SmartLocalAIProvider without 403 network errors
+  if (!(currentProvider instanceof SmartLocalAIProvider)) {
+    currentProvider = new SmartLocalAIProvider();
   }
   return currentProvider;
 }

@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       promptNote = "",
     } = body;
 
-    const aiProvider = getAIProvider();
+    const aiProvider = getAIProvider(req);
     const generatedQuestions = await aiProvider.generateQuestions({
       subject,
       grade: parseInt(grade.toString(), 10),

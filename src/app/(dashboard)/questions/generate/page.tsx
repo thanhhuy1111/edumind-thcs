@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { getDifficultyBadge, getQuestionTypeBadge } from "@/lib/utils";
 import { MathContent } from "@/components/ui/MathContent";
+import { getGeminiAuthHeaders } from "@/lib/aiClient";
 
 interface GeneratedQuestionItem {
   content: string;
@@ -67,7 +68,7 @@ export default function AIQuestionGeneratorPage() {
 
       const res = await fetch("/api/questions/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({
           subject: subjectMap[subject] || "Toán học",
           grade: parseInt(grade, 10),

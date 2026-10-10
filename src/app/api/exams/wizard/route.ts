@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const action = body.action || (body.params ? body.action : "GENERATE_PACKAGE");
     const params = body.params || body;
-    const ai = getAIProvider();
+    const ai = getAIProvider(req);
     const teacher = await prisma.user.findFirst();
 
     if (action === "GENERATE_PACKAGE") {

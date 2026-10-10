@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { MathContent } from "@/components/ui/MathContent";
 import { useVoice } from "@/lib/hooks/useVoice";
+import { getGeminiAuthHeaders } from "@/lib/aiClient";
 
 interface ChatMessage {
   id: string;
@@ -104,7 +105,7 @@ Cô có thể bấm vào các câu hỏi gợi ý bên dưới hoặc đặt câ
     try {
       const res = await fetch("/api/ai/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getGeminiAuthHeaders() },
         body: JSON.stringify({ message: query }),
       });
 
