@@ -16,6 +16,8 @@ import {
   CV7991ExamPackage,
   GenerateSCORMLessonParams,
   GeneratedInteractiveLesson,
+  AnalyzeTextbookParams,
+  TextbookAnalysisResult,
 } from "./types";
 
 /**
@@ -75,6 +77,7 @@ export class GeminiAIProvider implements AIProvider {
       useSearch?: boolean;
       maxTokens?: number;
       temperature?: number;
+      images?: Array<{ mimeType: string; data: string }>;
     }
   ): Promise<string> {
     const key = this.apiKey || process.env.GEMINI_API_KEY || "AIzaSyA8GyEXlqo77FrnMEncgmQu0ujXoFUUbYg";
@@ -87,11 +90,26 @@ export class GeminiAIProvider implements AIProvider {
     const maxTokens = options?.maxTokens || 65536;
     const temperature = options?.temperature ?? 0.4;
 
+    const parts: Array<Record<string, unknown>> = [];
+    if (options?.images && options.images.length > 0) {
+      for (const img of options.images) {
+        // Strip data prefix if user passed full data URL
+        const cleanData = img.data.replace(/^data:[^;]+;base64,/, "");
+        parts.push({
+          inlineData: {
+            mimeType: img.mimeType,
+            data: cleanData,
+          },
+        });
+      }
+    }
+    parts.push({ text: `${systemPrompt}\n\n---\nNỘI DUNG YÊU CẦU:\n${userPrompt}` });
+
     const requestBody: Record<string, unknown> = {
       contents: [
         {
           role: "user",
-          parts: [{ text: `${systemPrompt}\n\n---\nNỘI DUNG YÊU CẦU:\n${userPrompt}` }],
+          parts,
         },
       ],
       generationConfig: {
@@ -347,27 +365,95 @@ Nhiệm vụ của bạn là khởi tạo trọn bộ Hồ sơ Kiểm tra Địn
     return this.getFallback().generateExamCV7991(params);
   }
 
+  async analyzeTextbook(params: AnalyzeTextbookParams): Promise<TextbookAnalysisResult> {
+    const { documentText = "", fileName = "", imageBase64, imageMimeType, bookSeries } = params;
+
+    const systemPrompt = `Bạn là Chuyên gia Phương pháp Dạy học THCS và Thẩm định Sách Giáo Khoa (Bộ Giáo dục và Đào tạo Việt Nam).
+Nhiệm vụ: Đọc, bóc tách và phân tích sư phạm tài liệu hoặc ảnh chụp trang Sách Giáo Khoa (SGK) theo chuẩn Chương trình GDPT 2018.
+Trích xuất chính xác cấu trúc bài dạy:
+1. bookSeries: Tên bộ sách ("Kết Nối Tri Thức Với Cuộc Sống", "Chân Trời Sáng Tạo", "Cánh Diều", hoặc bộ sách nhận diện được).
+2. subject: Môn học (Toán học, Khoa học tự nhiên, Ngữ văn, Âm nhạc, Tiếng Anh, Lịch sử và Địa lí...).
+3. grade: Khối lớp (6, 7, 8, hoặc 9).
+4. chapterTitle: Tên chương hoặc Chủ đề chứa bài học.
+5. lessonTitle: Tên bài học chính xác trong SGK.
+6. learningOutcomes: Yêu cầu cần đạt chuẩn GDPT 2018 (nêu rõ học sinh biết gì, làm được gì sau bài học).
+7. keyConcepts: Mảng các khái niệm, định lý, công thức, nội dung kiến thức cốt lõi.
+8. exercisesSummary: Mảng tóm tắt các câu hỏi khởi động, khám phá, bài tập trong SGK.
+9. suggestedDuration: Thời lượng đề xuất (45 phút hoặc 90 phút).
+10. extractedSnippet: Đoạn trích dẫn tóm tắt các phần tiêu biểu nhất của trang SGK.
+
+Định dạng JSON Schema:
+{
+  "bookSeries": "string",
+  "subject": "string",
+  "grade": 7,
+  "chapterTitle": "string",
+  "lessonTitle": "string",
+  "learningOutcomes": "string",
+  "keyConcepts": ["string"],
+  "exercisesSummary": ["string"],
+  "suggestedDuration": 45,
+  "extractedSnippet": "string"
+}`;
+
+    const userPrompt = `Tên file: ${fileName || "Tài liệu SGK"}.
+Bộ sách giáo viên chọn trước (nếu có): ${bookSeries || "Tự động nhận diện từ tài liệu"}.
+Văn bản trích xuất (nếu có):
+${documentText.slice(0, 15000)}`;
+
+    const images = imageBase64 ? [{ mimeType: imageMimeType || "image/jpeg", data: imageBase64 }] : undefined;
+
+    try {
+      const rawJson = await this.callGemini(systemPrompt, userPrompt, { jsonMode: true, maxTokens: 16384, images });
+      const parsed = JSON.parse(this.cleanJsonText(rawJson));
+      if (parsed && parsed.lessonTitle) {
+        return parsed as TextbookAnalysisResult;
+      }
+    } catch (err) {
+      console.warn("Gemini textbook analysis failed, using local fallback:", err);
+    }
+
+    return this.getFallback().analyzeTextbook(params);
+  }
+
   async generateLessonPlan(params: GenerateLessonPlanParams): Promise<GeneratedLessonPlan> {
     const systemPrompt = `Bạn là Chuyên gia Phương pháp Dạy học THCS theo Chương trình GDPT 2018.
-Nhiệm vụ của bạn là soạn Kế hoạch bài dạy (Giáo án) theo đúng chuẩn Công văn 5512/BGDĐT-GDTrH.
+Nhiệm vụ của bạn là soạn Kế hoạch bài dạy (Giáo án) theo đúng chuẩn Công văn 5512/BGDĐT-GDTrH, bám sát Sách Giáo Khoa (SGK).
 Kế hoạch bài dạy bắt buộc phải có đầy đủ:
-I. MỤC TIÊU (Kiến thức, Năng lực, Phẩm chất).
-II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU.
-III. TIẾN TRÌNH DẠY HỌC (Hoạt động 1: Mở đầu; Hoạt động 2: Hình thành kiến thức; Hoạt động 3: Luyện tập; Hoạt động 4: Vận dụng).`;
+I. MỤC TIÊU:
+1. Kiến thức: Cụ thể theo nội dung bài học trong SGK.
+2. Năng lực: Năng lực chung (tự chủ, giao tiếp, hợp tác) và Năng lực đặc thù của bộ môn.
+3. Phẩm chất: Yêu nước, Nhân ái, Chăm chỉ, Trung thực, Trách nhiệm.
+II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU:
+1. Giáo viên: Thiết bị, dụng cụ, phiếu học tập số 1, 2.
+2. Học sinh: Đúng bộ SGK được chỉ định, vở ghi chép, đồ dùng học tập.
+3. Học liệu số: Slide bài giảng, video clip minh họa.
+III. TIẾN TRÌNH DẠY HỌC (Đúng 4 hoạt động chuẩn 5512):
+1. Hoạt động 1: Mở đầu / Khởi động (Mục tiêu, Nội dung bám sát câu hỏi mở đầu trong SGK, Sản phẩm, Tổ chức thực hiện 4 bước).
+2. Hoạt động 2: Hình thành kiến thức mới (Mục tiêu, Nội dung các mục trong SGK, Sản phẩm, Tổ chức thực hiện 4 bước).
+3. Hoạt động 3: Luyện tập (Mục tiêu, Nội dung bài tập SGK, Sản phẩm bài giải chi tiết, Tổ chức thực hiện 4 bước).
+4. Hoạt động 4: Vận dụng (Mục tiêu, Nội dung liên hệ thực tiễn / mở rộng, Sản phẩm, Tổ chức thực hiện 4 bước).
+Mỗi hoạt động bắt buộc có đủ 4 trường: objective (Mục tiêu), content (Nội dung), product (Sản phẩm), execution (Tổ chức thực hiện với 4 bước sư phạm: Bước 1 Giao nhiệm vụ, Bước 2 Thực hiện, Bước 3 Báo cáo thảo luận, Bước 4 Kết luận nhận định).`;
 
     const userPrompt = JSON.stringify({
       monHoc: params.subject,
       khoiLop: params.grade,
       tenBaiHoc: params.lessonTitle,
       chuong: params.chapter,
+      boSachSGK: params.bookSeries || "Kết Nối Tri Thức",
       thoiLuongPhut: params.durationMinutes,
       yeuCauCanDat: params.learningOutcomes,
       phuongPhap: params.method,
       thietBi: params.equipment,
+      noiDungSGKDacBiet: params.textbookContent ? params.textbookContent.slice(0, 10000) : undefined,
     });
 
+    const images = params.textbookImageBase64
+      ? [{ mimeType: params.textbookImageMimeType || "image/jpeg", data: params.textbookImageBase64 }]
+      : undefined;
+
     try {
-      const rawJson = await this.callGemini(systemPrompt, userPrompt, { jsonMode: true, maxTokens: 65536 });
+      const rawJson = await this.callGemini(systemPrompt, userPrompt, { jsonMode: true, maxTokens: 65536, images });
       const parsed = JSON.parse(this.cleanJsonText(rawJson));
       if (parsed && Array.isArray(parsed.activities) && parsed.activities.length === 4) {
         return parsed as GeneratedLessonPlan;

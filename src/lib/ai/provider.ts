@@ -16,6 +16,8 @@ import {
   CV7991ExamPackage,
   CV7991MatrixRow,
   CV7991SpecificationRow,
+  AnalyzeTextbookParams,
+  TextbookAnalysisResult,
 } from "./types";
 import { CURRICULUM_PRESETS } from "./curriculumDatabase";
 
@@ -353,20 +355,27 @@ export class SmartLocalAIProvider implements AIProvider {
   }
 
   async generateLessonPlan(params: GenerateLessonPlanParams): Promise<GeneratedLessonPlan> {
-    const {
-      subject = "Âm nhạc",
-      grade = 7,
-      lessonTitle = "Chủ đề 2: Tình bạn - Bài 3: Học hát bài Nụ cười",
-      durationMinutes = 45,
-      learningOutcomes,
-    } = params;
+    const subject = params.subject || "Toán học";
+    const lessonTitle =
+      params.lessonTitle ||
+      (params as any).title ||
+      (subject.toLowerCase().includes("nhạc")
+        ? "Chủ đề 2: Tình bạn - Bài 3: Học hát bài Nụ cười"
+        : subject.toLowerCase().includes("khoa học") || subject.toLowerCase().includes("khtn")
+        ? "Bài 22: Vai trò của trao đổi chất và chuyển hóa năng lượng ở sinh vật"
+        : subject.toLowerCase().includes("văn") || subject.toLowerCase().includes("ngữ")
+        ? "Văn bản: Qua Đèo Ngang (Bà Huyện Thanh Quan)"
+        : "Bài 6: Tỉ lệ thức và Dãy tỉ số bằng nhau");
+
+    const grade = params.grade || 7;
+    const durationMinutes = params.durationMinutes || 45;
+    const learningOutcomes = params.learningOutcomes;
 
     const isMusic =
       subject.includes("Âm nhạc") ||
       subject === "MUSIC" ||
       subject.toLowerCase().includes("nhạc") ||
-      lessonTitle.toLowerCase().includes("hát") ||
-      lessonTitle.toLowerCase().includes("nhạc");
+      (lessonTitle.toLowerCase().includes("hát") && !subject.toLowerCase().includes("toán") && !lessonTitle.toLowerCase().includes("toán"));
 
     if (isMusic) {
       return {
@@ -566,6 +575,114 @@ export class SmartLocalAIProvider implements AIProvider {
           execution: "Bước 1: Giáo viên trình chiếu tình huống, học sinh hoạt động nhóm làm bài vào bảng phụ.\nBước 2: Chụp ảnh bài làm của nhóm nhanh nhất chiếu lên màn hình lớp học.\nBước 3: Cả lớp phản biện, kiểm tra lại điều kiện thực tế (số kg phải là số dương).\nBước 4: Giáo viên tổng kết, giao nhiệm vụ mở rộng tìm hiểu thêm về tỉ lệ vàng trong hội họa.",
         },
       ],
+    };
+  }
+
+  async analyzeTextbook(params: AnalyzeTextbookParams): Promise<TextbookAnalysisResult> {
+    const rawText = params.documentText || (params as any).textContent || "";
+    const documentText = rawText;
+    const fileName = params.fileName || "";
+    const bookSeries = params.bookSeries || "Kết Nối Tri Thức Với Cuộc Sống";
+    const extraHints = ((params as any).subject || "") + " " + ((params as any).lessonTitle || "");
+    const textLower = (rawText + " " + fileName + " " + extraHints).toLowerCase();
+
+    // 1. Math check
+    if (textLower.includes("tỉ lệ") || textLower.includes("tỉ số") || textLower.includes("toán") || textLower.includes("math")) {
+      return {
+        bookSeries: bookSeries.includes("Cánh") ? "Cánh Diều" : bookSeries.includes("Chân") ? "Chân Trời Sáng Tạo" : "Kết Nối Tri Thức Với Cuộc Sống",
+        subject: "Toán học",
+        grade: 7,
+        chapterTitle: "Chương VI: Tỉ lệ thức và Đại lượng tỉ lệ",
+        lessonTitle: "Bài 6: Tỉ lệ thức và Dãy tỉ số bằng nhau",
+        learningOutcomes: "Nhận biết tỉ lệ thức và các tính chất cơ bản; vận dụng tính chất dãy tỉ số bằng nhau để giải bài toán chia đại lượng tỉ lệ trong đời sống thực tiễn.",
+        keyConcepts: [
+          "Định nghĩa: Tỉ lệ thức là đẳng thức của hai tỉ số a/b = c/d",
+          "Tính chất 1: a/b = c/d <=> a*d = b*c",
+          "Tính chất 2 (Dãy tỉ số bằng nhau): a/b = c/d = (a+c)/(b+d) = (a-c)/(b-d)",
+        ],
+        exercisesSummary: [
+          "Khởi động: Tỉ số giữa lượng trà và sữa trong công thức pha chế",
+          "Luyện tập 1: Tìm x trong tỉ lệ thức x/8 = 9/12",
+          "Luyện tập 2: Tìm hai số x, y biết x/2 = y/5 và x + y = 21",
+          "Vận dụng: Chia số kg giấy vụn ba lớp 7A, 7B, 7C quyên góp",
+        ],
+        suggestedDuration: 45,
+        extractedSnippet: documentText.slice(0, 500) || "Sách giáo khoa Toán 7 - Bài 6: Tỉ lệ thức và dãy tỉ số bằng nhau (Trang 6-10)",
+      };
+    }
+
+    // 2. Science check
+    if (textLower.includes("trao đổi chất") || textLower.includes("quang hợp") || textLower.includes("hô hấp") || textLower.includes("khtn") || textLower.includes("khoa học")) {
+      return {
+        bookSeries: "Cánh Diều",
+        subject: "Khoa học tự nhiên",
+        grade: 7,
+        chapterTitle: "Chủ đề 7: Trao đổi chất và chuyển hóa năng lượng ở sinh vật",
+        lessonTitle: "Bài 22: Vai trò của trao đổi chất và chuyển hóa năng lượng ở sinh vật",
+        learningOutcomes: "Nêu được khái niệm trao đổi chất và chuyển hóa năng lượng; phân tích mối quan hệ giữa quang hợp và hô hấp tế bào; giải thích ứng dụng bảo quản nông sản.",
+        keyConcepts: [
+          "Khái niệm trao đổi chất: Quá trình cơ thể lấy chất từ môi trường và thải chất cặn bã ra môi trường",
+          "Chuyển hóa năng lượng: Năng lượng ánh sáng -> hóa năng -> nhiệt năng và ATP",
+          "Phương trình tổng quát quang hợp và hô hấp tế bào",
+        ],
+        exercisesSummary: [
+          "Khởi động: Quan sát cây xanh quang hợp dưới ánh sáng mặt trời",
+          "Khám phá: Phân tích sơ đồ chuyển hóa vật chất ở thực vật và động vật",
+          "Luyện tập: So sánh trao đổi khí ở lá cây ban ngày và ban đêm",
+          "Vận dụng: Giải thích vì sao cần bảo quản hạt giống ở nơi khô ráo, thoáng mát",
+        ],
+        suggestedDuration: 45,
+        extractedSnippet: documentText.slice(0, 500) || "Sách giáo khoa KHTN 7 - Bài 22: Vai trò trao đổi chất và chuyển hóa năng lượng",
+      };
+    }
+
+    // 3. Literature check
+    if (textLower.includes("đèo ngang") || textLower.includes("đường luật") || textLower.includes("thơ") || textLower.includes("văn")) {
+      return {
+        bookSeries: "Chân Trời Sáng Tạo",
+        subject: "Ngữ văn",
+        grade: 8,
+        chapterTitle: "Bài 2: Vẻ đẹp cổ điển",
+        lessonTitle: "Văn bản: Qua Đèo Ngang (Bà Huyện Thanh Quan)",
+        learningOutcomes: "Nhận biết đặc điểm thể thơ Thất ngôn bát cú Đường luật (niêm, luật, vần, đối); cảm nhận bức tranh thiên nhiên Đèo Ngang hoang sơ và tâm trạng hoài cổ, nhớ nước thương nhà của thi nhân.",
+        keyConcepts: [
+          "Thể thơ Thất ngôn bát cú Đường luật: 8 câu, mỗi câu 7 chữ, vần bằng ở cuối câu 1, 2, 4, 6, 8",
+          "Bố cục: Đề - Thực - Luận - Kết",
+          "Nghệ thuật đối: Câu 3-4 (Lom khom - Lác đác) và Câu 5-6 (Nhớ nước - Thương nhà)",
+          "Bút pháp tả cảnh ngụ tình đặc sắc",
+        ],
+        exercisesSummary: [
+          "Khởi động: Chia sẻ cảm xúc khi đứng trước một khung cảnh thiên nhiên hùng vĩ",
+          "Đọc hiểu văn bản: Tìm hiểu từ ngữ địa phương, biện pháp chơi chữ quốc quốc / gia gia",
+          "Luyện tập: Phân tích tác dụng của nghệ thuật đảo ngữ ở 2 câu thực",
+          "Vận dụng: Viết đoạn văn (7-9 câu) ghi lại cảm nghĩ về tình yêu quê hương đất nước",
+        ],
+        suggestedDuration: 45,
+        extractedSnippet: documentText.slice(0, 500) || "Sách giáo khoa Ngữ văn 8 - Bài 2: Đọc hiểu văn bản Qua Đèo Ngang",
+      };
+    }
+
+    // 4. Music / Default
+    return {
+      bookSeries: "Kết Nối Tri Thức Với Cuộc Sống",
+      subject: "Âm nhạc",
+      grade: 7,
+      chapterTitle: "Chủ đề 2: Tình bạn",
+      lessonTitle: "Bài 3: Học hát bài Nụ cười",
+      learningOutcomes: "Hát đúng cao độ, trường độ bài hát Nụ cười; biết hát kết hợp gõ đệm thanh phách nhịp nhàng theo nhịp 2/4; cảm nhận tình bạn trong sáng, lạc quan yêu đời.",
+      keyConcepts: [
+        "Bài hát Nụ cười (Nhạc Nga, Lời Việt: Phạm Tuyên)",
+        "Tính chất âm nhạc: Vui tươi, hồn nhiên, trong sáng",
+        "Số chỉ nhịp 2/4, dấu luyến, dấu nối và cấu trúc hai đoạn đơn",
+      ],
+      exercisesSummary: [
+        "Khởi động: Luyện thanh theo mẫu âm La - Ma theo gam Đô trưởng",
+        "Khám phá: Nghe hát mẫu và học hát từng câu nối tiếp",
+        "Luyện tập: Hát kết hợp gõ đệm thanh phách theo phách và theo tiết tấu lời ca",
+        "Vận dụng: Biểu diễn bài hát theo nhóm kết hợp động tác phụ họa",
+      ],
+      suggestedDuration: 45,
+      extractedSnippet: documentText.slice(0, 500) || "Sách giáo khoa Âm nhạc 7 - Chủ đề 2: Học hát bài Nụ cười",
     };
   }
 

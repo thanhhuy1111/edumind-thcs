@@ -16,6 +16,7 @@ import {
   Calendar,
   Layers,
   ChevronRight,
+  Upload,
 } from "lucide-react";
 
 import { MathContent } from "@/components/ui/MathContent";
@@ -132,6 +133,13 @@ function MaterialsContent() {
             <Sparkles className="w-4 h-4 text-amber-600" />
             <span>SCORM &amp; Voice Studio (Mới)</span>
           </Link>
+          <Link
+            href="/materials/lesson-plan"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold text-xs shadow-xs transition-all active:scale-95 cursor-pointer"
+          >
+            <Upload className="w-4 h-4" />
+            <span>Upload SGK &amp; Soạn Giáo Án (CV 5512)</span>
+          </Link>
           <button
             onClick={() => {
               setModalType("WORKSHEET");
@@ -141,16 +149,6 @@ function MaterialsContent() {
           >
             <Sparkles className="w-4 h-4 text-indigo-500" />
             <span>AI Tạo Worksheet</span>
-          </button>
-          <button
-            onClick={() => {
-              setModalType("LESSON_PLAN");
-              setIsModalOpen(true);
-            }}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-xs transition-all active:scale-95 cursor-pointer"
-          >
-            <Plus className="w-4 h-4" />
-            <span>AI Soạn giáo án</span>
           </button>
         </div>
       </div>

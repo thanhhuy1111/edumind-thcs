@@ -211,8 +211,29 @@ function ExamWizardContent() {
     setMatrix(newMatrixRows);
   }, [questions, totalScore]);
 
-  // Initial load: generate default package if empty
+  // Initial load: generate default package or load preset from query params
   useEffect(() => {
+    const sParam = searchParams.get("subject");
+    const gParam = searchParams.get("grade");
+    const tParam = searchParams.get("title");
+    const topParam = searchParams.get("topic");
+
+    if (sParam) {
+      if (sParam.toLowerCase().includes("toán")) {
+        handleLoadPreset("math");
+        return;
+      } else if (sParam.toLowerCase().includes("khoa học") || sParam.toLowerCase().includes("khtn")) {
+        handleLoadPreset("khtn");
+        return;
+      } else if (sParam.toLowerCase().includes("văn") || sParam.toLowerCase().includes("ngữ")) {
+        handleLoadPreset("literature");
+        return;
+      }
+    }
+    if (gParam) setGrade(gParam);
+    if (tParam) setTitle(tParam);
+    if (topParam) setSelectedTopics([topParam]);
+
     handleRunAIGeneration();
   }, []);
 

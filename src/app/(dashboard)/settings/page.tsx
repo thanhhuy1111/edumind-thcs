@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   User,
   School,
@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   Crown,
   Key,
+  RefreshCw,
 } from "lucide-react";
 
 export default function SettingsPage() {
@@ -26,12 +27,54 @@ export default function SettingsPage() {
 
   const [aiEngine, setAiEngine] = useState("SMART_LOCAL");
   const [apiKey, setApiKey] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const handleSave = (e: React.FormEvent) => {
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.profile) {
+          setProfile({
+            name: data.profile.name || "Phan Thị Ngọc Huyền",
+            email: data.profile.email || "annahuyen889@gmail.com",
+            phone: data.profile.phone || "0987313889",
+            school: data.profile.school || "Trường THCS Tân Phong - Vĩnh Long",
+            subjects: data.profile.subjects || "Âm nhạc",
+            grades: data.profile.grades || "Khối 6, 7, 8, 9",
+          });
+        }
+        if (data && data.aiEngine) {
+          setAiEngine(data.aiEngine);
+        }
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+    setIsSaving(true);
+    try {
+      const res = await fetch("/api/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profile,
+          aiEngine,
+          apiKey,
+        }),
+      });
+      if (res.ok) {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2500);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (

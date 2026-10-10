@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   Upload,
   FileText,
@@ -133,7 +134,12 @@ Bao gồm hoàn cảnh mở đầu, sự việc phát triển, đỉnh điểm c
   },
 ];
 
-export default function SCORMStudioPage() {
+function SCORMStudioContent() {
+  const searchParams = useSearchParams();
+  const paramTitle = searchParams.get("title");
+  const paramSubject = searchParams.get("subject");
+  const paramGrade = searchParams.get("grade");
+
   // Step State: 1 = Upload, 2 = AI Review, 3 = Preview & Export
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
 
@@ -141,9 +147,9 @@ export default function SCORMStudioPage() {
   const [file, setFile] = useState<File | null>(null);
   const [parsedData, setParsedData] = useState<ParsedDocumentResult | null>(null);
   const [documentText, setDocumentText] = useState<string>("");
-  const [lessonTitle, setLessonTitle] = useState<string>("Nhịp 2/4 và Bài hát Nụ Cười");
-  const [subject, setSubject] = useState<string>("Âm nhạc");
-  const [grade, setGrade] = useState<number>(7);
+  const [lessonTitle, setLessonTitle] = useState<string>(paramTitle || "Nhịp 2/4 và Bài hát Nụ Cười");
+  const [subject, setSubject] = useState<string>(paramSubject || "Âm nhạc");
+  const [grade, setGrade] = useState<number>(paramGrade ? parseInt(paramGrade, 10) : 7);
   const [slideCount, setSlideCount] = useState<number>(8);
   const [isParsing, setIsParsing] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -1399,5 +1405,13 @@ export default function SCORMStudioPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function SCORMStudioPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-xs text-slate-500">Đang tải SCORM Studio...</div>}>
+      <SCORMStudioContent />
+    </Suspense>
   );
 }

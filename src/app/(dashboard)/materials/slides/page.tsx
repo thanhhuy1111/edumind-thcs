@@ -66,11 +66,14 @@ function SlidesStudioContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialLessonId = searchParams.get("lessonId") || "";
+  const paramTitle = searchParams.get("title");
+  const paramSubject = searchParams.get("subject");
+  const paramGrade = searchParams.get("grade");
 
   // Configuration Form State
-  const [subject, setSubject] = useState("Âm nhạc");
-  const [grade, setGrade] = useState("7");
-  const [lessonTitle, setLessonTitle] = useState("Chủ đề 2: Tình bạn - Học hát bài Nụ cười");
+  const [subject, setSubject] = useState(paramSubject || "Âm nhạc");
+  const [grade, setGrade] = useState(paramGrade || "7");
+  const [lessonTitle, setLessonTitle] = useState(paramTitle || "Chủ đề 2: Tình bạn - Học hát bài Nụ cười");
   const [style, setStyle] = useState("Học tập tương tác & Trực quan");
   const [slideCount, setSlideCount] = useState(10);
 

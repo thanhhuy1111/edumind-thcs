@@ -46,9 +46,9 @@ export default function ExportCenterPage() {
   const [loading, setLoading] = useState(true);
 
   // Export package parameters
-  const [exportSubject, setExportSubject] = useState("Âm nhạc");
+  const [exportSubject, setExportSubject] = useState("Toán học");
   const [exportGrade, setExportGrade] = useState("7");
-  const [exportTitle, setExportTitle] = useState("Kiểm tra định kỳ Giữa Học kỳ I - Môn Âm nhạc 7");
+  const [exportTitle, setExportTitle] = useState("Kiểm tra định kỳ Giữa Học kỳ I - Môn Toán học 7");
   const [exportSuccess, setExportSuccess] = useState<string | null>(null);
 
   useEffect(() => {
@@ -75,10 +75,10 @@ export default function ExportCenterPage() {
       return CURRICULUM_PRESETS["math-7-ratio"];
     }
     if (exportSubject.toLowerCase().includes("khoa học") || exportSubject.toLowerCase().includes("khtn")) {
-      return CURRICULUM_PRESETS["khtn-7-metabolism"];
+      return CURRICULUM_PRESETS["science-7-metabolism"];
     }
     if (exportSubject.toLowerCase().includes("văn") || exportSubject.toLowerCase().includes("ngữ")) {
-      return CURRICULUM_PRESETS["literature-8-tang-poetry"];
+      return CURRICULUM_PRESETS["lit-8-poetry"];
     }
     return CURRICULUM_PRESETS["math-7-ratio"];
   };

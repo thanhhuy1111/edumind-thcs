@@ -39,6 +39,20 @@ export async function POST(req: NextRequest) {
     const ai = getAIProvider();
     const teacher = await prisma.user.findFirst();
 
+    if (action === "ANALYZE_SGK") {
+      if (ai.analyzeTextbook) {
+        const analysis = await ai.analyzeTextbook({
+          documentText: params?.documentText,
+          fileName: params?.fileName,
+          imageBase64: params?.imageBase64,
+          imageMimeType: params?.imageMimeType,
+          bookSeries: params?.bookSeries,
+        });
+        return NextResponse.json({ success: true, analysis });
+      }
+      return NextResponse.json({ error: "AI Provider không hỗ trợ phân tích SGK" }, { status: 500 });
+    }
+
     if (action === "GENERATE") {
       const generated = await ai.generateLessonPlan({
         subject: params?.subject || "Toán học",
@@ -50,6 +64,10 @@ export async function POST(req: NextRequest) {
         keyContent: params?.keyContent,
         method: params?.method,
         notes: params?.notes,
+        bookSeries: params?.bookSeries,
+        textbookContent: params?.textbookContent,
+        textbookImageBase64: params?.textbookImageBase64,
+        textbookImageMimeType: params?.textbookImageMimeType,
       });
 
       return NextResponse.json(generated);

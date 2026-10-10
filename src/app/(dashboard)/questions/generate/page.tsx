@@ -57,11 +57,19 @@ export default function AIQuestionGeneratorPage() {
     setSavedSuccess(false);
 
     try {
+      const subjectMap: Record<string, string> = {
+        MUSIC: "Âm nhạc",
+        MATH: "Toán học",
+        ENGLISH: "Tiếng Anh",
+        SCIENCE: "Khoa học tự nhiên",
+        LITERATURE: "Ngữ văn",
+      };
+
       const res = await fetch("/api/questions/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          subject: subject === "MUSIC" ? "Âm nhạc" : subject === "MATH" ? "Toán học" : "Tiếng Anh",
+          subject: subjectMap[subject] || "Toán học",
           grade: parseInt(grade, 10),
           difficulty,
           questionType,
@@ -176,6 +184,12 @@ export default function AIQuestionGeneratorPage() {
                         setPromptNote("Tạo 5 câu trắc nghiệm Âm nhạc lớp 7 về bài hát Nụ cười, nhịp 2/4 và Dân ca Nam Bộ theo định hướng phát triển năng lực GDPT 2018.");
                       } else if (val === "MATH") {
                         setPromptNote("Tạo các câu trắc nghiệm về tỉ lệ thức và dãy tỉ số bằng nhau, gắn liền với bài toán thực tế học sinh THCS.");
+                      } else if (val === "SCIENCE") {
+                        setPromptNote("Tạo các câu trắc nghiệm Khoa học tự nhiên lớp 7 về quá trình trao đổi chất và chuyển hóa năng lượng ở sinh vật.");
+                      } else if (val === "LITERATURE") {
+                        setPromptNote("Tạo các câu trắc nghiệm Ngữ văn lớp 8 về đặc trưng thể loại thơ Đường luật (bố cục, niêm, luật, vần, đối).");
+                      } else if (val === "ENGLISH") {
+                        setPromptNote("Tạo các câu trắc nghiệm Tiếng Anh THCS về thì hiện tại hoàn thành, từ vựng chủ đề môi trường và kỹ năng đọc hiểu.");
                       }
                     }}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-800 outline-none"

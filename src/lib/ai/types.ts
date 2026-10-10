@@ -146,6 +146,31 @@ export interface GenerateLessonPlanParams {
   method?: string;
   equipment?: string;
   notes?: string;
+  bookSeries?: string;
+  textbookContent?: string;
+  textbookImageBase64?: string;
+  textbookImageMimeType?: string;
+}
+
+export interface TextbookAnalysisResult {
+  bookSeries: string;
+  subject: string;
+  grade: number;
+  chapterTitle?: string;
+  lessonTitle: string;
+  learningOutcomes: string;
+  keyConcepts: string[];
+  exercisesSummary: string[];
+  suggestedDuration: number;
+  extractedSnippet: string;
+}
+
+export interface AnalyzeTextbookParams {
+  documentText?: string;
+  fileName?: string;
+  imageBase64?: string;
+  imageMimeType?: string;
+  bookSeries?: string;
 }
 
 export interface SlideItem {
@@ -291,6 +316,7 @@ export interface AIProvider {
   generateExam(params: GenerateExamParams): Promise<GeneratedExam>;
   generateExamCV7991(params: GenerateExamCV7991Params): Promise<CV7991ExamPackage>;
   generateLessonPlan(params: GenerateLessonPlanParams): Promise<GeneratedLessonPlan>;
+  analyzeTextbook?(params: AnalyzeTextbookParams): Promise<TextbookAnalysisResult>;
   generateSlideDeck(params: GenerateSlideParams): Promise<GeneratedSlideDeck>;
   generateInteractiveLesson?(params: GenerateSCORMLessonParams): Promise<GeneratedInteractiveLesson>;
   analyzeStudent(params: AnalyzeStudentParams): Promise<StudentAnalysisResult>;
