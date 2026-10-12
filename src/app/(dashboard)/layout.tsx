@@ -5,6 +5,8 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { TopHeader } from "@/components/layout/TopHeader";
 import { FloatingAIAssistant } from "@/components/ai/FloatingAIAssistant";
 
+import { ToastProvider } from "@/components/ui/DesignSystem";
+
 export default function DashboardLayout({
   children,
 }: {
@@ -25,27 +27,29 @@ export default function DashboardLayout({
   }, []);
 
   return (
-    <div className="flex h-screen bg-slate-50/60 overflow-hidden font-sans">
-      {/* Sidebar */}
-      <Sidebar
-        user={{
-          name: "Cô Phan Thị Ngọc Huyền",
-          email: "annahuyen889@gmail.com",
-          school: "THCS Tân Phong - Vĩnh Long",
-        }}
-      />
+    <ToastProvider>
+      <div className="flex h-screen bg-slate-50/60 dark:bg-slate-950 dark:text-slate-100 overflow-hidden font-sans">
+        {/* Sidebar */}
+        <Sidebar
+          user={{
+            name: "Cô Phan Thị Ngọc Huyền",
+            email: "annahuyen889@gmail.com",
+            school: "THCS Tân Phong - Vĩnh Long",
+          }}
+        />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
-        <TopHeader onOpenAIDrawer={() => setIsAIDrawerOpen(true)} />
-        <main className="flex-1 overflow-y-auto">{children}</main>
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+          <TopHeader onOpenAIDrawer={() => setIsAIDrawerOpen(true)} />
+          <main className="flex-1 overflow-y-auto">{children}</main>
+        </div>
+
+        {/* Floating AI Assistant Drawer */}
+        <FloatingAIAssistant
+          isOpen={isAIDrawerOpen}
+          onClose={() => setIsAIDrawerOpen(false)}
+        />
       </div>
-
-      {/* Floating AI Assistant Drawer */}
-      <FloatingAIAssistant
-        isOpen={isAIDrawerOpen}
-        onClose={() => setIsAIDrawerOpen(false)}
-      />
-    </div>
+    </ToastProvider>
   );
 }

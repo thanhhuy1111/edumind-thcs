@@ -12,7 +12,7 @@ export interface SessionUser {
   grades: string | null;
 }
 
-const SESSION_COOKIE_NAME = "edumind_session_id";
+export const SESSION_COOKIE_NAME = "edumind_session_id";
 
 export async function getCurrentUser(): Promise<SessionUser | null> {
   try {
@@ -37,7 +37,7 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
       }
     }
 
-    // Default fallback to first teacher in DB so the demo works smoothly
+    // Default fallback to first teacher in DB so the application works smoothly
     const defaultTeacher = await prisma.user.findFirst();
     if (defaultTeacher) {
       return {
@@ -57,4 +57,12 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
     console.error("Auth error:", error);
     return null;
   }
+}
+
+export async function requireUser(): Promise<SessionUser> {
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error("UNAUTHORIZED");
+  }
+  return user;
 }

@@ -7,11 +7,18 @@ export async function GET(req: NextRequest) {
     const classId = searchParams.get("classId");
     const gradeLevel = searchParams.get("gradeLevel");
     const status = searchParams.get("status");
+    const search = searchParams.get("search");
 
     const where: any = {};
     if (classId) where.classId = classId;
     if (gradeLevel && gradeLevel !== "ALL") where.gradeLevel = parseInt(gradeLevel, 10);
     if (status && status !== "ALL") where.status = status;
+    if (search) {
+      where.OR = [
+        { title: { contains: search } },
+        { description: { contains: search } },
+      ];
+    }
 
     const exams = await prisma.exam.findMany({
       where,
