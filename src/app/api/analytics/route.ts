@@ -79,14 +79,53 @@ export async function GET(req: NextRequest) {
         studentCode: s.studentCode,
         className: s.class.name,
         averageScore: avg,
-        weakSkillName: lowest?.skill.name || "Tỉ lệ thức",
+        weakSkillName: lowest?.skill.name || "Kỹ năng cần củng cố",
         weakSkillScore: lowest?.masteryScore || 45,
       };
     });
 
+    // Dynamically diagnose the most critical skill needing intervention
+    const sortedByNeed = [...skillMasterySummary].sort(
+      (a, b) => b.below60Count - a.below60Count || a.averageMastery - b.averageMastery
+    );
+    const criticalSkill = sortedByNeed[0];
+
+    const totalAssessedStudents = skillMasterySummary.reduce((max, s) => Math.max(max, s.studentCount), 0);
+
+    const aiDiagnostic =
+      criticalSkill && criticalSkill.below60Count > 0
+        ? {
+            title: `Kỹ năng "${criticalSkill.name}" có tỷ lệ hổng kiến thức cao nhất`,
+            weakSkillName: criticalSkill.name,
+            weakSkillId: criticalSkill.skillId,
+            below60Count: criticalSkill.below60Count,
+            averageMastery: criticalSkill.averageMastery,
+            description: `Có ${criticalSkill.below60Count} học sinh đạt dưới 60% ở kỹ năng này (mức độ thành thạo trung bình đạt ${criticalSkill.averageMastery}%). Cần tổ chức phụ đạo và cho làm bài tập phân hóa để bù đắp kịp thời.`,
+            recommendedAction: `Tạo bài luyện tập bổ trợ: ${criticalSkill.name}`,
+            actionTopic: criticalSkill.name,
+          }
+        : {
+            title: "Mặt bằng năng lực học sinh đạt mức ổn định và làm chủ bài học tốt",
+            weakSkillName: criticalSkill?.name || "Kỹ năng cơ bản",
+            weakSkillId: criticalSkill?.skillId || "",
+            below60Count: 0,
+            averageMastery:
+              skillMasterySummary.length > 0
+                ? Math.round(
+                    skillMasterySummary.reduce((sum, s) => sum + s.averageMastery, 0) /
+                      skillMasterySummary.length
+                  )
+                : 85,
+            description: `Học sinh nắm vững các mục tiêu cần đạt của chương trình GDPT 2018. Giáo viên có thể triển khai thêm bài tập vận dụng sáng tạo để phát huy năng khiếu.`,
+            recommendedAction: "Giao nhiệm vụ dự án & hoạt động sáng tạo",
+            actionTopic: criticalSkill?.name || "Nâng cao",
+          };
+
     return NextResponse.json({
       skillMasterySummary,
       strugglingStudents,
+      aiDiagnostic,
+      totalAssessedStudents,
     });
   } catch (error) {
     console.error("Analytics API Error:", error);

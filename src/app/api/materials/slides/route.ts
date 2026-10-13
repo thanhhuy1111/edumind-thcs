@@ -85,20 +85,43 @@ export async function POST(req: NextRequest) {
       let newSlide = { ...slide };
 
       if (instruction === "shorten") {
-        newSlide.bullets = newSlide.bullets.slice(0, 2);
-        newSlide.mainContent = newSlide.mainContent.split(".")[0] + ".";
+        newSlide.bullets = (newSlide.bullets || []).slice(0, 2);
+        if (newSlide.mainContent) {
+          newSlide.mainContent = newSlide.mainContent.split(".")[0] + ".";
+        }
       } else if (instruction === "expand") {
         newSlide.bullets = [
-          ...newSlide.bullets,
-          "Bổ sung: Phân tích các trường hợp điều kiện mẫu số khác 0.",
-          "Liên hệ thực tế: Ứng dụng trong bản đồ địa lý tỉ lệ 1:100.000.",
+          ...(newSlide.bullets || []),
+          `Bổ sung: Liên hệ thực tiễn và mở rộng ứng dụng cho "${slide.title || "bài học"}".`,
+          `Gợi ý sư phạm: Tổ chức cho học sinh thảo luận cặp đôi và nhận xét chéo.`,
         ];
       } else if (instruction === "add_quiz") {
-        newSlide.quizQuestion = {
-          question: "Nếu $\\frac{x}{3} = \\frac{4}{6}$ thì $x$ bằng:",
-          options: ["x = 1", "x = 2", "x = 3", "x = 4"],
-          answer: "B",
-        };
+        const isMusic =
+          (slide.title || "").toLowerCase().includes("nhạc") ||
+          (slide.title || "").toLowerCase().includes("hát") ||
+          (params?.subject || "").toLowerCase().includes("nhạc");
+
+        newSlide.quizQuestion = isMusic
+          ? {
+              question: `Câu hỏi tương tác: Lưu ý quan trọng nhất khi thực hành phần "${slide.title || "bài học"}" là gì?`,
+              options: [
+                "A. Hát đúng cao độ, trường độ và giữ phách nhịp ổn định",
+                "B. Hát tự do không cần theo nhịp",
+                "C. Chỉ đọc lời ca không cần ngân giọng",
+                "D. Không cần phối hợp nhạc cụ gõ đệm",
+              ],
+              answer: "A",
+            }
+          : {
+              question: `Câu hỏi củng cố: Nội dung trọng tâm của phần "${slide.title || "kiến thức"}" hướng tới điều gì?`,
+              options: [
+                "A. Nắm vững bản chất kiến thức và biết vận dụng vào thực tiễn",
+                "B. Chỉ học thuộc lòng lý thuyết",
+                "C. Bỏ qua phần luyện tập",
+                "D. Không cần áp dụng phương pháp chuẩn",
+              ],
+              answer: "A",
+            };
       }
 
       return NextResponse.json(newSlide);

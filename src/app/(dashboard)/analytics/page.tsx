@@ -40,6 +40,7 @@ export default function AnalyticsPage() {
   const [selectedClass, setSelectedClass] = useState<string>("ALL");
   const [skillSummaries, setSkillSummaries] = useState<SkillSummary[]>([]);
   const [strugglingStudents, setStrugglingStudents] = useState<StrugglingStudent[]>([]);
+  const [aiDiagnostic, setAiDiagnostic] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -58,6 +59,7 @@ export default function AnalyticsPage() {
       .then((data) => {
         setSkillSummaries(data.skillMasterySummary || []);
         setStrugglingStudents(data.strugglingStudents || []);
+        setAiDiagnostic(data.aiDiagnostic || null);
         setLoading(false);
       })
       .catch((err) => {
@@ -112,23 +114,36 @@ export default function AnalyticsPage() {
               <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
                 AI Diagnostic Report
               </span>
-              <span className="text-xs text-slate-400">• Dựa trên 42 bài kiểm tra gần nhất</span>
+              <span className="text-xs text-slate-400">
+                • Dữ liệu kiểm tra thực tế
+              </span>
             </div>
             <h3 className="text-base font-bold text-slate-900">
-              Kỹ năng &ldquo;Tìm giá trị ẩn x, y trong tỉ lệ thức&rdquo; có tỷ lệ hổng kiến thức cao nhất
+              {aiDiagnostic?.title || "Đang tổng hợp chẩn đoán năng lực..."}
             </h3>
             <p className="text-xs text-slate-600 max-w-2xl leading-relaxed">
-              Có <strong>12 học sinh</strong> đạt dưới 60% ở kỹ năng này. Sai sót phổ biến nhất là không đảo vế khi nhân chéo và quên kiểm tra mẫu số khác 0.
+              {aiDiagnostic?.description || "Hệ thống AI đang theo dõi chỉ số làm chủ kỹ năng của học sinh theo chuẩn GDPT 2018..."}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           <Link
-            href="/exams/builder?topic=ti-le-thuc&grade=7"
+            href={`/assistant?q=${encodeURIComponent(
+              aiDiagnostic?.weakSkillName
+                ? `Hãy tư vấn phương pháp phụ đạo và bài tập củng cố cho học sinh yếu kỹ năng "${aiDiagnostic.weakSkillName}"`
+                : "Phân tích tình hình học tập và đề xuất kế hoạch dạy học phân hóa"
+            )}`}
+            className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs shadow-2xs transition-all active:scale-95"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+            <span>Hỏi Trợ lý AI</span>
+          </Link>
+          <Link
+            href={`/exams/builder?topic=${encodeURIComponent(aiDiagnostic?.actionTopic || "")}`}
             className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-all active:scale-95"
           >
-            <span>Tạo bài luyện tập bù hổng</span>
+            <span>{aiDiagnostic?.recommendedAction || "Tạo bài luyện tập bù hổng"}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

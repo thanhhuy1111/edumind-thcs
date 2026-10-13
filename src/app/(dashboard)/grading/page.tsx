@@ -29,6 +29,8 @@ function GradingContent() {
 
   // Student grading rows: { [studentId]: { versionId, answers: { 1: 'A', 2: 'B' }, manualScore: '' } }
   const [gradingRows, setGradingRows] = useState<Record<string, any>>({});
+  const [gradingDetails, setGradingDetails] = useState<Record<string, any>>({});
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
@@ -66,8 +68,10 @@ function GradingContent() {
           .then((studList) => {
             setStudents(studList);
 
-            // Populate existing attempts into grading rows
+            // Populate existing attempts into grading rows & details
             const initialRows: Record<string, any> = {};
+            const initialDetails: Record<string, any> = {};
+
             studList.forEach((s: any) => {
               const existingAttempt = examData.attempts?.find((a: any) => a.studentId === s.id);
               const defaultVersion = examData.versions?.[0]?.id || "";
@@ -78,9 +82,19 @@ function GradingContent() {
                 answers: existingAttempt?.studentAnswers ? JSON.parse(existingAttempt.studentAnswers) : {},
                 manualScore: existingAttempt ? existingAttempt.score.toString() : "",
               };
+
+              if (existingAttempt?.gradingDetail) {
+                try {
+                  initialDetails[s.id] =
+                    typeof existingAttempt.gradingDetail === "string"
+                      ? JSON.parse(existingAttempt.gradingDetail)
+                      : existingAttempt.gradingDetail;
+                } catch {}
+              }
             });
 
             setGradingRows(initialRows);
+            setGradingDetails(initialDetails);
             setLoading(false);
           });
       })
@@ -147,6 +161,23 @@ function GradingContent() {
       });
 
       if (!res.ok) throw new Error("Failed to save grading");
+      const resData = await res.json();
+
+      if (resData.attempts) {
+        const updatedDetails: Record<string, any> = { ...gradingDetails };
+        for (const att of resData.attempts) {
+          if (att.gradingDetail) {
+            try {
+              updatedDetails[att.studentId] =
+                typeof att.gradingDetail === "string"
+                  ? JSON.parse(att.gradingDetail)
+                  : att.gradingDetail;
+            } catch {}
+          }
+        }
+        setGradingDetails(updatedDetails);
+      }
+
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 3000);
     } catch (err) {
@@ -244,6 +275,7 @@ function GradingContent() {
                     </th>
                   ))}
                   <th className="py-3.5 px-4 text-center w-28">Điểm tổng</th>
+                  <th className="py-3.5 px-4 text-left min-w-[260px]">Nhận xét sư phạm AI (TT 22)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -309,7 +341,7 @@ function GradingContent() {
                                       isSelected
                                         ? isCorrectMatch
                                           ? "bg-emerald-600 text-white shadow-2xs"
-                                          : "bg-rose-600 text-white shadow-2xs"
+                                        : "bg-rose-600 text-white shadow-2xs"
                                         : "hover:bg-slate-200 text-slate-600"
                                     }`}
                                   >
@@ -336,6 +368,56 @@ function GradingContent() {
                             selectedExam?.totalScore || 10
                           )}`}
                         />
+                      </td>
+
+                      {/* AI Feedback & Teacher Remarks */}
+                      <td className="py-3 px-4">
+                        {gradingDetails[s.id]?.feedback ? (
+                          <div className="space-y-1.5 max-w-xs">
+                            <div className="p-2.5 rounded-xl bg-purple-50/80 border border-purple-200/80 text-[11px] text-purple-950 leading-relaxed shadow-2xs">
+                              <div className="flex items-center justify-between gap-1 mb-1 text-[10px] font-bold text-purple-700">
+                                <span className="flex items-center gap-1">
+                                  <Sparkles className="w-3 h-3 text-purple-600 shrink-0" />
+                                  <span>Gợi ý nhận xét</span>
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(gradingDetails[s.id].feedback);
+                                    setCopiedId(s.id);
+                                    setTimeout(() => setCopiedId(null), 2000);
+                                  }}
+                                  className="text-[10px] text-purple-600 hover:text-purple-800 font-semibold px-2 py-0.5 rounded-md bg-white border border-purple-100 shadow-2xs hover:bg-purple-50 transition-all"
+                                  title="Sao chép vào sổ liên lạc / VNEdu"
+                                >
+                                  {copiedId === s.id ? "✓ Đã chép" : "Sao chép"}
+                                </button>
+                              </div>
+                              <p className="line-clamp-2 hover:line-clamp-none transition-all cursor-pointer" title="Rê chuột để xem toàn bộ">
+                                {gradingDetails[s.id].feedback}
+                              </p>
+                            </div>
+
+                            {gradingDetails[s.id]?.weakSkills?.length > 0 && (
+                              <div className="flex flex-wrap items-center gap-1">
+                                <span className="text-[9px] font-bold text-amber-700">Rèn thêm:</span>
+                                {gradingDetails[s.id].weakSkills.slice(0, 2).map((sk: string, i: number) => (
+                                  <span
+                                    key={i}
+                                    className="text-[9px] font-medium bg-amber-50 text-amber-800 border border-amber-200 px-1.5 py-0.5 rounded"
+                                  >
+                                    {sk}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="text-[11px] text-slate-400 italic flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+                            <span>Lưu để AI tự động nhận xét</span>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   );

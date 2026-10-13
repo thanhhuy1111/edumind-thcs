@@ -2175,8 +2175,52 @@ export class SmartLocalAIProvider implements AIProvider {
 
   async chat(messages: ChatMessage[], context?: Record<string, unknown>): Promise<AIChatResponse> {
     const lastMessage = messages[messages.length - 1]?.content.toLowerCase() || "";
+    const classes = context?.classes as any[] | undefined;
+    const teacherName = (context?.teacher as any)?.name || "Thầy/Cô";
 
-    // Intent detection based on user query
+    // Dynamic data lookup if real classes and students exist in context
+    if (classes && classes.length > 0 && (lastMessage.includes("yếu") || lastMessage.includes("chú ý") || lastMessage.includes("học sinh"))) {
+      const warningStudents: Array<{ name: string; className: string; weakSkills: string[]; score?: number }> = [];
+      for (const cls of classes) {
+        for (const st of cls.students || []) {
+          const skills = st.studentSkills || [];
+          const weak = skills.filter((sk: any) => sk.masteryScore < 60).map((sk: any) => sk.skill?.name || "Kỹ năng");
+          if (st.status === "WARNING" || weak.length > 0) {
+            warningStudents.push({
+              name: st.name,
+              className: cls.name,
+              weakSkills: weak,
+              score: st.examAttempts?.[0]?.score,
+            });
+          }
+        }
+      }
+
+      if (warningStudents.length > 0) {
+        const studentLines = warningStudents.slice(0, 6).map((s, idx) =>
+          `${idx + 1}. **${s.name}** (Lớp ${s.className}${s.score !== undefined ? ` | Điểm gần nhất: ${s.score}` : ""}${s.weakSkills.length > 0 ? ` | Cần rèn: ${s.weakSkills.slice(0, 2).join(", ")}` : ""})`
+        ).join("\n");
+
+        return {
+          content: `Dựa trên dữ liệu thực tế các lớp học do ${teacherName} phụ trách, hệ thống ghi nhận **${warningStudents.length} học sinh** cần lưu ý hỗ trợ phụ đạo:\n\n${studentLines}\n\nThầy/cô nên sắp xếp các hoạt động phân hóa hoặc giao phiếu ôn tập riêng cho các em này.`,
+          structuredData: {
+            type: "STUDENT_LIST",
+            data: warningStudents.slice(0, 6).map((s) => ({
+              name: s.name,
+              className: s.className,
+              score: s.score || 6.0,
+              reason: s.weakSkills.join(", ") || "Cần chú ý",
+            })),
+          },
+          suggestedActions: [
+            { label: "Tạo bài luyện tập phụ đạo", action: "CREATE_EXAM", params: {} },
+            { label: "Xem toàn bộ học sinh", action: "FILTER_STUDENTS", params: { warning: true } },
+          ],
+        };
+      }
+    }
+
+    // Intent detection based on user query (Curriculum Fallback)
     if (lastMessage.includes("yếu") || lastMessage.includes("chú ý") || lastMessage.includes("học sinh")) {
       return {
         content: `Dựa trên dữ liệu tổng hợp môn **Âm nhạc** lớp **7A1** (Trường THCS Tân Phong), hệ thống ghi nhận **4 học sinh** cần được cô Huyền lưu ý hỗ trợ thêm về nhịp phách và đọc nhạc:

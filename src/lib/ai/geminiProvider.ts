@@ -344,12 +344,29 @@ LƯU Ý QUAN TRỌNG:
   }
 
   async generateQuestions(params: GenerateQuestionsParams): Promise<GeneratedQuestion[]> {
-    const { subject, grade, questionType = "SINGLE_CHOICE", difficulty = "THONG_HIEU", count = 5, promptNote = "" } = params;
+    const {
+      subject,
+      grade,
+      chapter,
+      lesson,
+      skill,
+      questionType = "SINGLE_CHOICE",
+      difficulty = "THONG_HIEU",
+      count = 5,
+      promptNote = "",
+    } = params;
 
-    const systemPrompt = `Bạn là Chuyên gia Khảo thí và Ngân hàng Câu hỏi THCS Việt Nam.
+    const topicDetails: string[] = [];
+    if (chapter) topicDetails.push(`Chương/Chủ đề: ${chapter}`);
+    if (lesson) topicDetails.push(`Bài học: ${lesson}`);
+    if (skill) topicDetails.push(`Kỹ năng đánh giá: ${skill}`);
+    if (promptNote) topicDetails.push(`Yêu cầu giáo viên: ${promptNote}`);
+
+    const systemPrompt = `Bạn là Chuyên gia Khảo thí và Ngân hàng Câu hỏi THCS Việt Nam theo Chương trình GDPT 2018.
 Nhiệm vụ: Tạo ${count} câu hỏi trắc nghiệm chất lượng cao cho môn ${subject} lớp ${grade}, dạng ${questionType}, mức độ ${difficulty}.
+${topicDetails.length > 0 ? `Nội dung trọng tâm:\n${topicDetails.join("\n")}\n` : ""}
 Yêu cầu sư phạm: Bám sát chuẩn GDPT 2018, ngôn từ chuẩn mực, đáp án có lời giải chi tiết.
-Công thức Toán học dùng LaTeX $...$.
+Công thức Toán học hoặc Khoa học dùng LaTeX $...$.
 
 JSON Schema:
 {
@@ -366,14 +383,17 @@ JSON Schema:
       ],
       "correct_answer": "A",
       "explanation": "Giải thích chi tiết lý do chọn đáp án này...",
-      "skill": "Tên kỹ năng đánh giá",
-      "source": "Gemini 3.8 Flash Question Bank",
+      "skill": "${skill || "Tên kỹ năng đánh giá"}",
+      "source": "Gemini Question Bank",
       "tags": ["${subject.toLowerCase()}", "lop-${grade}"]
     }
   ]
 }`;
 
-    const userPrompt = `Yêu cầu thêm từ giáo viên: ${promptNote || `Tạo ${count} câu hỏi trắc nghiệm môn ${subject} lớp ${grade}`}`;
+    const userPrompt =
+      topicDetails.length > 0
+        ? `Tạo ${count} câu hỏi môn ${subject} lớp ${grade}:\n${topicDetails.join("\n")}`
+        : `Yêu cầu từ giáo viên: ${promptNote || `Tạo ${count} câu hỏi trắc nghiệm môn ${subject} lớp ${grade}`}`;
 
     try {
       const rawText = await this.callGemini(systemPrompt, userPrompt, { jsonMode: true, maxTokens: 16384 });
@@ -388,13 +408,75 @@ JSON Schema:
     return this.getFallback().generateQuestions(params);
   }
 
+  /**
+   * Validate a CV7991 exam package: check total score, question count, and warnings.
+   * Returns the package with consistencyCheck filled in.
+   */
+  private validateCV7991Package(pkg: CV7991ExamPackage, params: GenerateExamCV7991Params): CV7991ExamPackage {
+    const warnings: string[] = [];
+    let scoreSum = 0;
+
+    if (Array.isArray(pkg.scoringGuide?.multipleChoice)) {
+      scoreSum += pkg.scoringGuide.multipleChoice.reduce((s, q) => s + (q.points || 0), 0);
+    }
+    if (Array.isArray(pkg.scoringGuide?.trueFalse)) {
+      pkg.scoringGuide.trueFalse.forEach((q) => {
+        scoreSum += q.subItems?.reduce((s, i) => s + (i.points || 0), 0) || 0;
+      });
+    }
+    if (Array.isArray(pkg.scoringGuide?.essayRubric)) {
+      scoreSum += pkg.scoringGuide.essayRubric.reduce((s, q) => s + (q.totalPoints || 0), 0);
+    }
+
+    const expectedTotal = params.totalScore || 10;
+    if (Math.abs(scoreSum - expectedTotal) > 0.5) {
+      warnings.push(`Tổng điểm biểu điểm (${scoreSum.toFixed(1)}) chênh lệch với yêu cầu (${expectedTotal}).`);
+    }
+
+    if (!Array.isArray(pkg.questions) || pkg.questions.length === 0) {
+      warnings.push("Không có câu hỏi nào được sinh ra.");
+    }
+
+    if (!Array.isArray(pkg.matrix) || pkg.matrix.length === 0) {
+      warnings.push("Thiếu ma trận đề 2 chiều.");
+    }
+
+    if (!Array.isArray(pkg.specification) || pkg.specification.length === 0) {
+      warnings.push("Thiếu bảng đặc tả.");
+    }
+
+    // Validate difficulty distribution
+    const nhanBietQ = pkg.questions.filter((q) => q.difficulty === "NHAN_BIET").length;
+    const totalQ = pkg.questions.length;
+    const nhanBietPct = totalQ > 0 ? (nhanBietQ / totalQ) * 100 : 0;
+    const expectedNB = params.matrixRatio?.nhanBiet || 40;
+    if (Math.abs(nhanBietPct - expectedNB) > 20) {
+      warnings.push(`Tỉ lệ câu Nhận biết (${nhanBietPct.toFixed(0)}%) không khớp yêu cầu (${expectedNB}%).`);
+    }
+
+    return {
+      ...pkg,
+      consistencyCheck: {
+        isValid: warnings.length === 0,
+        scoreSum: parseFloat(scoreSum.toFixed(1)),
+        warnings,
+      },
+    };
+  }
+
   async generateExamCV7991(params: GenerateExamCV7991Params): Promise<CV7991ExamPackage> {
-    const systemPrompt = `Bạn là Chuyên gia Khảo thí và Đo lường Giáo dục của Bộ Giáo dục và Đào tạo Việt Nam, am hiểu sâu sắc Công văn 7991/BGDĐT-GDTrH (ngày 17/12/2024) và Thông tư 22/2021/TT-BGDĐT.
+    const strictSystemPrompt = `Bạn là Chuyên gia Khảo thí và Đo lường Giáo dục của Bộ Giáo dục và Đào tạo Việt Nam, am hiểu sâu sắc Công văn 7991/BGDĐT-GDTrH (ngày 17/12/2024) và Thông tư 22/2021/TT-BGDĐT.
 Nhiệm vụ của bạn là khởi tạo trọn bộ Hồ sơ Kiểm tra Định kỳ Chuẩn Công văn 7991 cho cấp THCS gồm 4 phần:
 1. Ma trận đề kiểm tra 2 chiều chuẩn (chủ đề, đơn vị kiến thức, số lượng theo 4 dạng thức: Nhiều lựa chọn, Đúng-Sai 4 ý, Trả lời ngắn, Tự luận và mức độ Biết, Hiểu, Vận dụng, VDC).
 2. Bản đặc tả đề kiểm tra (Yêu cầu cần đạt chuẩn GDPT 2018).
 3. Đề kiểm tra chính thức (10.0 điểm).
-4. Hướng dẫn chấm & Đáp án chi tiết (biểu điểm thành phần).`;
+4. Hướng dẫn chấm & Đáp án chi tiết (biểu điểm thành phần).
+
+YÊU CẦU TUYỆT ĐỐI:
+- Tổng điểm scoringGuide phải ĐÚNG BẰNG ${params.totalScore || 10} điểm.
+- questions phải có ít nhất 4 câu.
+- matrix và specification phải có đủ các hàng theo chủ đề.
+- Mỗi câu hỏi phải có đủ content, answers (4 lựa chọn), correct_answer, explanation.`;
 
     const userPrompt = JSON.stringify({
       monHoc: params.subject,
@@ -404,19 +486,36 @@ Nhiệm vụ của bạn là khởi tạo trọn bộ Hồ sơ Kiểm tra Địn
       loaiDe: params.examType,
       chuDe: params.topics,
       tiLeMaTran: params.matrixRatio,
+      tongDiem: params.totalScore || 10,
     });
 
-    try {
-      const rawJson = await this.callGemini(systemPrompt, userPrompt, { jsonMode: true, maxTokens: 65536 });
-      const parsed = JSON.parse(this.cleanJsonText(rawJson));
-      if (parsed && Array.isArray(parsed.questions) && parsed.questions.length > 0) {
-        return parsed as CV7991ExamPackage;
+    // Attempt 1: Gemini with strict prompt
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const rawJson = await this.callGemini(strictSystemPrompt, userPrompt, {
+          jsonMode: true,
+          maxTokens: 65536,
+          temperature: attempt === 1 ? 0.4 : 0.2, // lower temp on retry for more precision
+        });
+        const parsed = JSON.parse(this.cleanJsonText(rawJson));
+
+        if (parsed && Array.isArray(parsed.questions) && parsed.questions.length >= 4) {
+          const validated = this.validateCV7991Package(parsed as CV7991ExamPackage, params);
+          // Accept if valid or only has minor warnings
+          if (validated.consistencyCheck.isValid || validated.consistencyCheck.warnings.length <= 1) {
+            return validated;
+          }
+          console.warn(`[CV7991 attempt ${attempt}] Warnings:`, validated.consistencyCheck.warnings);
+          if (attempt === 2) return validated; // return best effort on 2nd try
+        }
+      } catch (error) {
+        console.warn(`[CV7991 attempt ${attempt}] Gemini error:`, error);
       }
-    } catch (error) {
-      console.warn("Gemini generation failed, using Smart Local Fallback:", error);
     }
 
-    return this.getFallback().generateExamCV7991(params);
+    // Final fallback to local provider
+    const fallbackResult = await this.getFallback().generateExamCV7991(params);
+    return this.validateCV7991Package(fallbackResult, params);
   }
 
   async analyzeTextbook(params: AnalyzeTextbookParams): Promise<TextbookAnalysisResult> {
@@ -543,42 +642,246 @@ JSON output: { "title": "...", "subject": "...", "grade": number, "slides": [...
   }
 
   async generateExam(params: GenerateExamParams): Promise<GeneratedExam> {
+    const { title, subject, grade, durationMinutes, totalScore, questionCount, matrix, topics = [] } = params;
+
+    const nhanBiet = matrix?.nhanBiet ?? 40;
+    const thongHieu = matrix?.thongHieu ?? 30;
+    const vanDung = matrix?.vanDung ?? 20;
+    const vanDungCao = matrix?.vanDungCao ?? 10;
+
+    const systemPrompt = `Bạn là Chuyên gia Khảo thí và Đo lường Đánh giá Giáo dục THCS Việt Nam theo Chương trình GDPT 2018.
+Nhiệm vụ: Xây dựng Đề kiểm tra hoàn chỉnh gồm ${questionCount} câu hỏi trắc nghiệm khách quan môn ${subject} khối ${grade} theo Ma trận nhận thức chuẩn:
+- Nhận biết: ${nhanBiet}%
+- Thông hiểu: ${thongHieu}%
+- Vận dụng: ${vanDung}%
+- Vận dụng cao: ${vanDungCao}%
+Thời gian làm bài: ${durationMinutes} phút. Thang điểm: ${totalScore} điểm.
+
+Yêu cầu sư phạm:
+1. Đảm bảo ngôn từ trong sáng, chuẩn mực tiếng Việt, chuẩn kiến thức kỹ năng GDPT 2018.
+2. Công thức toán học/khoa học (nếu có) phải viết bằng LaTeX định dạng $...$.
+3. Mỗi câu hỏi phải có 4 phương án A, B, C, D, chỉ có đúng 1 đáp án chính xác, và có lời giải thích sư phạm chi tiết.
+4. Phân bố điểm số cho từng câu hỏi sao cho tổng điểm chính xác bằng ${totalScore}.
+
+JSON Schema:
+{
+  "questions": [
+    {
+      "orderNumber": 1,
+      "content": "Nội dung câu hỏi...",
+      "type": "SINGLE_CHOICE",
+      "difficulty": "NHAN_BIET",
+      "scorePoints": 0.5,
+      "answers": [
+        { "label": "A", "content": "Đáp án A", "isCorrect": true },
+        { "label": "B", "content": "Đáp án B", "isCorrect": false },
+        { "label": "C", "content": "Đáp án C", "isCorrect": false },
+        { "label": "D", "content": "Đáp án D", "isCorrect": false }
+      ],
+      "correct_answer": "A",
+      "explanation": "Lời giải thích sư phạm chi tiết...",
+      "skill": "Tên kỹ năng đánh giá",
+      "source": "Gemini EduMind Exam Generator"
+    }
+  ]
+}`;
+
+    const userPrompt = `Đề thi: ${title}
+Môn: ${subject} | Lớp: ${grade}
+Chủ đề: ${topics.length > 0 ? topics.join(", ") : "Chương trình chuẩn GDPT 2018"}
+Số lượng câu hỏi: ${questionCount}
+Tổng điểm: ${totalScore}đ`;
+
+    try {
+      const rawText = await this.callGemini(systemPrompt, userPrompt, {
+        jsonMode: true,
+        maxTokens: 32768,
+        temperature: 0.3,
+      });
+      const parsed = JSON.parse(this.cleanJsonText(rawText));
+      if (parsed && Array.isArray(parsed.questions) && parsed.questions.length > 0) {
+        return {
+          title,
+          questions: parsed.questions,
+          durationMinutes,
+          matrixSummary: `Ma trận GDPT 2018: Nhận biết ${nhanBiet}%, Thông hiểu ${thongHieu}%, Vận dụng ${vanDung}%, Vận dụng cao ${vanDungCao}%. Tổng điểm: ${totalScore}đ (${parsed.questions.length} câu).`,
+        };
+      }
+    } catch (err) {
+      console.warn("Gemini generateExam failed, using local fallback:", err);
+    }
+
     return this.getFallback().generateExam(params);
   }
 
   async analyzeStudent(params: AnalyzeStudentParams): Promise<StudentAnalysisResult> {
+    const { studentName, grade, classTitle, recentScores, skillMasteries } = params;
+
+    const systemPrompt = `Bạn là Chuyên gia Tâm lý Giáo dục và Đánh giá Năng lực Học sinh THCS Việt Nam theo Thông tư 22/2021/TT-BGDĐT.
+Nhiệm vụ: Phân tích toàn diện hồ sơ học tập của học sinh và tạo nhận xét cá nhân hóa.
+
+JSON Schema bắt buộc:
+{
+  "summary": "Tóm tắt tổng thể tình hình học tập 2-3 câu, cụ thể, không chung chung",
+  "strongSkills": ["Kỹ năng mạnh 1", "Kỹ năng mạnh 2"],
+  "weakSkills": ["Kỹ năng yếu 1", "Kỹ năng yếu 2"],
+  "trend": "IMPROVING" | "STABLE" | "DECLINING",
+  "recommendedActions": ["Hành động cụ thể 1", "Hành động cụ thể 2", "Hành động cụ thể 3"],
+  "teacherRemark": "Nhận xét sư phạm ấm áp, cụ thể để ghi vào học bạ hoặc gửi phụ huynh (2-3 câu, nhân ái, khuyến khích)."
+}
+Quy tắc: Dựa trên số liệu thực tế, đừng bịa dữ liệu, trend phải phù hợp với điểm gần đây.`;
+
+    const userPrompt = `Học sinh: ${studentName}\nLớp: ${classTitle} (Khối ${grade})\n\nĐiểm bài kiểm tra gần đây:\n${recentScores.map((s) => `- ${s.examTitle}: ${s.score}/${s.maxScore} (${s.date})`).join("\n")}\n\nMức độ thành thạo kỹ năng:\n${skillMasteries.map((s) => `- ${s.skillName}: ${s.score}%`).join("\n")}`;
+
+    try {
+      const rawJson = await this.callGemini(systemPrompt, userPrompt, { jsonMode: true, maxTokens: 4096 });
+      const parsed = JSON.parse(this.cleanJsonText(rawJson));
+      if (parsed && parsed.summary && parsed.trend) {
+        return parsed as StudentAnalysisResult;
+      }
+    } catch (err) {
+      console.warn("Gemini analyzeStudent failed, using local fallback:", err);
+    }
+
     return this.getFallback().analyzeStudent(params);
   }
 
+  /**
+   * Multi-turn chat call to Gemini with alternating role validation
+   */
+  public async callGeminiChat(
+    systemPrompt: string,
+    messages: ChatMessage[],
+    options?: {
+      useSearch?: boolean;
+      maxTokens?: number;
+      temperature?: number;
+    }
+  ): Promise<string> {
+    const key = this.apiKey || "";
+    if (!key || key.startsWith("AIzaSyA8GyEXlqo")) {
+      throw new Error("NO_GEMINI_KEY");
+    }
+
+    const useSearch = options?.useSearch === true;
+    const maxTokens = options?.maxTokens || 16384;
+    const temperature = options?.temperature ?? 0.3;
+
+    // Convert messages to Gemini format alternating user/model
+    const contents: Array<{ role: "user" | "model"; parts: Array<{ text: string }> }> = [];
+    for (let i = 0; i < messages.length; i++) {
+      const m = messages[i];
+      const role: "user" | "model" = m.role === "assistant" ? "model" : "user";
+      const text = i === 0 && systemPrompt ? `${systemPrompt}\n\n---\n${m.content}` : m.content;
+
+      if (contents.length > 0 && contents[contents.length - 1].role === role) {
+        contents[contents.length - 1].parts[0].text += `\n\n${text}`;
+      } else {
+        contents.push({ role, parts: [{ text }] });
+      }
+    }
+
+    if (contents.length === 0) {
+      contents.push({ role: "user", parts: [{ text: systemPrompt || "Xin chào." }] });
+    } else if (contents[0].role !== "user") {
+      contents.unshift({ role: "user", parts: [{ text: systemPrompt || "Bắt đầu trao đổi." }] });
+    }
+
+    const requestBody: Record<string, unknown> = {
+      contents,
+      generationConfig: {
+        temperature,
+        topP: 0.95,
+        maxOutputTokens: maxTokens,
+      },
+      ...(useSearch ? { tools: [{ googleSearch: {} }] } : {}),
+    };
+
+    let lastError: unknown = null;
+    for (const model of this.fallbackModels) {
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
+
+      try {
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestBody),
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const data = await res.json();
+          const candidate = data.candidates?.[0];
+          if (candidate?.content?.parts?.[0]?.text) {
+            return candidate.content.parts[0].text;
+          }
+        }
+        lastError = new Error(`Gemini ${model} HTTP ${res.status}`);
+      } catch (err) {
+        clearTimeout(timeoutId);
+        lastError = err;
+      }
+    }
+    throw lastError || new Error("All Gemini models failed");
+  }
+
   async chat(messages: ChatMessage[], context?: Record<string, unknown>): Promise<AIChatResponse> {
-    const systemPrompt = `Bạn là Trợ lý AI Sư phạm THCS của hệ thống EduMind THCS, hỗ trợ đắc lực cho giáo viên trong việc:
-1. Xây dựng đề kiểm tra và ma trận 2 chiều theo Công văn 7991/BGDĐT-GDTrH.
-2. Soạn kế hoạch bài dạy theo Công văn 5512/BGDĐT-GDTrH.
-3. Thiết kế slide bài giảng điện tử tương tác và chuẩn SCORM 1.2/2004.
-4. Tư vấn phương pháp dạy học phân hóa và nhận xét học sinh theo Thông tư 22/2021/TT-BGDĐT.
-Bạn có khả năng tra cứu thông tin thời gian thực bằng Google Search để cung cấp dữ liệu mới nhất.
-Hãy trả lời với giọng điệu sư phạm, ân cần, khúc chiết, chuẩn mực tiếng Việt.`;
+    // Build a rich data-aware system prompt using real classroom context
+    const classroomContextText = (context?.classroomContextText as string) || "";
+    const teacherName = (context?.teacher as any)?.name || "Giáo viên";
+
+    const dataSection = classroomContextText
+      ? `\n\n=== DỮ LIỆU THỰC TẾ LỚP HỌC CỦA ${teacherName.toUpperCase()} ===\n${classroomContextText}\n=== HẾT DỮ LIỆU ===\n\nQUAN TRỌNG: Khi giáo viên hỏi về học sinh, lớp, kỹ năng cụ thể, hãy trả lời DỰA TRÊN DỮ LIỆU TRÊN. Đừng bịa hoặc nói chung chung. Nếu dữ liệu không đủ, hãy nói rõ.`
+      : "";
+
+    const systemPrompt = `Bạn là Trợ lý AI Sư phạm THCS của hệ thống EduMind THCS, hỗ trợ đắc lực cho ${teacherName} trong việc:
+1. Trả lời câu hỏi về dữ liệu học sinh, lớp học, điểm số, kỹ năng cụ thể dựa trên dữ liệu thực.
+2. Xây dựng đề kiểm tra và ma trận 2 chiều theo Công văn 7991/BGDĐT-GDTrH.
+3. Soạn kế hoạch bài dạy theo Công văn 5512/BGDĐT-GDTrH.
+4. Tư vấn phương pháp dạy học phân hóa theo Thông tư 22/2021/TT-BGDĐT.
+5. Nhận xét học sinh và đề xuất hành động cụ thể.
+Hãy trả lời với giọng điệu sư phạm, ân cần, khúc chiết, chuẩn mực tiếng Việt.${dataSection}`;
 
     const lastUserMsg = messages[messages.length - 1]?.content || "";
 
+    // Determine if query is about classroom data (skip Google Search grounding for data queries)
+    const isDataQuery = /học sinh|lớp|điểm|kỹ năng|yếu|mạnh|kết quả|tiến bộ|phân tích|so sánh|nguy cơ|cần chú ý/i.test(lastUserMsg);
+
     try {
-      // Use search grounding for live factual answers
-      const text = await this.callGemini(systemPrompt, lastUserMsg, {
-        jsonMode: false,
-        useSearch: true,
+      // Use multi-turn conversation support
+      const text = await this.callGeminiChat(systemPrompt, messages, {
+        useSearch: !isDataQuery,
         maxTokens: 16384,
+        temperature: 0.3,
       });
+
+      // Auto-suggest actions based on response content
+      const suggestedActions: AIChatResponse["suggestedActions"] = [];
+
+      if (/yếu|kém|cần cải thiện|hổng kiến thức/i.test(text)) {
+        suggestedActions.push({ label: "Tạo bài luyện tập cho nhóm yếu", action: "CREATE_EXAM", params: {} });
+      }
+      if (/đề kiểm tra|bài kiểm tra/i.test(text)) {
+        suggestedActions.push({ label: "Mở trình tạo đề", action: "CREATE_EXAM", params: {} });
+      }
+      if (/học sinh nào|danh sách|cần chú ý/i.test(lastUserMsg)) {
+        suggestedActions.push({ label: "Xem toàn bộ học sinh", action: "FILTER_STUDENTS", params: { warning: true } });
+      }
 
       return {
         content: text,
+        suggestedActions: suggestedActions.length ? suggestedActions : undefined,
       };
     } catch (err) {
       console.warn("Gemini chat with search failed, retrying without search:", err);
       try {
-        const text = await this.callGemini(systemPrompt, lastUserMsg, {
-          jsonMode: false,
+        const text = await this.callGeminiChat(systemPrompt, messages, {
           useSearch: false,
           maxTokens: 16384,
+          temperature: 0.3,
         });
         return { content: text };
       } catch (innerErr) {

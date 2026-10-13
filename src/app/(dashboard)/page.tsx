@@ -27,6 +27,17 @@ export default async function DashboardPage() {
     where: { status: "WARNING" },
   });
 
+  const pendingGradingCount = await prisma.examAttempt.count({
+    where: { status: "SUBMITTED" },
+  });
+
+  // Find real weakest skill for the AI Classroom Insight card
+  const weakestSkillRecord = await prisma.studentSkill.findFirst({
+    where: { masteryScore: { lt: 60 } },
+    include: { skill: true, student: { include: { class: true } } },
+    orderBy: { masteryScore: "asc" },
+  });
+
   const recentExams = await prisma.exam.findMany({
     take: 3,
     orderBy: { createdAt: "desc" },
@@ -151,7 +162,9 @@ export default async function DashboardPage() {
             </div>
           </div>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">12</span>
+            <span className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+              {pendingGradingCount || 0}
+            </span>
             <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">bài cần chấm</span>
           </div>
           <p className="mt-2 text-xs text-amber-600 dark:text-amber-400 flex items-center gap-1 font-semibold group-hover:translate-x-0.5 transition-transform">
@@ -175,9 +188,9 @@ export default async function DashboardPage() {
           </div>
           <div className="mt-3 flex items-baseline gap-2">
             <span className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
-              {warningStudentsCount || 8}
+              {warningStudentsCount || 0}
             </span>
-            <span className="text-xs text-rose-600 dark:text-rose-400 font-medium">cần rèn nhịp phách</span>
+            <span className="text-xs text-rose-600 dark:text-rose-400 font-medium">học sinh cần hỗ trợ</span>
           </div>
           <p className="mt-2 text-xs text-rose-600 dark:text-rose-400 flex items-center gap-1 font-semibold group-hover:translate-x-0.5 transition-transform">
             <span>Xem danh sách</span>
@@ -198,13 +211,17 @@ export default async function DashboardPage() {
                 <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 dark:text-indigo-300 bg-indigo-100/70 dark:bg-indigo-900/50 px-2.5 py-0.5 rounded-full">
                   AI Classroom Insight
                 </span>
-                <span className="text-xs text-slate-400">• Vừa cập nhật 10 phút trước</span>
+                <span className="text-xs text-slate-400">• Dữ liệu lớp học thực tế</span>
               </div>
               <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-slate-100">
-                Lớp 7A1 đang có một số em cần rèn thêm kỹ năng &ldquo;Giữ nhịp phách 4/4 và Đọc nhạc&rdquo;
+                {weakestSkillRecord
+                  ? `Lớp ${weakestSkillRecord.student.class.name} có học sinh cần củng cố kỹ năng "${weakestSkillRecord.skill.name}"`
+                  : "Mặt bằng học tập ổn định, chuẩn bị tốt cho các bài kiểm tra định kỳ"}
               </h2>
               <p className="text-sm text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
-                Học sinh nắm vững lời ca bài Nụ cười nhưng còn chệch phách ở đoạn điệp khúc. AI gợi ý chia nhóm đôi bạn cùng tiến kết hợp gõ đệm thanh phách 5 phút đầu giờ.
+                {weakestSkillRecord
+                  ? `Dữ liệu ghi nhận học sinh ${weakestSkillRecord.student.name} (Lớp ${weakestSkillRecord.student.class.name}) đạt ${weakestSkillRecord.masteryScore}% ở kỹ năng này. AI gợi ý cho các em làm bài tập bổ trợ hoặc hoạt động đôi bạn cùng tiến.`
+                  : `Học sinh nắm vững các yêu cầu cần đạt của bộ môn. AI gợi ý chia nhóm đôi bạn cùng tiến kết hợp các bài tập phân hóa để nâng cao chất lượng.`}
               </p>
             </div>
           </div>
